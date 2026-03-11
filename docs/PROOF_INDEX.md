@@ -29,12 +29,15 @@ Windows alternative:
 py -3 scripts\run_buyer_determinism_proof.py
 ```
 
-What to inspect:
+Local proof outputs to inspect:
 
 - `proof/RUNS/determinism_<timestamp>.log`
 - `proof/RUNS/det_run1_<timestamp>.txt`
 - `proof/RUNS/det_run2_<timestamp>.txt`
-- Cross-compiler logs: `gcc_output.log`, `clang_output.log`
+
+CI determinism artifacts to inspect:
+
+- Linux cross-compiler logs: `gcc_output.log`, `clang_output.log`
 - Windows determinism artifact lane (`upe-determinism-proof-windows`)
 - macOS determinism artifact lane (`upe-determinism-proof-macos`)
 

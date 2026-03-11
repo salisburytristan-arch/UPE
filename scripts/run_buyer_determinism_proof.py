@@ -7,7 +7,6 @@ import argparse
 import glob
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 
@@ -60,8 +59,10 @@ def main() -> int:
 
     log_path = latest_log(root)
     print("\n[UPE] Determinism proof completed")
-    if log_path:
-        print(f"[UPE] Inspect log: {log_path}")
+    if not log_path:
+        print("[UPE] ERROR: proof completed but no determinism_*.log was produced")
+        return 1
+    print(f"[UPE] Inspect log: {log_path}")
     print("[UPE] PASS condition: hash_run_1 == hash_run_2 and MATCH=true")
     return 0
 

@@ -50,12 +50,15 @@ What is not guaranteed:
 
 ### Repeated-Run Proof
 
-The CI workflow runs the standard test binary repeatedly and checks whether the resulting output digests are identical.
+The CI workflow runs the standard test binary repeatedly and reports whether the resulting output digests are identical.
+This repeated-run digest count is treated as telemetry for visibility.
 
 It also runs the repository proof script:
 
 - `tools/run_determinism_proof.sh`
 - `tools/run_determinism_proof.bat`
+
+Those proof scripts are the pass/fail enforcement path for repeated-run determinism in CI.
 
 Those scripts write proof artifacts under `proof/RUNS/`, including:
 
