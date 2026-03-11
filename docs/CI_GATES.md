@@ -59,9 +59,9 @@ Artifacts include:
 - `gcc_output.log`
 - `clang_output.log`
 
-### Canonical Benchmarks
+### World-Step Benchmarks
 
-Builds and runs the canonical benchmark suite and publishes:
+Builds and runs the world-step benchmark suite and publishes:
 
 - `benchmark_results.csv`
 - canonical benchmark JSON summary
@@ -70,7 +70,7 @@ Builds and runs the canonical benchmark suite and publishes:
 
 This is the primary machine-readable performance proof surface.
 
-When a canonical benchmark baseline is present, the benchmark gate also checks frame-time regressions against that baseline.
+When a world-step benchmark baseline is present, the benchmark gate also checks frame-time regressions against that baseline.
 
 ### Strict Warnings Gate
 
@@ -88,7 +88,7 @@ Runs the release verification flow and publishes:
 For buyers, the most useful CI outputs are:
 
 1. Determinism proof artifacts
-2. Canonical benchmark artifacts
+2. World-step benchmark artifacts
 3. Release gate artifacts
 4. Platform build/test logs
 

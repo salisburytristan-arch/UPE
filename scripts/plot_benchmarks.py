@@ -23,7 +23,7 @@ def parse_csv(filename):
     benchmarks = []
     
     try:
-        with open(filename, 'r') as f:
+        with open(filename, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 benchmarks.append({
@@ -220,7 +220,7 @@ def generate_html_report(benchmarks, output_file):
 """
     
     try:
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding='utf-8') as f:
             f.write(html)
         print(f"✅ Generated: {output_file}")
         return True

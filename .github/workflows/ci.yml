@@ -381,7 +381,7 @@ jobs:
   # Canonical Benchmark Proof
   # =============================================================================
   benchmark-canonical-scenes:
-    name: Canonical Benchmarks
+    name: World-Step Benchmarks
     runs-on: ubuntu-latest
     needs: [quick-doc-link-gate]
 
@@ -408,10 +408,10 @@ jobs:
           -DUPE_BUILD_BENCHMARKS=ON \
           -DUPE_DETERMINISTIC=ON
 
-    - name: Build Canonical Benchmarks
-      run: cmake --build build-bench --target upe_bench_canonical_scenes --parallel
+    - name: Build World-Step Benchmarks
+      run: cmake --build build-bench --target upe_bench_world_step_v2 --parallel
 
-    - name: Run Canonical Benchmarks
+    - name: Run World-Step Benchmarks
       run: |
         mkdir -p proof/ci
         python scripts/run_canonical_benchmark_gate.py \
@@ -421,7 +421,9 @@ jobs:
           --results-csv proof/ci/canonical-benchmarks.csv \
           --report-html proof/ci/benchmark_report.html \
           --compare-baseline \
-          --threshold 20.0 2>&1 | tee proof/ci/canonical-benchmarks.log
+          --threshold 20.0 \
+          --steps 300 \
+          --warmup 60 2>&1 | tee proof/ci/canonical-benchmarks.log
 
     - name: Upload Benchmark Artifacts
       uses: actions/upload-artifact@v3
@@ -432,19 +434,19 @@ jobs:
           proof/ci/canonical-benchmarks.json
           proof/ci/canonical-benchmarks.log
           proof/ci/benchmark_report.html
-          proof/RUNS/canonical_benchmark_history.csv
-          proof/RUNS/canonical_benchmark_trend_*.json
+          proof/RUNS/world_step_benchmark_history.csv
+          proof/RUNS/world_step_benchmark_trend_*.json
 
     - name: Publish Benchmark Summary
       run: |
         {
-          echo "## Canonical Benchmarks"
+          echo "## World-Step Benchmarks"
           echo ""
           echo "- CSV artifact: \`proof/ci/canonical-benchmarks.csv\`"
           echo "- JSON artifact: \`proof/ci/canonical-benchmarks.json\`"
           echo "- HTML report artifact: \\`proof/ci/benchmark_report.html\\`"
           echo "- Execution log artifact: \\`proof/ci/canonical-benchmarks.log\\`"
-          echo "- Trend artifacts: \`proof/RUNS/canonical_benchmark_history.csv\`, \`proof/RUNS/canonical_benchmark_trend_*.json\`"
+          echo "- Trend artifacts: \`proof/RUNS/world_step_benchmark_history.csv\`, \`proof/RUNS/world_step_benchmark_trend_*.json\`"
         } >> "$GITHUB_STEP_SUMMARY"
 
   # =============================================================================
