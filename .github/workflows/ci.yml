@@ -122,11 +122,11 @@ jobs:
         compiler: [gcc, clang]
         include:
           - compiler: gcc
-            cc: gcc-11
-            cxx: g++-11
+            cc: gcc
+            cxx: g++
           - compiler: clang
-            cc: clang-14
-            cxx: clang++-14
+            cc: clang
+            cxx: clang++
     
     steps:
     - name: Checkout
@@ -135,7 +135,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build
+        sudo apt-get install -y build-essential cmake ninja-build clang
     
     - name: Configure CMake
       env:
@@ -208,6 +208,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build clang
     
     - name: Install Dependencies
       run: brew install cmake ninja
@@ -345,8 +350,8 @@ jobs:
     
     - name: Build with GCC
       env:
-        CC: gcc-11
-        CXX: g++-11
+        CC: gcc
+        CXX: g++
       run: |
         cmake -B build-gcc -DCMAKE_BUILD_TYPE=Release \
           -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
@@ -355,8 +360,8 @@ jobs:
     
     - name: Build with Clang  
       env:
-        CC: clang-14
-        CXX: clang++-14
+        CC: clang
+        CXX: clang++
       run: |
         cmake -B build-clang -DCMAKE_BUILD_TYPE=Release \
           -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
@@ -587,11 +592,11 @@ jobs:
         compiler: [gcc, clang]
         include:
           - compiler: gcc
-            cc: gcc-11
-            cxx: g++-11
+            cc: gcc
+            cxx: g++
           - compiler: clang
-            cc: clang-14
-            cxx: clang++-14
+            cc: clang
+            cxx: clang++
 
     steps:
     - name: Checkout
@@ -605,7 +610,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build gcc-11 g++-11 clang-14
+        sudo apt-get install -y build-essential cmake ninja-build clang
 
     - name: Run Strict Warnings Gate
       env:

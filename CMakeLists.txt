@@ -136,13 +136,24 @@ target_link_libraries(upe
 
 # SIMD support
 if(UPE_ENABLE_SIMD)
-    if(MSVC)
-        # SSE4.1 is enabled by default in x64; use AVX for advanced SIMD
-        target_compile_options(upe PRIVATE /arch:AVX)
-    else()
-        target_compile_options(upe PRIVATE -msse4.1)
+    string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" UPE_SYSTEM_PROCESSOR)
+    set(UPE_X86 FALSE)
+    if(UPE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|x86|i[3-6]86)$")
+        set(UPE_X86 TRUE)
     endif()
-    target_compile_definitions(upe PRIVATE UPE_ENABLE_SIMD)
+
+    if(MSVC)
+        # MSVC SIMD tuning only on x86/x64 targets.
+        if(UPE_X86)
+            target_compile_options(upe PRIVATE /arch:AVX)
+            target_compile_definitions(upe PRIVATE UPE_ENABLE_SIMD)
+        endif()
+    elseif(UPE_X86)
+        target_compile_options(upe PRIVATE -msse4.1)
+        target_compile_definitions(upe PRIVATE UPE_ENABLE_SIMD)
+    else()
+        message(STATUS "UPE_ENABLE_SIMD requested, but no x86 SIMD flags are available for processor '${CMAKE_SYSTEM_PROCESSOR}'.")
+    endif()
 endif()
 
 # Set output directories
