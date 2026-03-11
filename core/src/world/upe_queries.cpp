@@ -798,7 +798,7 @@ int UpeWorld_SweepSphere(UpeWorld *world, UpeSphere sphere, UpeVec3 velocity, fl
             continue;
         }
         
-        UpeCcdResult ccd = {0};
+        UpeCcdResult ccd = {0, 0.0f, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
         
         // Test CCD based on shape type
         switch (shape->type) {
@@ -891,7 +891,7 @@ int UpeWorld_SweepBox(UpeWorld *world, UpeAabb3 box, UpeVec3 velocity, float max
             continue;
         }
         
-        UpeCcdResult ccd = {0};
+        UpeCcdResult ccd = {0, 0.0f, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
         
         // Test CCD based on shape type
         UpeVec3 zero_vel = {0, 0, 0};
@@ -1004,7 +1004,7 @@ int UpeWorld_SweepCapsule(UpeWorld *world, UpeCapsule capsule, UpeVec3 velocity,
             continue;
         }
         
-        UpeCcdResult ccd = {0};
+        UpeCcdResult ccd = {0, 0.0f, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}};
         
         // Test CCD based on shape type
         UpeVec3 zero_vel = {0, 0, 0};

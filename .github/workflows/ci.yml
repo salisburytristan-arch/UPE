@@ -301,7 +301,7 @@ jobs:
         echo "::endgroup::"
 
     - name: Run Proof Artifact Capture
-      run: tools/run_determinism_proof.sh build-release
+      run: bash tools/run_determinism_proof.sh build-release
 
     - name: Upload Determinism Artifacts
       if: always()
@@ -436,19 +436,22 @@ jobs:
 
     - name: Publish Windows Determinism Summary
       if: always()
-      shell: bash
+      shell: pwsh
       run: |
-        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
-        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
-        if [ -z "$HASH1" ]; then HASH1="missing"; fi
-        if [ -z "$HASH2" ]; then HASH2="missing"; fi
-        {
-          echo "## Determinism (Windows)"
-          echo ""
-          echo "- hash_run_1: \\`${HASH1}\\`"
-          echo "- hash_run_2: \\`${HASH2}\\`"
-          echo "- Artifact: \\`proof/RUNS/\\`"
-        } >> "$GITHUB_STEP_SUMMARY"
+        $hash1 = "missing"
+        $hash2 = "missing"
+        $log = Get-ChildItem -Path "proof/RUNS" -Filter "determinism_*.log" -ErrorAction SilentlyContinue | Select-Object -Last 1
+        if ($log) {
+          $line1 = Select-String -Path $log.FullName -Pattern '^hash_run_1=' -ErrorAction SilentlyContinue | Select-Object -First 1
+          $line2 = Select-String -Path $log.FullName -Pattern '^hash_run_2=' -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($line1) { $hash1 = ($line1.Line -split '=',2)[1] }
+          if ($line2) { $hash2 = ($line2.Line -split '=',2)[1] }
+        }
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Determinism (Windows)"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- hash_run_1: `$hash1`"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- hash_run_2: `$hash2`"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Artifact: `proof/RUNS/`"
 
   # =============================================================================
   # macOS Determinism Proof

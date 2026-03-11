@@ -82,8 +82,8 @@ void UpeFrameAllocator_GetStats(UpeFrameAllocator *alloc, uint32_t *allocated,
 }
 
 /* Thread-local allocator storage */
-static __thread UpeThreadLocalAllocator *g_tls_allocator = NULL;
-static __thread uint32_t g_tls_capacity = 0;
+static thread_local UpeThreadLocalAllocator *g_tls_allocator = NULL;
+static thread_local uint32_t g_tls_capacity = 0;
 
 UpeThreadLocalAllocator *UpeFrameAllocator_GetThreadLocal(void) {
     if (g_tls_allocator) return g_tls_allocator;
