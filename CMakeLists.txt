@@ -229,6 +229,14 @@ if(UPE_BUILD_BENCHMARKS)
     set_target_properties(upe_bench_science_export PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks
     )
+
+    add_executable(upe_bench_canonical_scenes
+        benchmarks/canonical_scenes.cpp
+    )
+    target_link_libraries(upe_bench_canonical_scenes PRIVATE upe)
+    set_target_properties(upe_bench_canonical_scenes PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks
+    )
 endif()
 
 # =============================================================================

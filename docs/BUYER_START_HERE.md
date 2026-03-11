@@ -42,6 +42,8 @@ tools\run_determinism_proof.bat build
 - CRC64 hashes match across runs (no floating-point drift).
 - Proof logs stored in `proof/RUNS/determinism_*.log`.
 
+For the CI-backed certification surface and artifact expectations, see [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md).
+
 ## 4) Run Seven Core Examples
 
 ### Minimal 3D (rigid bodies, basic collision)

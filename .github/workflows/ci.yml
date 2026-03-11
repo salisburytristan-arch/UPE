@@ -26,6 +26,15 @@ jobs:
     - name: Verify Markdown Link Integrity
       run: python scripts/check_markdown_links.py
 
+    - name: Publish Documentation Gate Summary
+      run: |
+        {
+          echo "## Quick Documentation Link Gate"
+          echo ""
+          echo "- Status: passed"
+          echo "- Command: \\`python scripts/check_markdown_links.py\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
   # =============================================================================
   # Windows Build (CMake)
   # =============================================================================
@@ -56,7 +65,10 @@ jobs:
       run: cmake --build build --config ${{ matrix.config }} --parallel
     
     - name: Run Tests
-      run: cd build && ctest -C ${{ matrix.config }} --output-on-failure
+      run: |
+        New-Item -ItemType Directory -Force -Path proof\ci | Out-Null
+        cd build
+        ctest -C ${{ matrix.config }} --output-on-failure 2>&1 | Tee-Object -FilePath ..\proof\ci\windows-tests-${{ matrix.config }}.log
     
     - name: Test Example Runs
       run: |
@@ -74,6 +86,22 @@ jobs:
         path: |
           build/lib/
           build/bin/
+
+    - name: Upload Test Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-windows-tests-${{ matrix.config }}
+        path: proof/ci/windows-tests-${{ matrix.config }}.log
+
+    - name: Publish Windows Summary
+      shell: bash
+      run: |
+        {
+          echo "## Windows (${{ matrix.config }})"
+          echo ""
+          echo "- Build artifacts: uploaded"
+          echo "- Test log: \\`proof/ci/windows-tests-${{ matrix.config }}.log\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
   
   # =============================================================================
   # Linux Build (CMake)
@@ -119,7 +147,10 @@ jobs:
       run: cmake --build build --parallel
     
     - name: Run Tests
-      run: cd build && ctest --output-on-failure
+      run: |
+        mkdir -p proof/ci
+        cd build
+        ctest --output-on-failure 2>&1 | tee ../proof/ci/linux-tests-${{ matrix.compiler }}-${{ matrix.config }}.log
     
     - name: Test Example Runs
       run: |
@@ -136,6 +167,21 @@ jobs:
         path: |
           build/lib/
           build/bin/
+
+    - name: Upload Test Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-linux-tests-${{ matrix.compiler }}-${{ matrix.config }}
+        path: proof/ci/linux-tests-${{ matrix.compiler }}-${{ matrix.config }}.log
+
+    - name: Publish Linux Summary
+      run: |
+        {
+          echo "## Linux (${{ matrix.config }}, ${{ matrix.compiler }})"
+          echo ""
+          echo "- Build artifacts: uploaded"
+          echo "- Test log: \\`proof/ci/linux-tests-${{ matrix.compiler }}-${{ matrix.config }}.log\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
   
   # =============================================================================
   # macOS Build (CMake)
@@ -168,7 +214,10 @@ jobs:
       run: cmake --build build --parallel
     
     - name: Run Tests
-      run: cd build && ctest --output-on-failure
+      run: |
+        mkdir -p proof/ci
+        cd build
+        ctest --output-on-failure 2>&1 | tee ../proof/ci/macos-tests-${{ matrix.config }}.log
     
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3
@@ -177,6 +226,21 @@ jobs:
         path: |
           build/lib/
           build/bin/
+
+    - name: Upload Test Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-macos-tests-${{ matrix.config }}
+        path: proof/ci/macos-tests-${{ matrix.config }}.log
+
+    - name: Publish macOS Summary
+      run: |
+        {
+          echo "## macOS (${{ matrix.config }})"
+          echo ""
+          echo "- Build artifacts: uploaded"
+          echo "- Test log: \\`proof/ci/macos-tests-${{ matrix.config }}.log\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
   
   # =============================================================================
   # Determinism Verification
@@ -219,6 +283,33 @@ jobs:
           echo "⚠️  Got $UNIQUE different outputs (may be due to timestamps)"
         fi
         echo "::endgroup::"
+
+    - name: Run Proof Artifact Capture
+      run: tools/run_determinism_proof.sh build-release
+
+    - name: Upload Determinism Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-determinism-proof
+        path: |
+          proof/RUNS/
+          run_*.log
+          unique_count.txt
+
+    - name: Publish Determinism Summary
+      run: |
+        UNIQUE=$(cat unique_count.txt)
+        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log | tail -1 | cut -d= -f2)
+        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log | tail -1 | cut -d= -f2)
+        {
+          echo "## Determinism Certification"
+          echo ""
+          echo "- Repeated runs checked: 10"
+          echo "- Unique log digests: ${UNIQUE}"
+          echo "- Proof hash run 1: \\`${HASH1:-missing}\\`"
+          echo "- Proof hash run 2: \\`${HASH2:-missing}\\`"
+          echo "- Artifacts: \\`proof/RUNS/\\`, \\`run_*.log\\`, \\`unique_count.txt\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
   
   # =============================================================================
   # Cross-Compiler Determinism
@@ -266,6 +357,96 @@ jobs:
           echo "⚠️  Different outputs (may be normal with different FP implementations)"
         fi
 
+    - name: Upload Cross-Compiler Logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-cross-compiler-determinism
+        path: |
+          gcc_output.log
+          clang_output.log
+
+    - name: Publish Cross-Compiler Summary
+      run: |
+        GCC_TEST_HASH=$(grep -m1 'Test determinism hash:' gcc_output.log | awk '{print $4}')
+        CLANG_TEST_HASH=$(grep -m1 'Test determinism hash:' clang_output.log | awk '{print $4}')
+        {
+          echo "## Cross-Compiler Determinism"
+          echo ""
+          echo "- GCC test hash: \\`${GCC_TEST_HASH:-missing}\\`"
+          echo "- Clang test hash: \\`${CLANG_TEST_HASH:-missing}\\`"
+          echo "- Raw logs uploaded: \\`gcc_output.log\\`, \\`clang_output.log\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+  # =============================================================================
+  # Canonical Benchmark Proof
+  # =============================================================================
+  benchmark-canonical-scenes:
+    name: Canonical Benchmarks
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build
+
+    - name: Configure Benchmarks
+      run: |
+        cmake -B build-bench -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DUPE_BUILD_TESTS=OFF \
+          -DUPE_BUILD_EXAMPLES=OFF \
+          -DUPE_BUILD_BENCHMARKS=ON \
+          -DUPE_DETERMINISTIC=ON
+
+    - name: Build Canonical Benchmarks
+      run: cmake --build build-bench --target upe_bench_canonical_scenes --parallel
+
+    - name: Run Canonical Benchmarks
+      run: |
+        mkdir -p proof/ci
+        python scripts/run_canonical_benchmark_gate.py \
+          --build-dir build-bench \
+          --skip-build \
+          --results-json proof/ci/canonical-benchmarks.json \
+          --results-csv proof/ci/canonical-benchmarks.csv \
+          --report-html proof/ci/benchmark_report.html \
+          --compare-baseline \
+          --threshold 20.0 2>&1 | tee proof/ci/canonical-benchmarks.log
+
+    - name: Upload Benchmark Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-canonical-benchmarks
+        path: |
+          proof/ci/canonical-benchmarks.csv
+          proof/ci/canonical-benchmarks.json
+          proof/ci/canonical-benchmarks.log
+          proof/ci/benchmark_report.html
+          proof/RUNS/canonical_benchmark_history.csv
+          proof/RUNS/canonical_benchmark_trend_*.json
+
+    - name: Publish Benchmark Summary
+      run: |
+        {
+          echo "## Canonical Benchmarks"
+          echo ""
+          echo "- CSV artifact: \`proof/ci/canonical-benchmarks.csv\`"
+          echo "- JSON artifact: \`proof/ci/canonical-benchmarks.json\`"
+          echo "- HTML report artifact: \\`proof/ci/benchmark_report.html\\`"
+          echo "- Execution log artifact: \\`proof/ci/canonical-benchmarks.log\\`"
+          echo "- Trend artifacts: \`proof/RUNS/canonical_benchmark_history.csv\`, \`proof/RUNS/canonical_benchmark_trend_*.json\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
   # =============================================================================
   # Strict Warnings Parity (Linux GCC/Clang)
   # =============================================================================
@@ -306,13 +487,22 @@ jobs:
       run: |
         python scripts/run_strict_warnings_gate.py --build-dir build_warn_${{ matrix.compiler }}
 
+    - name: Publish Strict Warnings Summary
+      run: |
+        {
+          echo "## Strict Warnings (${{ matrix.compiler }})"
+          echo ""
+          echo "- Status: passed"
+          echo "- Command: \\`python scripts/run_strict_warnings_gate.py --build-dir build_warn_${{ matrix.compiler }}\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
   # =============================================================================
   # Release Package Gate
   # =============================================================================
   release-package-gate:
     name: Release Package Gate
     runs-on: ubuntu-latest
-    needs: [quick-doc-link-gate, strict-warnings-linux]
+    needs: [quick-doc-link-gate, strict-warnings-linux, benchmark-canonical-scenes]
 
     steps:
     - name: Checkout
@@ -328,3 +518,21 @@ jobs:
 
     - name: Create and Verify Release Packages
       run: python scripts/verify_release_gate.py --create --dir releases_ci
+
+    - name: Upload Release Gate Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-release-gate
+        path: |
+          releases_ci/
+          topic_truth_audit.csv
+          docs/TOPIC_TRUTH_AUDIT.md
+
+    - name: Publish Release Gate Summary
+      run: |
+        {
+          echo "## Release Package Gate"
+          echo ""
+          echo "- Release artifacts: \\`releases_ci/\\`"
+          echo "- Topic audit artifacts refreshed and verified"
+        } >> "$GITHUB_STEP_SUMMARY"
