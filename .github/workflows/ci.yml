@@ -80,20 +80,25 @@ jobs:
       shell: powershell
     
     - name: Upload Build Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-windows-${{ matrix.config }}
         path: |
           build/lib/
           build/bin/
+        if-no-files-found: warn
 
     - name: Upload Test Logs
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-windows-tests-${{ matrix.config }}
         path: proof/ci/windows-tests-${{ matrix.config }}.log
+        if-no-files-found: warn
 
     - name: Publish Windows Summary
+      if: always()
       shell: bash
       run: |
         {
@@ -161,20 +166,25 @@ jobs:
         done
     
     - name: Upload Build Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-linux-${{ matrix.compiler }}-${{ matrix.config }}
         path: |
           build/lib/
           build/bin/
+        if-no-files-found: warn
 
     - name: Upload Test Logs
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-linux-tests-${{ matrix.compiler }}-${{ matrix.config }}
         path: proof/ci/linux-tests-${{ matrix.compiler }}-${{ matrix.config }}.log
+        if-no-files-found: warn
 
     - name: Publish Linux Summary
+      if: always()
       run: |
         {
           echo "## Linux (${{ matrix.config }}, ${{ matrix.compiler }})"
@@ -220,20 +230,25 @@ jobs:
         ctest --output-on-failure 2>&1 | tee ../proof/ci/macos-tests-${{ matrix.config }}.log
     
     - name: Upload Build Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-macos-${{ matrix.config }}
         path: |
           build/lib/
           build/bin/
+        if-no-files-found: warn
 
     - name: Upload Test Logs
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-macos-tests-${{ matrix.config }}
         path: proof/ci/macos-tests-${{ matrix.config }}.log
+        if-no-files-found: warn
 
     - name: Publish macOS Summary
+      if: always()
       run: |
         {
           echo "## macOS (${{ matrix.config }})"
@@ -288,6 +303,7 @@ jobs:
       run: tools/run_determinism_proof.sh build-release
 
     - name: Upload Determinism Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-determinism-proof
@@ -295,19 +311,23 @@ jobs:
           proof/RUNS/
           run_*.log
           unique_count.txt
+        if-no-files-found: warn
 
     - name: Publish Determinism Summary
+      if: always()
       run: |
-        UNIQUE=$(cat unique_count.txt)
-        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log | tail -1 | cut -d= -f2)
-        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log | tail -1 | cut -d= -f2)
+        UNIQUE=$(cat unique_count.txt 2>/dev/null || echo "missing")
+        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        if [ -z "$HASH1" ]; then HASH1="missing"; fi
+        if [ -z "$HASH2" ]; then HASH2="missing"; fi
         {
           echo "## Determinism Certification"
           echo ""
           echo "- Repeated runs checked: 10"
           echo "- Unique log digests: ${UNIQUE}"
-          echo "- Proof hash run 1: \\`${HASH1:-missing}\\`"
-          echo "- Proof hash run 2: \\`${HASH2:-missing}\\`"
+          echo "- Proof hash run 1: \\`${HASH1}\\`"
+          echo "- Proof hash run 2: \\`${HASH2}\\`"
           echo "- Artifacts: \\`proof/RUNS/\\`, \\`run_*.log\\`, \\`unique_count.txt\\`"
         } >> "$GITHUB_STEP_SUMMARY"
   
@@ -358,22 +378,27 @@ jobs:
         fi
 
     - name: Upload Cross-Compiler Logs
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-cross-compiler-determinism
         path: |
           gcc_output.log
           clang_output.log
+        if-no-files-found: warn
 
     - name: Publish Cross-Compiler Summary
+      if: always()
       run: |
-        GCC_TEST_HASH=$(grep -m1 'Test determinism hash:' gcc_output.log | awk '{print $4}')
-        CLANG_TEST_HASH=$(grep -m1 'Test determinism hash:' clang_output.log | awk '{print $4}')
+        GCC_TEST_HASH=$(grep -m1 'Test determinism hash:' gcc_output.log 2>/dev/null | awk '{print $4}')
+        CLANG_TEST_HASH=$(grep -m1 'Test determinism hash:' clang_output.log 2>/dev/null | awk '{print $4}')
+        if [ -z "$GCC_TEST_HASH" ]; then GCC_TEST_HASH="missing"; fi
+        if [ -z "$CLANG_TEST_HASH" ]; then CLANG_TEST_HASH="missing"; fi
         {
           echo "## Cross-Compiler Determinism"
           echo ""
-          echo "- GCC test hash: \\`${GCC_TEST_HASH:-missing}\\`"
-          echo "- Clang test hash: \\`${CLANG_TEST_HASH:-missing}\\`"
+          echo "- GCC test hash: \\`${GCC_TEST_HASH}\\`"
+          echo "- Clang test hash: \\`${CLANG_TEST_HASH}\\`"
           echo "- Raw logs uploaded: \\`gcc_output.log\\`, \\`clang_output.log\\`"
         } >> "$GITHUB_STEP_SUMMARY"
 
@@ -426,6 +451,7 @@ jobs:
           --warmup 60 2>&1 | tee proof/ci/canonical-benchmarks.log
 
     - name: Upload Benchmark Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-canonical-benchmarks
@@ -436,8 +462,10 @@ jobs:
           proof/ci/benchmark_report.html
           proof/RUNS/world_step_benchmark_history.csv
           proof/RUNS/world_step_benchmark_trend_*.json
+        if-no-files-found: warn
 
     - name: Publish Benchmark Summary
+      if: always()
       run: |
         {
           echo "## World-Step Benchmarks"
@@ -522,6 +550,7 @@ jobs:
       run: python scripts/verify_release_gate.py --create --dir releases_ci
 
     - name: Upload Release Gate Artifacts
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: upe-release-gate
@@ -529,8 +558,10 @@ jobs:
           releases_ci/
           topic_truth_audit.csv
           docs/TOPIC_TRUTH_AUDIT.md
+        if-no-files-found: warn
 
     - name: Publish Release Gate Summary
+      if: always()
       run: |
         {
           echo "## Release Package Gate"

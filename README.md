@@ -178,6 +178,8 @@ See [ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed design.
 - [Determinism Certification](docs/DETERMINISM_CERTIFICATION.md)
 - [CI Gates](docs/CI_GATES.md)
 - [Benchmark Baselines](docs/BENCHMARK_BASELINES.md)
+- [Proof Index](docs/PROOF_INDEX.md)
+- [Platform Support Matrix](docs/PLATFORM_SUPPORT_MATRIX.md)
 - [Build Status](BUILD_STATUS.md)
 - [Implementation Status](docs/IMPLEMENTATION_STATUS.md)
 - [Performance Gates](docs/perf_gates.py)

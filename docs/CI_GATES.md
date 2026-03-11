@@ -63,10 +63,10 @@ Artifacts include:
 
 Builds and runs the world-step benchmark suite and publishes:
 
-- `benchmark_results.csv`
-- canonical benchmark JSON summary
-- benchmark execution log
-- generated HTML benchmark report
+- `proof/ci/canonical-benchmarks.csv`
+- `proof/ci/canonical-benchmarks.json`
+- `proof/ci/canonical-benchmarks.log`
+- `proof/ci/benchmark_report.html`
 
 This is the primary machine-readable performance proof surface.
 
@@ -82,6 +82,8 @@ Runs the release verification flow and publishes:
 
 - generated release artifacts
 - topic truth audit artifacts
+
+See [PROOF_INDEX.md](PROOF_INDEX.md) for the one-page artifact inspection path.
 
 ## Buyer Interpretation
 

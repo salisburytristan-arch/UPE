@@ -11,6 +11,41 @@ The determinism certification path is intended to answer four buyer questions:
 3. Can compiler-specific drift be inspected directly?
 4. Can the proof be reproduced locally with repository scripts?
 
+## Determinism Guarantee Levels
+
+### Level 1: Repeated-Run Determinism (Guaranteed)
+
+Guaranteed by current proof jobs:
+
+- Same binary
+- Same input and timestep path
+- Same machine class and runtime setup
+- Repeated runs should produce matching determinism hashes
+
+### Level 2: Cross-Compiler Determinism (Observed, Not Guaranteed)
+
+Current CI captures cross-compiler outputs and hashes, but does not claim universal bit-exact parity between GCC and Clang.
+
+What is guaranteed:
+
+- Drift visibility via preserved artifacts (`gcc_output.log`, `clang_output.log`)
+
+What is not guaranteed:
+
+- Bit-identical outputs across all compiler implementations and versions
+
+### Level 3: Cross-Platform Determinism (Not Guaranteed)
+
+The repository does not currently guarantee bit-exact determinism across all operating systems and CPU architectures.
+
+What is guaranteed:
+
+- Per-platform determinism proof tooling and CI evidence lanes
+
+What is not guaranteed:
+
+- Universal hash identity across Windows, Linux, and macOS without platform-specific validation
+
 ## Current Certification Signals
 
 ### Repeated-Run Proof
@@ -75,6 +110,7 @@ tools/run_determinism_proof.sh build
 - Matching proof hashes across repeated runs is the primary bit-exact signal.
 - Cross-compiler output equality is a stronger condition, but not the only useful signal.
 - Raw proof logs should always be reviewed alongside any summary line when a mismatch occurs.
+- Do not market cross-platform bit-exact determinism unless the corresponding proof lane has been explicitly validated for that target.
 
 ## Related References
 
