@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/UpeTargets.cmake")
+
+check_required_components(Upe)
+
+# Provide variables for downstream projects
+set(Upe_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set(Upe_LIBRARIES Upe::upe)

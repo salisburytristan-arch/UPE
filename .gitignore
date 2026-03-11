@@ -1,0 +1,16 @@
+/build/out/
+/.venv/
+/build/
+/build_warn/
+/build_linux/
+/build_windows/
+/releases_ci/
+/proof/RUNS/
+*.log
+/*.obj
+*.exe
+*.lib
+*.dll
+*.so
+*.dylib
+*.pdb

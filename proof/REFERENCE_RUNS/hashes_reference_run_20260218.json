@@ -1,0 +1,8 @@
+{
+  "note": "Package SHA-256 published externally (cannot be self-reference)",
+  "determinism": {
+    "hash_run_1": "0xCC9DBEDE83059DAD",
+    "hash_run_2": "0xCC9DBEDE83059DAD",
+    "match": true
+  }
+}

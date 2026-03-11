@@ -1,0 +1,2 @@
+Expected result: tools/run_tests.(bat|sh) exits with code 0 and output includes:
+- 100% tests passed

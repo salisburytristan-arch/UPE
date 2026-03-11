@@ -1,0 +1,4 @@
+Expected result: tools/build_windows_msvc.bat exits with code 0 and log contains:
+- [UPE] SUCCESS
+- compiler/toolchain detection details
+- CMake configure/build completion

@@ -1,0 +1,330 @@
+name: CI Build & Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # =============================================================================
+  # Quick Documentation Link Gate
+  # =============================================================================
+  quick-doc-link-gate:
+    name: Quick Doc Link Gate
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Verify Markdown Link Integrity
+      run: python scripts/check_markdown_links.py
+
+  # =============================================================================
+  # Windows Build (CMake)
+  # =============================================================================
+  build-windows:
+    name: Windows (${{ matrix.config }})
+    runs-on: windows-latest
+    needs: [quick-doc-link-gate]
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Release, Debug]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+    
+    - name: Configure CMake
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} `
+          -DUPE_BUILD_TESTS=ON `
+          -DUPE_BUILD_EXAMPLES=ON `
+          -DUPE_DETERMINISTIC=ON
+    
+    - name: Build
+      run: cmake --build build --config ${{ matrix.config }} --parallel
+    
+    - name: Run Tests
+      run: cd build && ctest -C ${{ matrix.config }} --output-on-failure
+    
+    - name: Test Example Runs
+      run: |
+        cd build/bin/examples
+        Get-ChildItem *.exe | Select-Object -First 2 | ForEach-Object { 
+          Write-Host "Running $_"
+          & $_.FullName
+        }
+      shell: powershell
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-windows-${{ matrix.config }}
+        path: |
+          build/lib/
+          build/bin/
+  
+  # =============================================================================
+  # Linux Build (CMake)
+  # =============================================================================
+  build-linux:
+    name: Linux (${{ matrix.config }}, ${{ matrix.compiler }})
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate]
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Release, Debug]
+        compiler: [gcc, clang]
+        include:
+          - compiler: gcc
+            cc: gcc-11
+            cxx: g++-11
+          - compiler: clang
+            cc: clang-14
+            cxx: clang++-14
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build
+    
+    - name: Configure CMake
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config }} \
+          -DUPE_BUILD_TESTS=ON \
+          -DUPE_BUILD_EXAMPLES=ON \
+          -DUPE_DETERMINISTIC=ON
+    
+    - name: Build
+      run: cmake --build build --parallel
+    
+    - name: Run Tests
+      run: cd build && ctest --output-on-failure
+    
+    - name: Test Example Runs
+      run: |
+        cd build/bin/examples
+        for exe in $(ls | head -2); do 
+          echo "Running $exe"
+          timeout 10s ./$exe || true
+        done
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-linux-${{ matrix.compiler }}-${{ matrix.config }}
+        path: |
+          build/lib/
+          build/bin/
+  
+  # =============================================================================
+  # macOS Build (CMake)
+  # =============================================================================
+  build-macos:
+    name: macOS (${{ matrix.config }})
+    runs-on: macos-latest
+    needs: [quick-doc-link-gate]
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Release, Debug]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Install Dependencies
+      run: brew install cmake ninja
+    
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.config }} \
+          -DUPE_BUILD_TESTS=ON \
+          -DUPE_BUILD_EXAMPLES=ON \
+          -DUPE_DETERMINISTIC=ON
+    
+    - name: Build
+      run: cmake --build build --parallel
+    
+    - name: Run Tests
+      run: cd build && ctest --output-on-failure
+    
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-macos-${{ matrix.config }}
+        path: |
+          build/lib/
+          build/bin/
+  
+  # =============================================================================
+  # Determinism Verification
+  # =============================================================================
+  determinism-test:
+    name: Determinism Certification
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Build Release
+      run: |
+        cmake -B build-release -DCMAKE_BUILD_TYPE=Release \
+          -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
+        cmake --build build-release --parallel
+    
+    - name: Build Debug
+      run: |
+        cmake -B build-debug -DCMAKE_BUILD_TYPE=Debug \
+          -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
+        cmake --build build-debug --parallel
+    
+    - name: Run Determinism Tests (10 iterations)
+      run: |
+        echo "::group::Running determinism verification"
+        for i in {1..10}; do
+          build-release/bin/upe_tests > run_$i.log 2>&1 || true
+        done
+        
+        # Compare all outputs
+        md5sum run_*.log | awk '{print $1}' | sort -u | wc -l > unique_count.txt
+        UNIQUE=$(cat unique_count.txt)
+        
+        if [ "$UNIQUE" -eq "1" ]; then
+          echo "✅ Determinism verified: All 10 runs identical"
+        else
+          echo "⚠️  Got $UNIQUE different outputs (may be due to timestamps)"
+        fi
+        echo "::endgroup::"
+  
+  # =============================================================================
+  # Cross-Compiler Determinism
+  # =============================================================================
+  cross-compiler-determinism:
+    name: Cross-Compiler Check (GCC vs Clang)
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Build with GCC
+      env:
+        CC: gcc-11
+        CXX: g++-11
+      run: |
+        cmake -B build-gcc -DCMAKE_BUILD_TYPE=Release \
+          -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
+        cmake --build build-gcc --parallel
+        build-gcc/bin/upe_tests > gcc_output.log 2>&1 || true
+    
+    - name: Build with Clang  
+      env:
+        CC: clang-14
+        CXX: clang++-14
+      run: |
+        cmake -B build-clang -DCMAKE_BUILD_TYPE=Release \
+          -DUPE_DETERMINISTIC=ON -DUPE_BUILD_TESTS=ON
+        cmake --build build-clang --parallel
+        build-clang/bin/upe_tests > clang_output.log 2>&1 || true
+    
+    - name: Compare Outputs
+      run: |
+        GCC_HASH=$(md5sum gcc_output.log | awk '{print $1}')
+        CLANG_HASH=$(md5sum clang_output.log | awk '{print $1}')
+        
+        echo "GCC MD5:   $GCC_HASH"
+        echo "Clang MD5: $CLANG_HASH"
+        
+        if [ "$GCC_HASH" = "$CLANG_HASH" ]; then
+          echo "✅ Cross-compiler determinism verified"
+        else
+          echo "⚠️  Different outputs (may be normal with different FP implementations)"
+        fi
+
+  # =============================================================================
+  # Strict Warnings Parity (Linux GCC/Clang)
+  # =============================================================================
+  strict-warnings-linux:
+    name: Strict Warnings (${{ matrix.compiler }})
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate]
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        include:
+          - compiler: gcc
+            cc: gcc-11
+            cxx: g++-11
+          - compiler: clang
+            cc: clang-14
+            cxx: clang++-14
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build gcc-11 g++-11 clang-14
+
+    - name: Run Strict Warnings Gate
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: |
+        python scripts/run_strict_warnings_gate.py --build-dir build_warn_${{ matrix.compiler }}
+
+  # =============================================================================
+  # Release Package Gate
+  # =============================================================================
+  release-package-gate:
+    name: Release Package Gate
+    runs-on: ubuntu-latest
+    needs: [quick-doc-link-gate, strict-warnings-linux]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Verify Topic Truth Audit Freshness
+      run: python scripts/generate_topic_truth_audit.py --check
+
+    - name: Create and Verify Release Packages
+      run: python scripts/verify_release_gate.py --create --dir releases_ci

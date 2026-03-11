@@ -1,0 +1,4 @@
+Expected result: tools/build_linux.sh exits with code 0 and log contains:
+- [UPE] SUCCESS
+- selected compiler
+- CMake configure/build completion

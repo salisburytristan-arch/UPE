@@ -1,0 +1,4 @@
+closing_timestamp=2026-02-18T02:51:15-05:00
+zip_manifest_sha256=8AF6C4C6D542DF57E4D19B3EF974DFAFBA3CB8EAC54A607B7184580E3DEFCFFC
+
+Note: Package SHA-256 published externally (cannot be stored inside the ZIP itself).

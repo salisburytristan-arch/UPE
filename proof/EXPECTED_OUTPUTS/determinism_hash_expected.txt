@@ -1,0 +1,4 @@
+Expected result: tools/run_determinism_proof.(bat|sh) outputs:
+- hash_run_1=0xCC9DBEDE83059DAD
+- hash_run_2=0xCC9DBEDE83059DAD
+- MATCH=true

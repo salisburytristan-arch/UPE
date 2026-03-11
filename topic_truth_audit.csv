@@ -1,0 +1,283 @@
+topic_id,domain,catalog_level,truth_tier,truth_tier_label,topic,basis
+1,MATH,MINIMAL,B,API/Helper-Level,Arithmetic > fractions and ratios (Example: 3/4 + 1/8 = 7/8),Conservative domain mapping: helper/API-level coverage
+2,MATH,MINIMAL,B,API/Helper-Level,Prealgebra > exponents and roots (Example: 2^5 = 32 and sqrt(81)=9),Conservative domain mapping: helper/API-level coverage
+3,MATH,MINIMAL,B,API/Helper-Level,Algebra I > linear equations (Example: 3x+2=11 -> x=3),Conservative domain mapping: helper/API-level coverage
+4,MATH,MINIMAL,B,API/Helper-Level,Algebra I > inequalities (Example: 2x-1>7 -> x>4),Conservative domain mapping: helper/API-level coverage
+5,MATH,MINIMAL,B,API/Helper-Level,Algebra II > polynomials (Example: x^2-5x+6=(x-2)(x-3)),Conservative domain mapping: helper/API-level coverage
+6,MATH,MINIMAL,B,API/Helper-Level,Algebra II > logarithms (Example: log10(1000)=3),Conservative domain mapping: helper/API-level coverage
+7,MATH,MINIMAL,B,API/Helper-Level,Algebra II > complex numbers (Example: i^2=-1 and (1+i)^2=2i),Conservative domain mapping: helper/API-level coverage
+8,MATH,MINIMAL,B,API/Helper-Level,Functions > composition (Example: f(x)=x^2 and g(x)=x+1 then f(g(2))=9),Conservative domain mapping: helper/API-level coverage
+9,MATH,MINIMAL,B,API/Helper-Level,Trigonometry > identities (Example: sin^2(x)+cos^2(x)=1),Conservative domain mapping: helper/API-level coverage
+10,MATH,MINIMAL,B,API/Helper-Level,Trigonometry > solving triangles (Example: Law of Cosines c^2=a^2+b^2-2ab cos(C)),Conservative domain mapping: helper/API-level coverage
+11,MATH,MINIMAL,B,API/Helper-Level,Analytic geometry > conics (Example: x^2/9 + y^2/4 = 1 ellipse),Conservative domain mapping: helper/API-level coverage
+12,MATH,MINIMAL,B,API/Helper-Level,Vectors > dot product (Example: (1 2)·(3 4)=11),Conservative domain mapping: helper/API-level coverage
+13,MATH,MINIMAL,B,API/Helper-Level,Vectors > cross product (Example: (1 0 0)x(0 1 0)=(0 0 1)),Conservative domain mapping: helper/API-level coverage
+14,MATH,MINIMAL,B,API/Helper-Level,Linear algebra > matrices (Example: solve Ax=b via Gaussian elimination),Conservative domain mapping: helper/API-level coverage
+15,MATH,MINIMAL,B,API/Helper-Level,Linear algebra > eigenvalues (Example: A v = λ v),Conservative domain mapping: helper/API-level coverage
+16,MATH,MINIMAL,B,API/Helper-Level,Calculus I > limits (Example: lim x->0 sin(x)/x = 1),Conservative domain mapping: helper/API-level coverage
+17,MATH,MINIMAL,B,API/Helper-Level,Calculus I > derivatives (Example: d/dx x^3 = 3x^2),Conservative domain mapping: helper/API-level coverage
+18,MATH,MINIMAL,B,API/Helper-Level,Calculus I > optimization (Example: maximize area A(x)=x(10-x)),Conservative domain mapping: helper/API-level coverage
+19,MATH,MINIMAL,B,API/Helper-Level,Calculus II > integration (Example: ∫ x^2 dx = x^3/3 + C),Conservative domain mapping: helper/API-level coverage
+20,MATH,MINIMAL,B,API/Helper-Level,Calculus II > series (Example: 1/(1-x)=Σ x^n for |x|<1),Conservative domain mapping: helper/API-level coverage
+21,MATH,MINIMAL,B,API/Helper-Level,Multivariable calculus > gradients (Example: ∇(x^2+y^2)=(2x 2y)),Conservative domain mapping: helper/API-level coverage
+22,MATH,MINIMAL,B,API/Helper-Level,Multivariable calculus > Lagrange multipliers (Example: maximize f subject to g=c via ∇f=λ∇g),Conservative domain mapping: helper/API-level coverage
+23,MATH,MINIMAL,B,API/Helper-Level,Differential equations > first order ODEs (Example: dy/dx = ky -> y=Ce^(kx)),Conservative domain mapping: helper/API-level coverage
+24,MATH,MINIMAL,B,API/Helper-Level,Differential equations > oscillators (Example: x¨+ω^2 x=0),Conservative domain mapping: helper/API-level coverage
+25,MATH,MINIMAL,B,API/Helper-Level,Dynamical systems > phase space (Example: logistic map x_{n+1}=r x_n(1-x_n)),Conservative domain mapping: helper/API-level coverage
+26,MATH,MINIMAL,B,API/Helper-Level,Numerical analysis > floating point error (Example: subtractive cancellation when a≈b in a-b),Conservative domain mapping: helper/API-level coverage
+27,MATH,MINIMAL,B,API/Helper-Level,Numerical analysis > stable integration (Example: RK4 vs Euler for stiff systems),Conservative domain mapping: helper/API-level coverage
+28,MATH,MINIMAL,B,API/Helper-Level,Discrete math > sets and relations (Example: equivalence relation partitions a set),Conservative domain mapping: helper/API-level coverage
+29,MATH,MINIMAL,B,API/Helper-Level,Discrete math > logic and proofs (Example: prove by contradiction assume ¬P then derive false),Conservative domain mapping: helper/API-level coverage
+30,MATH,MINIMAL,B,API/Helper-Level,Combinatorics > counting (Example: n choose k = n!/(k!(n-k)!)),Conservative domain mapping: helper/API-level coverage
+31,MATH,MINIMAL,B,API/Helper-Level,Combinatorics > inclusion exclusion (Example: |A∪B|=|A|+|B|-|A∩B|),Conservative domain mapping: helper/API-level coverage
+32,MATH,MINIMAL,B,API/Helper-Level,Graph theory > shortest paths (Example: Dijkstra on nonnegative edges),Conservative domain mapping: helper/API-level coverage
+33,MATH,MINIMAL,B,API/Helper-Level,Graph theory > spanning trees (Example: Kruskal for MST),Conservative domain mapping: helper/API-level coverage
+34,MATH,MINIMAL,B,API/Helper-Level,Probability > random variables (Example: E[X]=Σ x p(x)),Conservative domain mapping: helper/API-level coverage
+35,MATH,MINIMAL,B,API/Helper-Level,Probability > Bayes rule (Example: P(A|B)=P(B|A)P(A)/P(B)),Conservative domain mapping: helper/API-level coverage
+36,MATH,MINIMAL,B,API/Helper-Level,Statistics > estimation (Example: sample mean estimates μ),Conservative domain mapping: helper/API-level coverage
+37,MATH,MINIMAL,B,API/Helper-Level,Statistics > hypothesis tests (Example: t test compares mean to baseline),Conservative domain mapping: helper/API-level coverage
+38,MATH,MINIMAL,B,API/Helper-Level,Optimization > convex optimization (Example: minimize ||Ax-b||^2),Conservative domain mapping: helper/API-level coverage
+39,MATH,MINIMAL,B,API/Helper-Level,Optimization > constrained optimization (Example: KKT conditions),Conservative domain mapping: helper/API-level coverage
+40,MATH,MINIMAL,B,API/Helper-Level,Information theory > entropy (Example: H(X)=-Σ p log2 p),Conservative domain mapping: helper/API-level coverage
+41,MATH,MINIMAL,B,API/Helper-Level,Game theory > Nash equilibrium (Example: best responses intersect),Conservative domain mapping: helper/API-level coverage
+42,MATH,MINIMAL,B,API/Helper-Level,Set theory > cardinality (Example: countable vs uncountable),Conservative domain mapping: helper/API-level coverage
+43,MATH,MINIMAL,B,API/Helper-Level,Real analysis > continuity (Example: ε-δ definition),Conservative domain mapping: helper/API-level coverage
+44,MATH,MINIMAL,B,API/Helper-Level,Real analysis > measure theory (Example: Lebesgue integral handles more functions than Riemann),Conservative domain mapping: helper/API-level coverage
+45,MATH,MINIMAL,B,API/Helper-Level,Functional analysis > norms (Example: ||x||2 = sqrt(Σ x_i^2)),Conservative domain mapping: helper/API-level coverage
+46,MATH,MINIMAL,B,API/Helper-Level,Abstract algebra > groups (Example: integers under addition form a group),Conservative domain mapping: helper/API-level coverage
+47,MATH,MINIMAL,B,API/Helper-Level,Abstract algebra > rings (Example: polynomials with addition and multiplication),Conservative domain mapping: helper/API-level coverage
+48,MATH,MINIMAL,B,API/Helper-Level,Abstract algebra > fields (Example: rationals form a field),Conservative domain mapping: helper/API-level coverage
+49,MATH,MINIMAL,B,API/Helper-Level,Topology > open sets (Example: ball B(r) around a point),Conservative domain mapping: helper/API-level coverage
+50,MATH,MINIMAL,B,API/Helper-Level,Differential geometry > manifolds (Example: sphere S2 is a 2D manifold),Conservative domain mapping: helper/API-level coverage
+51,MATH,MINIMAL,B,API/Helper-Level,Category theory > functors (Example: map objects and morphisms preserving composition),Conservative domain mapping: helper/API-level coverage
+52,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Atomic structure (Example: electron configuration 1s2 2s2 2p6 for Ne),Catalog marks NOT_IMPLEMENTED
+53,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Periodic trends (Example: electronegativity increases across a period),Catalog marks NOT_IMPLEMENTED
+54,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Chemical bonding > ionic (Example: Na+ and Cl- form NaCl),Catalog marks NOT_IMPLEMENTED
+55,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Chemical bonding > covalent (Example: H2 shares electron pair),Catalog marks NOT_IMPLEMENTED
+56,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Molecular geometry > VSEPR (Example: CH4 tetrahedral),Catalog marks NOT_IMPLEMENTED
+57,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Intermolecular forces (Example: H bonding raises boiling point of water),Catalog marks NOT_IMPLEMENTED
+58,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Stoichiometry (Example: 2H2 + O2 -> 2H2O so 2 mol H2 makes 2 mol H2O),Catalog marks NOT_IMPLEMENTED
+59,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Gas laws (Example: PV=nRT),Catalog marks NOT_IMPLEMENTED
+60,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Solutions and concentration (Example: molarity M = mol solute / L solution),Catalog marks NOT_IMPLEMENTED
+61,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Thermochemistry (Example: ΔH<0 exothermic),Catalog marks NOT_IMPLEMENTED
+62,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Chemical kinetics (Example: rate=k[A]^m[B]^n),Catalog marks NOT_IMPLEMENTED
+63,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Reaction mechanisms (Example: SN2 is one step backside attack),Catalog marks NOT_IMPLEMENTED
+64,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Chemical equilibrium (Example: K = products/reactants at equilibrium),Catalog marks NOT_IMPLEMENTED
+65,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Le Chatelier principle (Example: add reactant shifts equilibrium to products),Catalog marks NOT_IMPLEMENTED
+66,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Acids and bases (Example: pH = -log10[H+]),Catalog marks NOT_IMPLEMENTED
+67,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Buffers (Example: weak acid + conjugate base resists pH change),Catalog marks NOT_IMPLEMENTED
+68,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Solubility equilibria (Example: Ksp for AgCl relates to [Ag+][Cl-]),Catalog marks NOT_IMPLEMENTED
+69,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Redox chemistry (Example: oxidation is loss of electrons),Catalog marks NOT_IMPLEMENTED
+70,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Electrochemistry > galvanic cells (Example: cell potential drives spontaneous reaction),Catalog marks NOT_IMPLEMENTED
+71,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Electrochemistry > Nernst equation (Example: E=E0-(RT/nF)lnQ),Catalog marks NOT_IMPLEMENTED
+72,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Organic chemistry > functional groups (Example: alcohol ROH),Catalog marks NOT_IMPLEMENTED
+73,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Organic chemistry > stereochemistry (Example: chirality gives R and S enantiomers),Catalog marks NOT_IMPLEMENTED
+74,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Organic chemistry > aromaticity (Example: benzene has 6 π electrons),Catalog marks NOT_IMPLEMENTED
+75,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Organic chemistry > spectroscopy (Example: IR peak near 1700 cm^-1 indicates C=O),Catalog marks NOT_IMPLEMENTED
+76,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Inorganic chemistry > coordination complexes (Example: [Cu(NH3)4]2+),Catalog marks NOT_IMPLEMENTED
+77,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Solid state chemistry (Example: band gap separates valence and conduction),Catalog marks NOT_IMPLEMENTED
+78,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Polymer chemistry (Example: polyethylene from ethylene monomers),Catalog marks NOT_IMPLEMENTED
+79,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Analytical chemistry > titration (Example: find unknown acid concentration with base),Catalog marks NOT_IMPLEMENTED
+80,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Analytical chemistry > chromatography (Example: separate mixture by retention time),Catalog marks NOT_IMPLEMENTED
+81,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Biochemistry > enzymes (Example: Michaelis Menten v=Vmax[S]/(Km+[S])),Catalog marks NOT_IMPLEMENTED
+82,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Materials chemistry (Example: Li ion cathode intercalation),Catalog marks NOT_IMPLEMENTED
+83,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Environmental chemistry (Example: NOx contributes to ozone formation),Catalog marks NOT_IMPLEMENTED
+84,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Natal chart basics (Example: Sun sign = zodiac sign at birth),Catalog marks NOT_IMPLEMENTED
+85,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Zodiac signs archetypes (Example: Sun in Aries interpreted as assertive style),Catalog marks NOT_IMPLEMENTED
+86,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Houses (Example: 10th house linked with career themes),Catalog marks NOT_IMPLEMENTED
+87,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Aspects (Example: conjunction = 0 degree separation),Catalog marks NOT_IMPLEMENTED
+88,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Transits (Example: Saturn transit to natal Moon interpreted as heavier mood),Catalog marks NOT_IMPLEMENTED
+89,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Progressions (Example: progressed Moon changes sign roughly monthly),Catalog marks NOT_IMPLEMENTED
+90,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Synastry (Example: compare two charts for relationship themes),Catalog marks NOT_IMPLEMENTED
+91,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Mercury retrograde lore (Example: people attribute delays to Mercury retrograde),Catalog marks NOT_IMPLEMENTED
+92,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Celestial sphere coordinates (Example: right ascension and declination locate stars),Conservative domain mapping: helper/API-level coverage
+93,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Timekeeping > sidereal vs solar (Example: sidereal day is based on stars),Conservative domain mapping: helper/API-level coverage
+94,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Telescopes > optics (Example: angular resolution ~ λ/D),Conservative domain mapping: helper/API-level coverage
+95,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Photometry (Example: magnitude scale is logarithmic),Conservative domain mapping: helper/API-level coverage
+96,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Spectroscopy (Example: absorption lines identify elements),Conservative domain mapping: helper/API-level coverage
+97,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Stellar structure (Example: hydrostatic equilibrium balances gravity and pressure),Conservative domain mapping: helper/API-level coverage
+98,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Stellar evolution (Example: main sequence -> red giant -> white dwarf),Conservative domain mapping: helper/API-level coverage
+99,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,HR diagram (Example: luminosity vs temperature tracks stellar life stages),Conservative domain mapping: helper/API-level coverage
+100,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Nucleosynthesis (Example: fusion H->He releases energy),Conservative domain mapping: helper/API-level coverage
+101,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Supernovae (Example: Type Ia used as standardizable candles),Conservative domain mapping: helper/API-level coverage
+102,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Neutron stars (Example: pulsar lighthouse effect),Conservative domain mapping: helper/API-level coverage
+103,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Black holes (Example: event horizon radius r_s=2GM/c^2),Conservative domain mapping: helper/API-level coverage
+104,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Accretion disks (Example: disk heats by viscosity and radiates X rays),Conservative domain mapping: helper/API-level coverage
+105,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Exoplanets > detection (Example: transit method measures dip in brightness),Conservative domain mapping: helper/API-level coverage
+106,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Exoplanets > radial velocity (Example: Doppler wobble reveals planet mass lower bound),Conservative domain mapping: helper/API-level coverage
+107,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Planet formation (Example: core accretion builds gas giants),Conservative domain mapping: helper/API-level coverage
+108,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Protoplanetary disks (Example: ALMA images dust rings),Conservative domain mapping: helper/API-level coverage
+109,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Solar system dynamics (Example: resonances like 3:2 Pluto Neptune),Conservative domain mapping: helper/API-level coverage
+110,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Celestial mechanics (Example: Kepler third law P^2 ∝ a^3),Conservative domain mapping: helper/API-level coverage
+111,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Orbital perturbations (Example: J2 oblateness shifts node),Conservative domain mapping: helper/API-level coverage
+112,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Tides (Example: tidal locking of Moon),Conservative domain mapping: helper/API-level coverage
+113,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Galactic structure (Example: Milky Way has spiral arms),Conservative domain mapping: helper/API-level coverage
+114,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Stellar populations (Example: Population II stars are metal poor),Conservative domain mapping: helper/API-level coverage
+115,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Interstellar medium (Example: molecular clouds form stars),Conservative domain mapping: helper/API-level coverage
+116,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Star formation (Example: Jeans instability triggers collapse),Conservative domain mapping: helper/API-level coverage
+117,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Dark matter evidence (Example: flat galaxy rotation curves),Conservative domain mapping: helper/API-level coverage
+118,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Dark energy and expansion (Example: accelerated expansion from supernova distances),Conservative domain mapping: helper/API-level coverage
+119,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Cosmology > Big Bang (Example: CMB is relic radiation),Conservative domain mapping: helper/API-level coverage
+120,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Cosmology > Friedmann equations (Example: expansion rate depends on density terms),Conservative domain mapping: helper/API-level coverage
+121,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Gravitational lensing (Example: mass bends light and magnifies background galaxies),Conservative domain mapping: helper/API-level coverage
+122,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Gravitational waves (Example: binary merger chirp signals),Conservative domain mapping: helper/API-level coverage
+123,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Astrobiology (Example: habitable zone concept),Conservative domain mapping: helper/API-level coverage
+124,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > Newton laws (Example: F=ma),Conservative domain mapping: runtime-integrated core exists
+125,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > energy (Example: E=K+U conserved in closed system),Conservative domain mapping: runtime-integrated core exists
+126,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > momentum (Example: p=mv conserved in isolated collisions),Conservative domain mapping: runtime-integrated core exists
+127,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > rigid body dynamics (Example: τ=Iα),Conservative domain mapping: runtime-integrated core exists
+128,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > Lagrangian mechanics (Example: d/dt(∂L/∂qdot)-∂L/∂q=0),Conservative domain mapping: runtime-integrated core exists
+129,PHYSICS,EXTREME,A,Runtime-Integrated Module,Classical mechanics > Hamiltonian mechanics (Example: qdot=∂H/∂p and pdot=-∂H/∂q),Conservative domain mapping: runtime-integrated core exists
+130,PHYSICS,EXTREME,A,Runtime-Integrated Module,Waves and oscillations (Example: x¨+2ζωx˙+ω^2 x=0),Conservative domain mapping: runtime-integrated core exists
+131,PHYSICS,EXTREME,A,Runtime-Integrated Module,Fluid dynamics > Navier Stokes (Example: model viscous flow with ∂v/∂t + v·∇v = -∇p/ρ + ν∇^2 v),Conservative domain mapping: runtime-integrated core exists
+132,PHYSICS,EXTREME,A,Runtime-Integrated Module,Fluid dynamics > turbulence (Example: Reynolds number Re=ρvL/μ),Conservative domain mapping: runtime-integrated core exists
+133,PHYSICS,EXTREME,A,Runtime-Integrated Module,Thermodynamics > laws (Example: ΔU=Q-W),Conservative domain mapping: runtime-integrated core exists
+134,PHYSICS,EXTREME,A,Runtime-Integrated Module,Statistical mechanics (Example: Boltzmann factor exp(-E/kT)),Conservative domain mapping: runtime-integrated core exists
+135,PHYSICS,EXTREME,A,Runtime-Integrated Module,Electromagnetism > Coulomb law (Example: F = k q1 q2 / r^2),Conservative domain mapping: runtime-integrated core exists
+136,PHYSICS,EXTREME,A,Runtime-Integrated Module,Electromagnetism > Maxwell equations (Example: ∇·E=ρ/ε0),Conservative domain mapping: runtime-integrated core exists
+137,PHYSICS,EXTREME,A,Runtime-Integrated Module,Circuits (Example: V=IR),Conservative domain mapping: runtime-integrated core exists
+138,PHYSICS,EXTREME,A,Runtime-Integrated Module,Optics > geometrical (Example: thin lens 1/f=1/do+1/di),Conservative domain mapping: runtime-integrated core exists
+139,PHYSICS,EXTREME,A,Runtime-Integrated Module,Optics > wave optics (Example: double slit interference fringe spacing ~ λL/d),Conservative domain mapping: runtime-integrated core exists
+140,PHYSICS,EXTREME,A,Runtime-Integrated Module,Quantum mechanics > wavefunction (Example: |ψ|^2 gives probability density),Conservative domain mapping: runtime-integrated core exists
+141,PHYSICS,EXTREME,A,Runtime-Integrated Module,Quantum mechanics > Schrodinger equation (Example: iħ ∂ψ/∂t = Hψ),Conservative domain mapping: runtime-integrated core exists
+142,PHYSICS,EXTREME,A,Runtime-Integrated Module,Quantum mechanics > operators (Example: [x p]=iħ),Conservative domain mapping: runtime-integrated core exists
+143,PHYSICS,EXTREME,A,Runtime-Integrated Module,Quantum mechanics > tunneling (Example: alpha decay via barrier penetration),Conservative domain mapping: runtime-integrated core exists
+144,PHYSICS,EXTREME,A,Runtime-Integrated Module,Quantum field theory basics (Example: particles as field excitations),Conservative domain mapping: runtime-integrated core exists
+145,PHYSICS,EXTREME,A,Runtime-Integrated Module,Relativity > special relativity (Example: time dilation γ=1/sqrt(1-v^2/c^2)),Conservative domain mapping: runtime-integrated core exists
+146,PHYSICS,EXTREME,A,Runtime-Integrated Module,Relativity > general relativity (Example: gravity as spacetime curvature),Conservative domain mapping: runtime-integrated core exists
+147,PHYSICS,EXTREME,A,Runtime-Integrated Module,Nuclear physics (Example: binding energy from mass defect),Conservative domain mapping: runtime-integrated core exists
+148,PHYSICS,EXTREME,A,Runtime-Integrated Module,Particle physics > Standard Model (Example: quarks and leptons interact via gauge bosons),Conservative domain mapping: runtime-integrated core exists
+149,PHYSICS,EXTREME,A,Runtime-Integrated Module,Condensed matter > band theory (Example: conductor vs insulator from band gap),Conservative domain mapping: runtime-integrated core exists
+150,PHYSICS,EXTREME,A,Runtime-Integrated Module,Condensed matter > superconductivity (Example: zero resistance below Tc),Conservative domain mapping: runtime-integrated core exists
+151,PHYSICS,EXTREME,A,Runtime-Integrated Module,Materials physics > elasticity (Example: stress = E strain),Conservative domain mapping: runtime-integrated core exists
+152,PHYSICS,EXTREME,A,Runtime-Integrated Module,Plasma physics (Example: Debye length sets shielding scale),Conservative domain mapping: runtime-integrated core exists
+153,PHYSICS,EXTREME,A,Runtime-Integrated Module,Acoustics (Example: sound speed c = sqrt(γRT/M) in ideal gas),Conservative domain mapping: runtime-integrated core exists
+154,PHYSICS,EXTREME,A,Runtime-Integrated Module,Computational physics (Example: simulate N body with symplectic integrator),Conservative domain mapping: runtime-integrated core exists
+155,PHYSICS,EXTREME,A,Runtime-Integrated Module,Chaos (Example: sensitive dependence on initial conditions),Conservative domain mapping: runtime-integrated core exists
+156,PHYSICS,EXTREME,A,Runtime-Integrated Module,Geophysics (Example: seismic waves probe Earth interior),Conservative domain mapping: runtime-integrated core exists
+157,PHYSICS,EXTREME,A,Runtime-Integrated Module,Biophysics (Example: diffusion J=-D∇c),Conservative domain mapping: runtime-integrated core exists
+158,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Bosonic string basics (Example: vibrating string modes map to particle states),Catalog marks NOT_IMPLEMENTED
+159,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Superstrings and supersymmetry (Example: fermions emerge via SUSY on worldsheet),Catalog marks NOT_IMPLEMENTED
+160,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Worldsheet action (Example: Polyakov action defines string dynamics),Catalog marks NOT_IMPLEMENTED
+161,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Conformal field theory (Example: 2D CFT describes string worldsheet),Catalog marks NOT_IMPLEMENTED
+162,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Compactification (Example: extra dimensions wrapped on small manifold),Catalog marks NOT_IMPLEMENTED
+163,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Calabi Yau manifolds (Example: compact spaces preserving SUSY),Catalog marks NOT_IMPLEMENTED
+164,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,D branes (Example: open strings end on branes),Catalog marks NOT_IMPLEMENTED
+165,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Gauge gravity duality AdS CFT (Example: gravity in AdS corresponds to CFT on boundary),Catalog marks NOT_IMPLEMENTED
+166,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,String scattering amplitudes (Example: Veneziano amplitude in early models),Catalog marks NOT_IMPLEMENTED
+167,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Moduli stabilization (Example: fix shape and size of extra dimensions),Catalog marks NOT_IMPLEMENTED
+168,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,M theory (Example: unifies superstring theories in 11D),Catalog marks NOT_IMPLEMENTED
+169,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Flux compactifications (Example: background fluxes generate potentials),Catalog marks NOT_IMPLEMENTED
+170,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,String cosmology (Example: brane inflation scenarios),Catalog marks NOT_IMPLEMENTED
+171,SPACE,MINIMAL,B,API/Helper-Level,Heliophysics (Example: track solar cycle impact on Earth),Conservative domain mapping: helper/API-level coverage
+172,SPACE,MINIMAL,B,API/Helper-Level,Solar wind (Example: plasma outflow interacts with magnetosphere),Conservative domain mapping: helper/API-level coverage
+173,SPACE,MINIMAL,B,API/Helper-Level,Space weather forecasting (Example: CME arrival predicts geomagnetic storms),Conservative domain mapping: helper/API-level coverage
+174,SPACE,MINIMAL,B,API/Helper-Level,Magnetospheres (Example: Earth magnetosphere deflects charged particles),Conservative domain mapping: helper/API-level coverage
+175,SPACE,MINIMAL,B,API/Helper-Level,Ionosphere physics (Example: electron density affects radio propagation),Conservative domain mapping: helper/API-level coverage
+176,SPACE,MINIMAL,B,API/Helper-Level,Auroras (Example: particle precipitation excites atmospheric atoms),Conservative domain mapping: helper/API-level coverage
+177,SPACE,MINIMAL,B,API/Helper-Level,Radiation belts (Example: Van Allen belts trap energetic electrons),Conservative domain mapping: helper/API-level coverage
+178,SPACE,MINIMAL,B,API/Helper-Level,Cosmic rays (Example: high energy protons produce air showers),Conservative domain mapping: helper/API-level coverage
+179,SPACE,MINIMAL,B,API/Helper-Level,Solar energetic particles (Example: flare events increase radiation risk),Conservative domain mapping: helper/API-level coverage
+180,SPACE,MINIMAL,B,API/Helper-Level,Plasma waves (Example: whistler mode waves scatter electrons),Conservative domain mapping: helper/API-level coverage
+181,SPACE,MINIMAL,B,API/Helper-Level,Reconnection (Example: magnetic reconnection releases stored magnetic energy),Conservative domain mapping: helper/API-level coverage
+182,SPACE,MINIMAL,B,API/Helper-Level,Planetary atmospheres (Example: escape processes strip upper atmosphere),Conservative domain mapping: helper/API-level coverage
+183,SPACE,MINIMAL,B,API/Helper-Level,Atmospheric drag (Example: LEO satellites decay due to drag),Conservative domain mapping: helper/API-level coverage
+184,SPACE,MINIMAL,B,API/Helper-Level,Orbital mechanics > Hohmann transfer (Example: two burn transfer between circular orbits),Conservative domain mapping: helper/API-level coverage
+185,SPACE,MINIMAL,B,API/Helper-Level,Attitude dynamics (Example: reaction wheels change spacecraft orientation),Conservative domain mapping: helper/API-level coverage
+186,SPACE,MINIMAL,B,API/Helper-Level,Spacecraft thermal control (Example: radiators reject heat by IR emission),Conservative domain mapping: helper/API-level coverage
+187,SPACE,MINIMAL,B,API/Helper-Level,Astrodynamics > perturbations (Example: solar radiation pressure changes orbit),Conservative domain mapping: helper/API-level coverage
+188,SPACE,MINIMAL,B,API/Helper-Level,Space instrumentation (Example: magnetometer measures field vectors),Conservative domain mapping: helper/API-level coverage
+189,SPACE,MINIMAL,B,API/Helper-Level,Remote sensing (Example: multispectral imaging retrieves surface properties),Conservative domain mapping: helper/API-level coverage
+190,SPACE,MINIMAL,B,API/Helper-Level,Planetary magnetism (Example: Jupiter strong field drives intense auroras),Conservative domain mapping: helper/API-level coverage
+191,OPT,EXTREME,A,Runtime-Integrated Module,CPU profiling first (Example: use perf or VTune to find hottest function),Conservative domain mapping: runtime-integrated core exists
+192,OPT,EXTREME,A,Runtime-Integrated Module,Choose better algorithms (Example: O(n log n) sort vs O(n^2) bubble),Conservative domain mapping: runtime-integrated core exists
+193,OPT,EXTREME,A,Runtime-Integrated Module,Data locality and cache (Example: iterate arrays in contiguous order),Conservative domain mapping: runtime-integrated core exists
+194,OPT,EXTREME,A,Runtime-Integrated Module,Structure of arrays over array of structures (Example: positions_x positions_y for tight loops),Conservative domain mapping: runtime-integrated core exists
+195,OPT,EXTREME,A,Runtime-Integrated Module,Minimize allocations (Example: reuse buffers via memory pool),Conservative domain mapping: runtime-integrated core exists
+196,OPT,EXTREME,A,Runtime-Integrated Module,Avoid fragmentation (Example: arena allocator for many short lived objects),Conservative domain mapping: runtime-integrated core exists
+197,OPT,EXTREME,A,Runtime-Integrated Module,Reduce branch mispredicts (Example: replace if chains with lookup table),Conservative domain mapping: runtime-integrated core exists
+198,OPT,EXTREME,A,Runtime-Integrated Module,SIMD vectorization (Example: process 8 floats at once with AVX),Conservative domain mapping: runtime-integrated core exists
+199,OPT,EXTREME,A,Runtime-Integrated Module,Align data (Example: 64 byte alignment for cache lines),Conservative domain mapping: runtime-integrated core exists
+200,OPT,EXTREME,A,Runtime-Integrated Module,Use restrict and const when safe (Example: help compiler auto vectorize),Conservative domain mapping: runtime-integrated core exists
+201,OPT,EXTREME,A,Runtime-Integrated Module,Loop optimizations (Example: unroll small fixed loops),Conservative domain mapping: runtime-integrated core exists
+202,OPT,EXTREME,A,Runtime-Integrated Module,Avoid false sharing in threads (Example: pad hot counters to cache line size),Conservative domain mapping: runtime-integrated core exists
+203,OPT,EXTREME,A,Runtime-Integrated Module,Threading with work stealing (Example: task queue balances uneven jobs),Conservative domain mapping: runtime-integrated core exists
+204,OPT,EXTREME,A,Runtime-Integrated Module,Pin threads to cores (Example: keep worker on same core to preserve cache),Conservative domain mapping: runtime-integrated core exists
+205,OPT,EXTREME,A,Runtime-Integrated Module,Reduce lock contention (Example: per thread buffers then merge),Conservative domain mapping: runtime-integrated core exists
+206,OPT,EXTREME,A,Runtime-Integrated Module,Use atomics carefully (Example: relaxed ordering for counters),Conservative domain mapping: runtime-integrated core exists
+207,OPT,EXTREME,A,Runtime-Integrated Module,Batch system calls (Example: write buffers instead of many small writes),Conservative domain mapping: runtime-integrated core exists
+208,OPT,EXTREME,A,Runtime-Integrated Module,I O overlap (Example: async read while computing),Conservative domain mapping: runtime-integrated core exists
+209,OPT,EXTREME,A,Runtime-Integrated Module,Compiler flags (Example: -O3 and LTO for release builds),Conservative domain mapping: runtime-integrated core exists
+210,OPT,EXTREME,A,Runtime-Integrated Module,Profile guided optimization (Example: compile with PGO using real workloads),Conservative domain mapping: runtime-integrated core exists
+211,OPT,EXTREME,A,Runtime-Integrated Module,Avoid denormals in hot DSP loops (Example: flush to zero mode),Conservative domain mapping: runtime-integrated core exists
+212,OPT,EXTREME,A,Runtime-Integrated Module,Use fixed point where needed (Example: embedded deterministic math),Conservative domain mapping: runtime-integrated core exists
+213,OPT,EXTREME,A,Runtime-Integrated Module,GPU occupancy management (Example: reduce register pressure to increase active warps),Conservative domain mapping: runtime-integrated core exists
+214,OPT,EXTREME,A,Runtime-Integrated Module,Coalesced global memory access (Example: threads read consecutive addresses),Conservative domain mapping: runtime-integrated core exists
+215,OPT,EXTREME,A,Runtime-Integrated Module,Use shared memory tiling (Example: tile matrix multiply into shared then compute),Conservative domain mapping: runtime-integrated core exists
+216,OPT,EXTREME,A,Runtime-Integrated Module,Minimize global memory writes (Example: fuse kernels to keep intermediates in registers),Conservative domain mapping: runtime-integrated core exists
+217,OPT,EXTREME,A,Runtime-Integrated Module,Avoid warp divergence (Example: replace per thread branching with predication when possible),Conservative domain mapping: runtime-integrated core exists
+218,OPT,EXTREME,A,Runtime-Integrated Module,Use appropriate precision (Example: FP16 for inference when error tolerable),Conservative domain mapping: runtime-integrated core exists
+219,OPT,EXTREME,A,Runtime-Integrated Module,Use vector loads (Example: load float4 per thread when aligned),Conservative domain mapping: runtime-integrated core exists
+220,OPT,EXTREME,A,Runtime-Integrated Module,Use constant memory for broadcast (Example: store small read only tables),Conservative domain mapping: runtime-integrated core exists
+221,OPT,EXTREME,A,Runtime-Integrated Module,Use texture cache for spatial locality (Example: sampling 2D fields),Conservative domain mapping: runtime-integrated core exists
+222,OPT,EXTREME,A,Runtime-Integrated Module,Overlap compute and transfer (Example: double buffer with streams),Conservative domain mapping: runtime-integrated core exists
+223,OPT,EXTREME,A,Runtime-Integrated Module,Reduce PCIe transfers (Example: keep data on GPU across steps),Conservative domain mapping: runtime-integrated core exists
+224,OPT,EXTREME,A,Runtime-Integrated Module,Kernel launch overhead reduction (Example: larger kernels or persistent kernels),Conservative domain mapping: runtime-integrated core exists
+225,OPT,EXTREME,A,Runtime-Integrated Module,Use graph execution when available (Example: capture repeated launches as a graph),Conservative domain mapping: runtime-integrated core exists
+226,OPT,EXTREME,A,Runtime-Integrated Module,Memory pooling on GPU (Example: reuse allocations to avoid cudaMalloc overhead),Conservative domain mapping: runtime-integrated core exists
+227,OPT,EXTREME,A,Runtime-Integrated Module,Avoid CPU GPU sync points (Example: do not call blocking device synchronize in loop),Conservative domain mapping: runtime-integrated core exists
+228,OPT,EXTREME,A,Runtime-Integrated Module,Use pinned host memory for transfers (Example: faster H2D copies),Conservative domain mapping: runtime-integrated core exists
+229,OPT,EXTREME,A,Runtime-Integrated Module,Use unified memory carefully (Example: prefetch to device to avoid page faults),Conservative domain mapping: runtime-integrated core exists
+230,OPT,EXTREME,A,Runtime-Integrated Module,RAM usage profiling (Example: track peak RSS and per allocation callsites),Conservative domain mapping: runtime-integrated core exists
+231,OPT,EXTREME,A,Runtime-Integrated Module,Reduce object size (Example: pack booleans into bitsets),Conservative domain mapping: runtime-integrated core exists
+232,OPT,EXTREME,A,Runtime-Integrated Module,Compress sparse data (Example: CSR format for sparse matrices),Conservative domain mapping: runtime-integrated core exists
+233,OPT,EXTREME,A,Runtime-Integrated Module,Use streaming and chunking (Example: process dataset in tiles not full load),Conservative domain mapping: runtime-integrated core exists
+234,OPT,EXTREME,A,Runtime-Integrated Module,Cache results (Example: memoize expensive pure function),Conservative domain mapping: runtime-integrated core exists
+235,OPT,EXTREME,A,Runtime-Integrated Module,Avoid copies by move semantics (Example: C++ move vector instead of deep copy),Conservative domain mapping: runtime-integrated core exists
+236,OPT,EXTREME,A,Runtime-Integrated Module,Use zero copy parsing (Example: parse views into buffer slices),Conservative domain mapping: runtime-integrated core exists
+237,OPT,EXTREME,A,Runtime-Integrated Module,Prefer iterative over recursive when deep (Example: avoid stack blowups),Conservative domain mapping: runtime-integrated core exists
+238,OPT,EXTREME,A,Runtime-Integrated Module,Control GC pressure in managed runtimes (Example: reuse arrays and avoid per frame allocations),Conservative domain mapping: runtime-integrated core exists
+239,OPT,EXTREME,A,Runtime-Integrated Module,NUMA awareness (Example: allocate memory on same NUMA node as thread),Conservative domain mapping: runtime-integrated core exists
+240,OPT,EXTREME,A,Runtime-Integrated Module,Huge pages when beneficial (Example: reduce TLB misses for large contiguous buffers),Conservative domain mapping: runtime-integrated core exists
+241,OPT,EXTREME,A,Runtime-Integrated Module,Memory bandwidth optimization (Example: compute intensity increase via fusion),Conservative domain mapping: runtime-integrated core exists
+242,OPT,EXTREME,A,Runtime-Integrated Module,Precision tuned math libraries (Example: use fused multiply add where available),Conservative domain mapping: runtime-integrated core exists
+243,OPT,EXTREME,A,Runtime-Integrated Module,Deterministic scheduling for sims (Example: fixed timestep and deterministic reduction order),Conservative domain mapping: runtime-integrated core exists
+244,OPT,EXTREME,A,Runtime-Integrated Module,Deterministic parallel reductions (Example: pairwise reduction tree to fix summation order),Conservative domain mapping: runtime-integrated core exists
+245,OPT,EXTREME,A,Runtime-Integrated Module,Use SoA for GPU and CPU parity (Example: same layout friendly to vector loads),Conservative domain mapping: runtime-integrated core exists
+246,OPT,EXTREME,A,Runtime-Integrated Module,Fast path slow path design (Example: common case branchless and rare case separate),Conservative domain mapping: runtime-integrated core exists
+247,OPT,EXTREME,A,Runtime-Integrated Module,Minimize virtual dispatch (Example: replace hot virtual calls with function pointers or templates),Conservative domain mapping: runtime-integrated core exists
+248,OPT,EXTREME,A,Runtime-Integrated Module,Precompute lookup tables (Example: approximate sin with table and interpolation),Conservative domain mapping: runtime-integrated core exists
+249,OPT,EXTREME,A,Runtime-Integrated Module,Bounds check elimination (Example: hoist checks out of inner loops),Conservative domain mapping: runtime-integrated core exists
+250,OPT,EXTREME,A,Runtime-Integrated Module,Use cache friendly spatial partitioning (Example: uniform grid broadphase reduces pair checks),Conservative domain mapping: runtime-integrated core exists
+251,MATH,MINIMAL,B,API/Helper-Level,Numerical PDEs > finite volume methods (Example: conservative flux update for hyperbolic systems),Conservative domain mapping: helper/API-level coverage
+252,MATH,MINIMAL,B,API/Helper-Level,Stochastic calculus > Ito processes (Example: dX = mu dt + sigma dW for diffusion models),Conservative domain mapping: helper/API-level coverage
+253,MATH,MINIMAL,B,API/Helper-Level,Spectral methods > Fourier collocation (Example: solve periodic PDEs with FFT basis),Conservative domain mapping: helper/API-level coverage
+254,MATH,MINIMAL,B,API/Helper-Level,Computational geometry > convex hulls (Example: quickhull for collision pre-processing),Conservative domain mapping: helper/API-level coverage
+255,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Quantum chemistry > Hartree-Fock (Example: self-consistent field for molecular orbitals),Catalog marks NOT_IMPLEMENTED
+256,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Chemical thermodynamics > Gibbs free energy (Example: Delta G determines reaction spontaneity),Catalog marks NOT_IMPLEMENTED
+257,CHEM,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Atmospheric chemistry > photochemical smog (Example: VOC and NOx driven ozone cycles),Catalog marks NOT_IMPLEMENTED
+258,ASTROLOGY,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Statistical validation of astrological claims (Example: blinded study design for predictive tests),Catalog marks NOT_IMPLEMENTED
+259,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,High-energy astrophysics > AGN jets (Example: relativistic outflows from accreting black holes),Conservative domain mapping: helper/API-level coverage
+260,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Interferometry > aperture synthesis (Example: combine baselines for high angular resolution),Conservative domain mapping: helper/API-level coverage
+261,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Transient astronomy > kilonova modeling (Example: r-process ejecta light curve estimation),Conservative domain mapping: helper/API-level coverage
+262,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Black hole metrics > Kerr spacetime (Example: frame dragging near rotating horizons),Conservative domain mapping: helper/API-level coverage
+263,PHYSICS,EXTREME,A,Runtime-Integrated Module,Computational mechanics > symplectic integrators (Example: long-horizon Hamiltonian stability),Conservative domain mapping: runtime-integrated core exists
+264,PHYSICS,EXTREME,A,Runtime-Integrated Module,Nonlinear dynamics > bifurcation analysis (Example: Hopf bifurcation in oscillator systems),Conservative domain mapping: runtime-integrated core exists
+265,PHYSICS,EXTREME,A,Runtime-Integrated Module,Continuum mechanics > constitutive models (Example: viscoelastic stress evolution laws),Conservative domain mapping: runtime-integrated core exists
+266,PHYSICS,EXTREME,A,Runtime-Integrated Module,Plasma transport > magnetohydrodynamics (Example: coupling Lorentz forces with fluid flow),Conservative domain mapping: runtime-integrated core exists
+267,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,String compactification > moduli spaces (Example: deformation parameters of compact manifolds),Catalog marks NOT_IMPLEMENTED
+268,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Brane dynamics > Dirac-Born-Infeld action (Example: effective worldvolume dynamics),Catalog marks NOT_IMPLEMENTED
+269,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Dualities > T-duality and S-duality (Example: equivalent spectra across coupling regimes),Catalog marks NOT_IMPLEMENTED
+270,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Holography > AdS black brane thermodynamics (Example: transport coefficients from dual gravity),Catalog marks NOT_IMPLEMENTED
+271,SPACE,MINIMAL,B,API/Helper-Level,Mission design > patched conics (Example: sphere-of-influence transfer staging),Conservative domain mapping: helper/API-level coverage
+272,SPACE,MINIMAL,B,API/Helper-Level,Orbit determination > batch least squares (Example: fit state vector to tracking residuals),Conservative domain mapping: helper/API-level coverage
+273,SPACE,MINIMAL,B,API/Helper-Level,Attitude control > quaternion PID (Example: reaction wheel torque commands from error quaternion),Conservative domain mapping: helper/API-level coverage
+274,SPACE,MINIMAL,B,API/Helper-Level,Space environment > thermospheric density models (Example: drag forecasting under solar storms),Conservative domain mapping: helper/API-level coverage
+275,OPT,EXTREME,A,Runtime-Integrated Module,Numerical kernels > blocked sparse matvec (Example: cache-aware CSR traversal with tiling),Conservative domain mapping: runtime-integrated core exists
+276,OPT,EXTREME,A,Runtime-Integrated Module,Deterministic replay > checksum windows (Example: periodic state digests for bisecting drift),Conservative domain mapping: runtime-integrated core exists
+277,OPT,EXTREME,A,Runtime-Integrated Module,Parallel runtime > lock-free MPMC queues (Example: bounded ring queue for task dispatch),Conservative domain mapping: runtime-integrated core exists
+278,OPT,EXTREME,A,Runtime-Integrated Module,Profiling automation > continuous flamegraph diffs (Example: CI gate on hot-path regression),Conservative domain mapping: runtime-integrated core exists
+279,PHYSICS,EXTREME,A,Runtime-Integrated Module,Geometric mechanics > Lie group integration (Example: SO(3) updates without renormalization drift),Conservative domain mapping: runtime-integrated core exists
+280,SPACE,MINIMAL,B,API/Helper-Level,Deep-space navigation > DSN two-way ranging (Example: light-time corrected range and Doppler solution),Conservative domain mapping: helper/API-level coverage
+281,ASTRONOMY,JUST_STARTED,B,API/Helper-Level,Cosmological probes > baryon acoustic oscillations (Example: standard ruler in galaxy clustering),Conservative domain mapping: helper/API-level coverage
+282,STRING,NOT_IMPLEMENTED,C,Catalog-Only / Not Implemented,Worldsheet quantization > BRST cohomology (Example: physical state conditions from nilpotent charge),Catalog marks NOT_IMPLEMENTED

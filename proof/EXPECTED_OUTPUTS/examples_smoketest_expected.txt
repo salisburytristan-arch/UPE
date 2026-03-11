@@ -1,0 +1,3 @@
+Expected result: tools/run_examples_smoketest.(bat|sh) exits with code 0 and log contains:
+- execution of one or more example binaries
+- [UPE] SUCCESS
