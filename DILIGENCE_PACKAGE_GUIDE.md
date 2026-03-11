@@ -348,7 +348,7 @@ Use this timeline to structure your evaluation:
 
 ### Common Q&A Responses
 
-See ["Sample Q&A responses" section in SALES_PROCESS_GUIDE.md](../SALES_PROCESS_GUIDE.md#sample-qa-responses).
+See ["Sample Q&A responses" section in SALES_PROCESS_GUIDE.md](SALES_PROCESS_GUIDE.md#sample-qa-responses).
 
 ---
 
