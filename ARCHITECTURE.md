@@ -1,8 +1,16 @@
 # UnifiedPhysicsEngine Architecture
 
+Trust note: this document describes architectural intent and subsystem design.
+For current externally validated guarantees and confidence levels, defer to:
+- `docs/PROOF_INDEX.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/MATURITY_MATRIX.md`
+- `docs/TRUTH_HIERARCHY.md`
+
 ## Overview
 
-The UnifiedPhysicsEngine (UPE) is a comprehensive, deterministic, cross-platform physics simulation framework capable of simulating phenomena from quantum-scale molecular interactions to planetary-scale orbital mechanics.
+The UnifiedPhysicsEngine (UPE) is a broad physics simulation framework with deterministic tooling and cross-platform build paths.
 
 ## Core Design Philosophy
 
@@ -240,7 +248,7 @@ The UnifiedPhysicsEngine (UPE) is a comprehensive, deterministic, cross-platform
 - Grow capacity exponentially (2x)
 - Compact/defrag during quiescent periods
 
-### Determinism Guarantees
+### Determinism Mechanisms (Design Intent)
 
 **Deterministic Ordering**:
 - Sort contacts/pairs/constraints by stable keys
@@ -252,9 +260,9 @@ The UnifiedPhysicsEngine (UPE) is a comprehensive, deterministic, cross-platform
 - Denormals-are-zero on supported platforms
 - Overflow/NaN guards in hot paths
 
-**State Hashing**:
+**State Hashing and Replay Signals**:
 - Frame-by-frame state hashes (Blake3 or similar)
-- Compare across compilers/platforms
+- Compare within and across selected compilers/platforms as a visibility signal
 - Replay validation
 
 ### Certification Harness (planned, `upe_certification.h`)

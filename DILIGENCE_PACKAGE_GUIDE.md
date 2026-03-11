@@ -2,9 +2,16 @@
 ## Unified Physics Engine v1.0.0 – Exclusive Evaluation
 
 **Package Date**: February 26, 2026  
-**Version**: 1.0.0 (Production Ready)  
+**Version**: 1.0.0 (Buyer Evaluation Package)  
 **Evaluation Period**: [INSERT: 30-90 days from date]  
 **Confidentiality**: Subject to signed NDA
+
+Validation authority: treat these documents as canonical for current claim scope:
+- `docs/PROOF_INDEX.md`
+- `docs/CI_GATES.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/TRUTH_HIERARCHY.md`
 
 ---
 
@@ -239,9 +246,9 @@ Read in this order:
    - Platform assumptions
 
 9. **[docs/DETERMINISM.md](docs/DETERMINISM.md) + [docs/DETERMINISM_GUIDE.md](docs/DETERMINISM_GUIDE.md)** (20 min)
-   - How determinism is guaranteed
+   - How determinism is evidenced and reproduced
    - Replay/snapshot infrastructure
-   - Cross-platform bit-exact validation
+   - Cross-platform drift visibility and platform-specific validation lanes
    - Performance vs. determinism trade-offs
 
 10. **[docs/SECURITY_AND_SAFETY.md](docs/SECURITY_AND_SAFETY.md)** (10 min)
@@ -365,7 +372,7 @@ proof/RUNS/determinism_*.log
 Shows:
 - Frame-by-frame state hashing (CRC64)
 - Multi-run reproducibility verification
-- Cross-platform bit-exact matching
+- Cross-platform proof lanes and drift visibility artifacts
 
 ### Test Results
 

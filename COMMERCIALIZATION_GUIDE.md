@@ -2,6 +2,14 @@
 
 **Status**: ✅ COMPLETE - All 5 priorities implemented
 
+Scope note: this document includes commercialization planning and historical implementation framing.
+For current buyer-verifiable validation scope and guarantees, defer to:
+- `docs/PROOF_INDEX.md`
+- `docs/CI_GATES.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/TRUTH_HIERARCHY.md`
+
 ---
 
 ## Executive Summary
@@ -758,7 +766,7 @@ TOTAL: 1930+ lines of production-grade code
 
 ### Certification ✅
 - [x] 4 comprehensive determinism tests
-- [x] Bit-exact reproducibility verified
+- [x] Repeated-run bit-exact reproducibility verified on the certification path
 - [x] Professional certification report format
 
 ### Benchmarks ✅

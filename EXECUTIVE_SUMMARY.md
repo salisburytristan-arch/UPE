@@ -1,6 +1,13 @@
 # UNIFIED PHYSICS ENGINE - EXECUTIVE SUMMARY (1-PAGE)
 
-**Prepared**: February 2026 | **Status**: Production Ready | **Confidential**
+**Prepared**: February 2026 | **Status**: Qualified Buyer Evaluation Ready | **Confidential**
+
+Validation authority: when this summary conflicts with proof/maturity docs, defer to:
+- `docs/PROOF_INDEX.md`
+- `docs/CI_GATES.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/TRUTH_HIERARCHY.md`
 
 ---
 
@@ -22,7 +29,7 @@
 | **Languages** | C/C++, Python, C#, Rust, JavaScript/WASM, Lua |
 | **Build** | CMake 3.15+, cross-platform |
 | **Testing** | 66 unit tests, all passing |
-| **Determinism** | Bit-exact reproducibility verified |
+| **Determinism** | Repeated-run reproducibility verified; broader scope defined in certification docs |
 | **Performance** | 60 FPS @ 1000+ bodies (platform-dependent) |
 | **Library Size** | ~700 KB compiled |
 

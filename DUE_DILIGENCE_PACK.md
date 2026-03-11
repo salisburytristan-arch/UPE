@@ -3,8 +3,15 @@
 
 **Prepared**: February 2026  
 **Version**: 1.0  
-**Status**: Production-Ready Commercial SDK  
+**Status**: Qualified Buyer Evaluation Package  
 **Confidentiality**: For Qualified Buyer Evaluation
+
+Validation authority: when this pack conflicts with current proof/maturity docs, defer to:
+- `docs/PROOF_INDEX.md`
+- `docs/CI_GATES.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/TRUTH_HIERARCHY.md`
 
 ---
 
@@ -43,7 +50,7 @@ The **Unified Physics Engine (UPE)** is a comprehensive physics simulation frame
 | **External Dependencies** | None (C/C++ stdlib only) |
 | **Library Size** | ~700 KB compiled |
 | **Tests** | 66 tests, all passing |
-| **Determinism** | Bit-exact reproducibility verified |
+| **Determinism** | Repeated-run reproducibility verified; broader scope is qualification-bound |
 | **Build System** | CMake 3.15+ (cross-platform) |
 | **Code Organization** | 273+ headers, 130+ source files |
 

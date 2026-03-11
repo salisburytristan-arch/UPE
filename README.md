@@ -2,6 +2,13 @@
 
 **Deterministic rollback-ready physics core (no mandatory runtime dependencies) with snapshots, replay validation, and state hashing.**
 
+Validation scope authority: for buyer-verifiable claims and confidence levels, use:
+- [docs/PROOF_INDEX.md](docs/PROOF_INDEX.md)
+- [docs/CI_GATES.md](docs/CI_GATES.md)
+- [docs/DETERMINISM_CERTIFICATION.md](docs/DETERMINISM_CERTIFICATION.md)
+- [docs/PLATFORM_SUPPORT_MATRIX.md](docs/PLATFORM_SUPPORT_MATRIX.md)
+- [docs/TRUTH_HIERARCHY.md](docs/TRUTH_HIERARCHY.md)
+
 **CONFIDENTIAL: Proprietary source for private evaluation and exclusive acquisition discussions.**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
@@ -16,7 +23,7 @@
 - ✅ Builds with current toolchains; see proof logs for exact output
 - ✅ CTest entry AllTests passes (see proof/RUNS/tests_*.log)
 - ✅ Full World Pipeline: Broadphase → Narrowphase → Solver → Integration → Constraints
-- ✅ Windows (MSVC) verified; Linux build scripts included; macOS unverified
+- ✅ Platform/toolchain validation status is tracked in docs/PLATFORM_SUPPORT_MATRIX.md
 - ✅ Determinism proof tooling included; validated via tools/run_determinism_proof.* (see proof logs)
 
 See [Implementation Status](docs/IMPLEMENTATION_STATUS.md) for complete feature list.
@@ -62,7 +69,7 @@ Module presence below reflects code in the repository. Runtime integration into 
 ### Developer Experience
 - ✅ **Zero Dependencies**: Pure C/C++ with no external libraries
 - ✅ **Small Footprint**: ~700KB compiled library (optimized)
-- ✅ **Windows (MSVC) Verified**: Linux build scripts included; macOS unverified
+- ✅ **Platform Validation Matrix**: See docs/PLATFORM_SUPPORT_MATRIX.md for current status labels and evidence
 - ✅ **Language Bindings**: Python, C#, Rust, JavaScript/WASM, Lua
 - ✅ **Test Suite**: CTest entry AllTests passes (see proof/RUNS/tests_*.log)
 

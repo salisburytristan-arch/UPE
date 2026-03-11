@@ -1,5 +1,13 @@
 # Unified Physics Engine - Release Notes
 
+Historical framing note: this file includes legacy release messaging.
+For current buyer-verifiable validation scope and trust claims, use:
+- `docs/PROOF_INDEX.md`
+- `docs/CI_GATES.md`
+- `docs/DETERMINISM_CERTIFICATION.md`
+- `docs/BENCHMARK_BASELINES.md`
+- `docs/TRUTH_HIERARCHY.md`
+
 ## v0.10.0 (Current) - Production Infrastructure Foundation
 
 **Focus**: Enterprise infrastructure, error handling, telemetry, and validated configuration.
