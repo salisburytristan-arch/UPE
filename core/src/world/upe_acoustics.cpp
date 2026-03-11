@@ -347,3 +347,39 @@ float UpeAcoustics_ComputeSoundPower(const UpeAcousticsGrid *grid, uint32_t axis
     
     return power;
 }
+
+/* Doppler: positive v_source moves away from observer, positive v_observer moves toward source */
+float UpeAcoustics_DopplerFrequency(float f0, float v_sound,
+                                     float v_source, float v_observer) {
+    float denom = v_sound + v_source;
+    if (denom < 1e-4f) return f0;
+    return f0 * (v_sound + v_observer) / denom;
+}
+
+/* Simplified Whitham sonic boom overpressure [Pa] */
+float UpeAcoustics_SonicBoomOverpressure(float mach, float altitude_m, float wingspan_m) {
+    if (mach <= 1.0f || altitude_m <= 0.0f) return 0.0f;
+    /* Carlson formula approximation */
+    float beta = sqrtf(mach * mach - 1.0f);
+    float rho0 = 1.225f * expf(-altitude_m / 8500.0f);
+    float c0   = 340.0f;
+    float dp = 0.0f;
+    /* Simplified: dp ~ rho*c * M * beta * K / sqrt(r) with K from wingspan */
+    float r = altitude_m;
+    if (r < 1.0f) r = 1.0f;
+    dp = rho0 * c0 * 0.01f * mach * beta * wingspan_m / sqrtf(r);
+    return dp;
+}
+
+/* Single knife-edge Kirchhoff diffraction attenuation [dB] */
+float UpeAcoustics_DiffractionAttenuation(float wavelength, float aperture, float angle_rad) {
+    if (wavelength <= 0.0f || aperture <= 0.0f) return 0.0f;
+    /* Fresnel number N = aperture^2 / (wavelength * path_excess) — simplified */
+    float sin_a = sinf(angle_rad);
+    if (sin_a < 0.0f) sin_a = -sin_a;
+    if (sin_a < 1e-6f) return 0.0f;
+    float fresnel_N = (aperture * aperture) / (wavelength * aperture / sin_a);
+    /* Attenuation ≈ -10*log10(1/(1+4*pi*N)) dB  (rough approximation) */
+    float denom = 1.0f + 4.0f * 3.14159265f * fresnel_N;
+    return -10.0f * log10f(1.0f / denom);
+}

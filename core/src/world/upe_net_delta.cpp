@@ -223,3 +223,21 @@ void UpeNetDelta_Destroy(UpeNetDelta *delta) {
     free(delta->data);
     free(delta);
 }
+
+void UpeNetDelta_DeadReckoning(UpeVec3 pos, UpeVec3 vel, UpeVec3 accel,
+                                 float dt, UpeVec3 *out_pos) {
+    if (!out_pos) return;
+    out_pos->x = pos.x + vel.x * dt + 0.5f * accel.x * dt * dt;
+    out_pos->y = pos.y + vel.y * dt + 0.5f * accel.y * dt * dt;
+    out_pos->z = pos.z + vel.z * dt + 0.5f * accel.z * dt * dt;
+}
+
+int UpeNetDelta_RequestOwnership(UpeOwnershipState *state, uint32_t requester_id) {
+    if (!state) return 0;
+    if (state->owner_id == requester_id) return 1;
+    /* Simple immediate handoff with authority version bump */
+    state->owner_id = requester_id;
+    state->authority_version += 1u;
+    state->handoff_timer = 0.0f;
+    return 1;
+}

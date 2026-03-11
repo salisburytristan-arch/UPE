@@ -96,6 +96,18 @@ typedef struct UpeTransferOrbit {
 
 UpeTransferOrbit UpeSpace_PlanHohmannTransfer(float r1, float r2, float mu);
 
+/* Radiation pressure from a star's luminosity on a surface at distance_m */
+float UpeSpace_SolarWindPressure(float luminosity_W, float c, float distance_m);
+
+/* Bondi-Jeans accretion rate [kg/s] */
+float UpeSpace_JeansAccretionRate(float density, float sound_speed, float G, float mass);
+
+/* Sedov-Taylor blast wave radius  R = (E_blast / rho)^0.2 * t^0.4  */
+float UpeSpace_SedovTaylorBlastRadius(float E_blast, float rho_ambient, float time_s);
+
+/* Hubble recession velocity  v = H0 * d */
+float UpeSpace_HubbleRecessionalVelocity(float H0_km_s_Mpc, float distance_Mpc);
+
 #ifdef __cplusplus
 }
 #endif

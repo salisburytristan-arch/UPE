@@ -25,6 +25,20 @@ UpeVec3 UpeNetDelta_DequantizeVec3(const uint16_t q[3], UpeVec3 min_value, UpeVe
                                    uint32_t bits);
 void UpeNetDelta_Destroy(UpeNetDelta *delta);
 
+/* Dead reckoning: extrapolates position forward under constant acceleration */
+void UpeNetDelta_DeadReckoning(UpeVec3 pos, UpeVec3 vel, UpeVec3 accel,
+                                 float dt, UpeVec3 *out_pos);
+
+/* Ownership authority: optimistic lock-step ownership transfer */
+typedef struct UpeOwnershipState {
+    uint32_t owner_id;
+    uint32_t authority_version;
+    float    handoff_timer;
+} UpeOwnershipState;
+
+/* Returns 1 if ownership was granted (requester_id != current owner_id) */
+int UpeNetDelta_RequestOwnership(UpeOwnershipState *state, uint32_t requester_id);
+
 #ifdef __cplusplus
 }
 #endif

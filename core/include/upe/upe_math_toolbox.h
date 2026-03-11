@@ -112,6 +112,21 @@ void UpeMath_Delaunay2D(const float *points, uint32_t point_count, uint32_t **tr
 void UpeMath_FFT(const float *real, const float *imag, float *out_real, float *out_imag, uint32_t n);
 void UpeMath_IFFT(const float *real, const float *imag, float *out_real, float *out_imag, uint32_t n);
 
+/* Cubic Bezier curve and tangent */
+UpeVec3 UpeMath_BezierCubic(UpeVec3 p0, UpeVec3 p1, UpeVec3 p2, UpeVec3 p3, float t);
+UpeVec3 UpeMath_BezierCubicTangent(UpeVec3 p0, UpeVec3 p1, UpeVec3 p2, UpeVec3 p3, float t);
+
+/* Fractal box-counting dimension estimate */
+float   UpeMath_FractalBoxDimension(float count_small, float count_large, float scale_ratio);
+
+/* Fast LUT-based sin/cos using 256-entry table (approx, periodic) */
+float   UpeMath_LUTSin(float angle_rad);
+float   UpeMath_LUTCos(float angle_rad);
+
+/* Square-cube law: area scales as linear_scale^2, volume as linear_scale^3.
+  Returns surface-area / volume ratio relative to unit scale. */
+float   UpeMath_SquareCubeLaw(float linear_scale);
+
 #ifdef __cplusplus
 }
 #endif

@@ -221,3 +221,82 @@ UpeVec3 UpeQuat_RotateVec3(UpeQuat q, UpeVec3 v) {
     UpeQuat rq = UpeQuat_Mul(UpeQuat_Mul(q, vq), qinv);
     return {rq.x, rq.y, rq.z};
 }
+
+float UpeVec3_ScalarTriple(UpeVec3 a, UpeVec3 b, UpeVec3 c) {
+    return UpeVec3_Dot(a, UpeVec3_Cross(b, c));
+}
+
+UpeMat3 UpeMat3_Skew(UpeVec3 v) {
+    UpeMat3 out = {{
+        {0.0f, -v.z,  v.y},
+        { v.z, 0.0f, -v.x},
+        {-v.y, v.x, 0.0f}
+    }};
+    return out;
+}
+
+/* Jacobi eigen decomposition for symmetric 3x3 matrices */
+void UpeMat3_EigenSymmetric(UpeMat3 m, float eigenvalues[3], UpeVec3 eigenvectors[3]) {
+    if (!eigenvalues || !eigenvectors) return;
+    float a[3][3] = {
+        {m.m[0][0], m.m[0][1], m.m[0][2]},
+        {m.m[1][0], m.m[1][1], m.m[1][2]},
+        {m.m[2][0], m.m[2][1], m.m[2][2]}
+    };
+    float v[3][3] = {
+        {1.0f,0.0f,0.0f},
+        {0.0f,1.0f,0.0f},
+        {0.0f,0.0f,1.0f}
+    };
+    for (int iter = 0; iter < 32; ++iter) {
+        int p = 0, q = 1;
+        float max = fabsf(a[0][1]);
+        if (fabsf(a[0][2]) > max) { max = fabsf(a[0][2]); p = 0; q = 2; }
+        if (fabsf(a[1][2]) > max) { max = fabsf(a[1][2]); p = 1; q = 2; }
+        if (max < 1e-6f) break;
+        float app = a[p][p], aqq = a[q][q], apq = a[p][q];
+        float phi = 0.5f * atan2f(2.0f * apq, (aqq - app));
+        float c = cosf(phi), s = sinf(phi);
+        for (int k = 0; k < 3; ++k) {
+            float aip = a[k][p], aiq = a[k][q];
+            a[k][p] = c * aip - s * aiq;
+            a[k][q] = s * aip + c * aiq;
+        }
+        for (int k = 0; k < 3; ++k) {
+            float apk = a[p][k], aqk = a[q][k];
+            a[p][k] = c * apk - s * aqk;
+            a[q][k] = s * apk + c * aqk;
+        }
+        for (int k = 0; k < 3; ++k) {
+            float vip = v[k][p], viq = v[k][q];
+            v[k][p] = c * vip - s * viq;
+            v[k][q] = s * vip + c * viq;
+        }
+    }
+    eigenvalues[0] = a[0][0]; eigenvalues[1] = a[1][1]; eigenvalues[2] = a[2][2];
+    eigenvectors[0] = {v[0][0], v[1][0], v[2][0]};
+    eigenvectors[1] = {v[0][1], v[1][1], v[2][1]};
+    eigenvectors[2] = {v[0][2], v[1][2], v[2][2]};
+}
+
+UpeMat4 UpeMat4_Perspective(float fovY_rad, float aspect, float near_z, float far_z) {
+    float f = 1.0f / tanf(fovY_rad * 0.5f);
+    return {
+        f / aspect, 0.0f, 0.0f, 0.0f,
+        0.0f, f, 0.0f, 0.0f,
+        0.0f, 0.0f, (far_z + near_z) / (near_z - far_z), -1.0f,
+        0.0f, 0.0f, (2.0f * far_z * near_z) / (near_z - far_z), 0.0f
+    };
+}
+
+UpeMat4 UpeMat4_LookAt(UpeVec3 eye, UpeVec3 target, UpeVec3 up) {
+    UpeVec3 f = UpeVec3_Normalize(UpeVec3_Sub(target, eye));
+    UpeVec3 r = UpeVec3_Normalize(UpeVec3_Cross(f, up));
+    UpeVec3 u = UpeVec3_Cross(r, f);
+    return {
+         r.x,  u.x, -f.x, 0.0f,
+         r.y,  u.y, -f.y, 0.0f,
+         r.z,  u.z, -f.z, 0.0f,
+        -UpeVec3_Dot(r, eye), -UpeVec3_Dot(u, eye), UpeVec3_Dot(f, eye), 1.0f
+    };
+}

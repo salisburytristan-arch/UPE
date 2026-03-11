@@ -171,3 +171,53 @@ int UpeOrbital_ComputeCircularState(UpeVec3 central_position,
     *out_velocity = velocity;
     return 1;
 }
+
+void UpeOrbital_LagrangePoints(float mu1, float mu2, float separation,
+                                 float out_L[5][3]) {
+    if (!out_L || separation <= 0.0f) return;
+    float mu = mu2 / (mu1 + mu2);
+    float x1 = -mu * separation;
+    float x2 = (1.0f - mu) * separation;
+    /* Collinear approximations near secondary/primary */
+    float r_hill = separation * cbrtf(mu / 3.0f);
+    out_L[0][0] = x2 - r_hill; out_L[0][1] = 0.0f; out_L[0][2] = 0.0f; /* L1 */
+    out_L[1][0] = x2 + r_hill; out_L[1][1] = 0.0f; out_L[1][2] = 0.0f; /* L2 */
+    out_L[2][0] = x1 - 7.0f * r_hill; out_L[2][1] = 0.0f; out_L[2][2] = 0.0f; /* L3 rough */
+    out_L[3][0] = (x1 + x2) * 0.5f; out_L[3][1] = 0.8660254f * separation; out_L[3][2] = 0.0f; /* L4 */
+    out_L[4][0] = (x1 + x2) * 0.5f; out_L[4][1] = -0.8660254f * separation; out_L[4][2] = 0.0f;/* L5 */
+}
+
+float UpeOrbital_RocheLimit(float primary_radius, float primary_density,
+                              float secondary_density) {
+    if (primary_radius <= 0.0f || primary_density <= 0.0f || secondary_density <= 0.0f) return 0.0f;
+    return 2.44f * primary_radius * cbrtf(primary_density / secondary_density);
+}
+
+float UpeOrbital_TidalLockTorque(float G, float M_primary, float R_body,
+                                   float a_orbit, float I_body, float omega) {
+    if (G <= 0.0f || M_primary <= 0.0f || R_body <= 0.0f || a_orbit <= 0.0f || I_body <= 0.0f) return 0.0f;
+    float n = sqrtf(G * M_primary / (a_orbit * a_orbit * a_orbit));
+    float k = 3.0f * G * M_primary * M_primary * R_body * R_body * R_body * R_body * R_body / (a_orbit*a_orbit*a_orbit*a_orbit*a_orbit*a_orbit);
+    return -k * (omega - n) / I_body;
+}
+
+float UpeOrbital_DecayRate(float a, float mu, float B_star, float rho_atm) {
+    if (a <= 0.0f || mu <= 0.0f || B_star <= 0.0f || rho_atm <= 0.0f) return 0.0f;
+    /* da/dt ≈ -B* rho * sqrt(mu*a) */
+    return -B_star * rho_atm * sqrtf(mu * a);
+}
+
+float UpeOrbital_ApsidalPrecession(float a, float e, float J2,
+                                    float R_planet, float n) {
+    if (a <= 0.0f) return 0.0f;
+    float one_me2 = 1.0f - e * e;
+    if (one_me2 < 1e-6f) one_me2 = 1e-6f;
+    return 0.75f * n * J2 * (R_planet * R_planet) / (a * a) * (5.0f / one_me2 - 1.0f);
+}
+
+void UpeOrbital_EulerNutation(UpeVec3 omega, float Ix, float Iy, float Iz,
+                                 float *psi_dot, float *theta_dot) {
+    if (!psi_dot || !theta_dot || Ix <= 0.0f || Iy <= 0.0f || Iz <= 0.0f) return;
+    *psi_dot = ((Iz - Ix) / Iy) * omega.z;
+    *theta_dot = ((Iy - Iz) / Ix) * omega.y;
+}

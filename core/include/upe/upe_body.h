@@ -47,6 +47,14 @@ void UpeBody_ApplyTorque(UpeBody *body, UpeVec3 torque);
 void UpeBody_ApplyImpulse(UpeBody *body, UpeVec3 impulse);
 void UpeBody_ClearForces(UpeBody *body);
 
+/* Rigid body rotational dynamics helpers */
+UpeVec3 UpeBody_GyroscopicTorque(UpeVec3 omega, float Ix, float Iy, float Iz);
+UpeVec3 UpeBody_CoriolisAccel(UpeVec3 vel, UpeVec3 omega_frame);
+
+/* Utility setters */
+void UpeBody_SetDensity(UpeBody *body, float density);   /* Recomputes mass with implicit unit volume */
+int  UpeBody_ScaleUniform(UpeBody *body, float scale);   /* Scales inverse inertia for uniform size change */
+
 #ifdef __cplusplus
 }
 #endif

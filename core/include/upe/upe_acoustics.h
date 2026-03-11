@@ -74,6 +74,16 @@ float UpeAcoustics_ComputeIntensity(float pressure);
 float UpeAcoustics_ComputeTotalEnergy(const UpeAcousticsGrid *grid);
 float UpeAcoustics_ComputeSoundPower(const UpeAcousticsGrid *grid, uint32_t axis);
 
+/* Doppler-shifted frequency  f' = f0 * (v_sound + v_observer) / (v_sound + v_source)  */
+float UpeAcoustics_DopplerFrequency(float f0, float v_sound,
+                                     float v_source, float v_observer);
+
+/* Whitham-based sonic boom overpressure estimate [Pa] */
+float UpeAcoustics_SonicBoomOverpressure(float mach, float altitude_m, float wingspan_m);
+
+/* Single-edge Kirchhoff diffraction attenuation [dB] */
+float UpeAcoustics_DiffractionAttenuation(float wavelength, float aperture, float angle_rad);
+
 #ifdef __cplusplus
 }
 #endif

@@ -99,3 +99,27 @@ float UpeAstro_GravitationalRedshift(float emitted_wavelength, float radius, flo
     }
     return emitted_wavelength / dilation;
 }
+
+int UpeAstro_EventHorizonCapture(float r, float mass, float G, float c) {
+    if (r <= 0.0f || mass <= 0.0f || G <= 0.0f || c <= 0.0f) return 0;
+    float rs = UpeAstro_SchwarzschildRadius(mass, G, c);
+    return (r <= rs) ? 1 : 0;
+}
+
+float UpeAstro_Spaghettification(float mass, float r, float G, float c,
+                                   float body_length) {
+    (void)c;
+    if (mass <= 0.0f || r <= 0.0f || G <= 0.0f || body_length <= 0.0f) return 0.0f;
+    /* Differential tidal acceleration ~ 2GM L / r^3 */
+    return 2.0f * G * mass * body_length / (r * r * r);
+}
+
+float UpeAstro_GravitationalLensAngle(float mass, float G, float c, float b_impact) {
+    if (mass <= 0.0f || G <= 0.0f || c <= 0.0f || b_impact <= 0.0f) return 0.0f;
+    return 4.0f * G * mass / (c * c * b_impact);
+}
+
+float UpeAstro_WormholeTransitTime(float throat_radius, float c) {
+    if (throat_radius <= 0.0f || c <= 0.0f) return 0.0f;
+    return 2.0f * throat_radius / c;
+}

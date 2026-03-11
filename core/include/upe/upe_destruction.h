@@ -80,6 +80,17 @@ void UpeDestructionTracker_SetDestructionCallback(UpeDestructionTracker *tracker
 void UpeDestructionTracker_PropagateFracture(UpeDestructionTracker *tracker,
     uint32_t initiating_body, float propagation_radius);
 
+/* Spalling: depth of spall layer from near-surface tensile failure */
+float UpeDestruction_SpallingDepth(float impact_pressure_Pa, float material_tensile_Pa);
+
+/* Crumple zone: axial load at progressive plastic hinge formation (Alexander formula) */
+float UpeDestruction_CrumpleForce(float axial_load_N, float yield_stress_Pa,
+                                   float tube_thickness_m, float tube_radius_m);
+
+/* Crater radius (Pi-scaling / Holsapple): scales with projectile mass and velocity */
+float UpeDestruction_CraterRadius(float projectile_mass, float impact_velocity,
+                                   float target_density);
+
 #ifdef __cplusplus
 }
 #endif

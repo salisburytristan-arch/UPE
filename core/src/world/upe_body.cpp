@@ -49,3 +49,33 @@ void UpeBody_ClearForces(UpeBody *body) {
     body->force = {0.0f, 0.0f, 0.0f};
     body->torque = {0.0f, 0.0f, 0.0f};
 }
+
+UpeVec3 UpeBody_GyroscopicTorque(UpeVec3 omega, float Ix, float Iy, float Iz) {
+    UpeVec3 Iw = { Ix * omega.x, Iy * omega.y, Iz * omega.z };
+    return UpeVec3_Cross(omega, Iw);
+}
+
+UpeVec3 UpeBody_CoriolisAccel(UpeVec3 vel, UpeVec3 omega_frame) {
+    UpeVec3 c = UpeVec3_Cross(omega_frame, vel);
+    return UpeVec3_Scale(c, -2.0f);
+}
+
+void UpeBody_SetDensity(UpeBody *body, float density) {
+    if (!body || density <= 0.0f || body->type != UPE_BODY_DYNAMIC) {
+        return;
+    }
+    body->mass = density;
+    body->inv_mass = (body->mass > 0.0f) ? (1.0f / body->mass) : 0.0f;
+}
+
+int UpeBody_ScaleUniform(UpeBody *body, float scale) {
+    if (!body || scale <= 0.0f) {
+        return 0;
+    }
+    float s5 = scale * scale * scale * scale * scale;
+    if (s5 <= 1.0e-12f) {
+        return 0;
+    }
+    body->inv_inertia = UpeVec3_Scale(body->inv_inertia, 1.0f / s5);
+    return 1;
+}

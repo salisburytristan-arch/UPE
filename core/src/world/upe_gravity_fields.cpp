@@ -1,5 +1,6 @@
 #include "upe/upe_gravity_fields.h"
 #include "upe_world.h"
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -131,4 +132,29 @@ uint32_t UpeWorld_GetGravityFields(const UpeWorld *world, UpeGravityFieldInfo *o
     }
 
     return count;
+}
+
+float UpeGravity_NFWDensity(float r, float rho_s, float r_s) {
+    if (r <= 0.0f || rho_s <= 0.0f || r_s <= 0.0f) return 0.0f;
+    float x = r / r_s;
+    return rho_s / (x * (1.0f + x) * (1.0f + x));
+}
+
+float UpeGravity_NFWEnclosedMass(float r, float rho_s, float r_s) {
+    if (r <= 0.0f || rho_s <= 0.0f || r_s <= 0.0f) return 0.0f;
+    float x = r / r_s;
+    float term = logf(1.0f + x) - x / (1.0f + x);
+    return 4.0f * 3.14159265f * rho_s * r_s * r_s * r_s * term;
+}
+
+float UpeGravity_SingularityForce(float m1, float m2, float r, float G, float softening) {
+    if (m1 <= 0.0f || m2 <= 0.0f || G <= 0.0f) return 0.0f;
+    float rs = r * r + softening * softening;
+    if (rs <= 1e-12f) rs = 1e-12f;
+    return G * m1 * m2 / rs;
+}
+
+float UpeGravity_SingularityEventHorizonRadius(float mass, float G, float c) {
+    if (mass <= 0.0f || G <= 0.0f || c <= 0.0f) return 0.0f;
+    return 2.0f * G * mass / (c * c);
 }

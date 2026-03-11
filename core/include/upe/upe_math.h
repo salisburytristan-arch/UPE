@@ -81,6 +81,19 @@ UpeQuat UpeQuat_Multiply(UpeQuat a, UpeQuat b);  /* Alias for compatibility */
 UpeQuat UpeQuat_Slerp(UpeQuat a, UpeQuat b, float t);  /* Spherical linear interpolation */
 UpeVec3 UpeQuat_RotateVec3(UpeQuat q, UpeVec3 v);
 
+/* Scalar triple product  a · (b × c) */
+float   UpeVec3_ScalarTriple(UpeVec3 a, UpeVec3 b, UpeVec3 c);
+
+/* Symmetric 3x3 eigendecomposition (Jacobi iteration, max 32 sweeps) */
+void    UpeMat3_EigenSymmetric(UpeMat3 m, float eigenvalues[3], UpeVec3 eigenvectors[3]);
+
+/* Skew-symmetric [v]x cross-product matrix */
+UpeMat3 UpeMat3_Skew(UpeVec3 v);
+
+/* Projection / view matrices (column-major, OpenGL convention) */
+UpeMat4 UpeMat4_Perspective(float fovY_rad, float aspect, float near_z, float far_z);
+UpeMat4 UpeMat4_LookAt(UpeVec3 eye, UpeVec3 target, UpeVec3 up);
+
 #ifdef __cplusplus
 }
 #endif

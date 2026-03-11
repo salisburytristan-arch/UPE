@@ -348,10 +348,60 @@ float UpeAdvancedVehicle_GetDriftScore(UpeAdvancedVehicle *vehicle) {
 }
 
 void UpeAdvancedVehicle_ApplyTractionControl(UpeAdvancedVehicle *vehicle, float dt) {
+    (void)dt;
     // Traction control reduces power to wheels that are slipping
     for (uint32_t i = 0; i < vehicle->wheel_count; ++i) {
         if (vehicle->wheels[i].tire.slide_factor > vehicle->traction_control_slip) {
             vehicle->wheels[i].drive_torque *= (1.0f - vehicle->wheels[i].tire.slide_factor * 0.5f);
         }
     }
+}
+
+float UpeVehicle_DifferentialSlipRatio(float wheel_speed_L, float wheel_speed_R, float v_chassis) {
+    float w_avg = 0.5f * (wheel_speed_L + wheel_speed_R);
+    float denom = fabsf(v_chassis);
+    if (denom < 0.1f) denom = 0.1f;
+    return (w_avg - v_chassis) / denom;
+}
+
+float UpeVehicle_TurbolagBoostPressure(float throttle, float boost_setpoint,
+                                        float tau_turbo, float dt) {
+    if (tau_turbo <= 1e-4f) return throttle * boost_setpoint;
+    /* First-order lag response to commanded boost */
+    float alpha = 1.0f - expf(-dt / tau_turbo);
+    static float boost_state = 0.0f;
+    float target = throttle * boost_setpoint;
+    boost_state += (target - boost_state) * alpha;
+    return boost_state;
+}
+
+float UpeVehicle_ClutchSlipTorque(float engine_torque, float slip_ratio,
+                                   float clutch_capacity) {
+    float slip = fabsf(slip_ratio);
+    float engagement = 1.0f - (slip > 1.0f ? 1.0f : slip);
+    float transferable = clutch_capacity * engagement;
+    if (transferable < 0.0f) transferable = 0.0f;
+    if (transferable > fabsf(engine_torque)) transferable = fabsf(engine_torque);
+    return (engine_torque >= 0.0f) ? transferable : -transferable;
+}
+
+float UpeVehicle_BrakeFadeCoeff(float base_Crr, float brake_temp_C) {
+    if (brake_temp_C <= 200.0f) return base_Crr;
+    float fade = 1.0f + 0.0025f * (brake_temp_C - 200.0f);
+    if (fade > 3.0f) fade = 3.0f;
+    return base_Crr * fade;
+}
+
+float UpeVehicle_HydroplaningSpeed(float tire_width_m, float water_depth_m,
+                                    float tire_pressure_Pa) {
+    (void)tire_width_m;
+    /* Baseline NASA relation in m/s from pressure in psi: V(knots)=10.35*sqrt(P_psi) */
+    float p_psi = tire_pressure_Pa / 6894.757f;
+    if (p_psi < 1.0f) p_psi = 1.0f;
+    float v_knots = 10.35f * sqrtf(p_psi);
+    float v_ms = v_knots * 0.514444f;
+    /* Deeper water lowers onset speed */
+    float depth_factor = 1.0f - 0.35f * (water_depth_m > 0.02f ? 1.0f : water_depth_m / 0.02f);
+    if (depth_factor < 0.5f) depth_factor = 0.5f;
+    return v_ms * depth_factor;
 }

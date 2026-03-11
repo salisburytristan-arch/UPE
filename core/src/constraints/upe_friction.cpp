@@ -40,3 +40,8 @@ void UpeFriction_Solve(UpeBodyState *bodies, uint32_t body_count,
         b.velocity = UpeVec3_Add(b.velocity, UpeVec3_Scale(impulse, b.inv_mass));
     }
 }
+
+float UpeFriction_RollingResistanceTorque(float normal_force, float Crr, float wheel_radius) {
+    if (normal_force <= 0.0f || Crr <= 0.0f || wheel_radius <= 0.0f) return 0.0f;
+    return normal_force * Crr * wheel_radius;
+}

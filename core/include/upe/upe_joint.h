@@ -16,7 +16,8 @@ typedef enum UpeJointType {
     UPE_JOINT_SPRING,
     UPE_JOINT_CONE_TWIST,
     UPE_JOINT_GEAR,
-    UPE_JOINT_PULLEY
+    UPE_JOINT_PULLEY,
+    UPE_JOINT_UNIVERSAL   /* Two perpendicular hinge axes - no axial rotation */
 } UpeJointType;
 
 struct UpeJoint;

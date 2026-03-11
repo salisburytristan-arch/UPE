@@ -3,6 +3,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define UPE_HYSTERESIS_HISTORY 8
+typedef struct UpeHysteresisState {
+    float stress_history[UPE_HYSTERESIS_HISTORY];
+    float strain_history[UPE_HYSTERESIS_HISTORY];
+    uint32_t idx;
+    float tau;
+    float eta;
+} UpeHysteresisState;
+
 // ============================================================================
 // VISCOELASTIC MATERIAL MODELS
 //
@@ -223,6 +232,28 @@ float UpeViscoelastic_StressRelaxation_Maxwell(float E, float eta, float time) {
     if (E <= 0.0f) return 0.0f;
     
     return E * expf(-E / eta * time);
+}
+
+/* Rate-dependent hysteresis: viscous correction on top of elastic stress.
+    Stores last N strain samples and applies exponential stress decay (Prony-like). */
+float UpeHysteresis_Stress(UpeHysteresisState *s, float strain, float strain_rate,
+                                     float E, float dt) {
+     if (!s || E <= 0.0f || dt <= 0.0f) return 0.0f;
+     /* Elastic stress */
+     float sigma_e = E * strain;
+     /* Viscous overstress: sigma_v decays toward zero with time constant tau */
+     float tau = (s->tau > 0.0f) ? s->tau : 0.01f;
+     float eta  = (s->eta > 0.0f) ? s->eta : 1.0f;
+     /* Find last stress from history ring buffer */
+     uint32_t prev = (s->idx == 0) ? (UPE_HYSTERESIS_HISTORY - 1) : (s->idx - 1);
+     float sigma_prev = s->stress_history[prev];
+     /* Forward Euler update of viscous stress */
+     float sigma_v = sigma_prev + dt * (eta * strain_rate - sigma_prev / tau);
+     /* Store */
+     s->stress_history[s->idx] = sigma_v;
+     s->strain_history[s->idx] = strain;
+     s->idx = (s->idx + 1) % UPE_HYSTERESIS_HISTORY;
+     return sigma_e + sigma_v;
 }
 
 // ============================================================================

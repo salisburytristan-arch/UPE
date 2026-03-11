@@ -313,3 +313,50 @@ float UpeEM_ComputeParticleEnergy(float mass, UpeVec3 velocity) {
     float v_sq = velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z;
     return 0.5f * mass * v_sq;
 }
+
+float UpeEM_OhmicHeatPower(float J_density, float conductivity) {
+    if (conductivity <= 0.0f) return 0.0f;
+    return (J_density * J_density) / conductivity;
+}
+
+float UpeEM_EddyBrakingAccel(float B, float sigma, float thickness, float velocity) {
+    if (sigma <= 0.0f || thickness <= 0.0f) return 0.0f;
+    /* a ~ k * sigma * B^2 * thickness * v */
+    float k = 0.01f;
+    float a = k * sigma * B * B * thickness * velocity;
+    return (a >= 0.0f) ? -a : a;
+}
+
+void UpeEM_EMPulseField(float energy_J, float distance_m,
+                          float *out_E_V_m, float *out_B_T) {
+    if (!out_E_V_m || !out_B_T || energy_J <= 0.0f || distance_m <= 0.0f) {
+        if (out_E_V_m) *out_E_V_m = 0.0f;
+        if (out_B_T) *out_B_T = 0.0f;
+        return;
+    }
+    float r2 = distance_m * distance_m;
+    float flux = energy_J / (4.0f * 3.14159265f * r2);
+    *out_E_V_m = sqrtf(fabsf(flux) / EPS_0);
+    *out_B_T   = *out_E_V_m / C_LIGHT;
+}
+
+int UpeEM_ESDBreakdownCheck(float E_field_V_m, float dielectric_strength_V_m) {
+    return (E_field_V_m >= dielectric_strength_V_m) ? 1 : 0;
+}
+
+float UpeEM_FerromagneticBH(float H_field, float B_sat, float mu_r) {
+    /* Frohlich-Kennelly-like saturation: B = (mu0*mu_r*H) / (1 + |H|/Hk) */
+    const float MU0 = 1.2566370614e-6f;
+    if (mu_r <= 0.0f) mu_r = 1.0f;
+    float Hk = (B_sat > 0.0f) ? (B_sat / (MU0 * mu_r)) : 1.0f;
+    float B = (MU0 * mu_r * H_field) / (1.0f + fabsf(H_field) / Hk);
+    if (B > B_sat) B = B_sat;
+    if (B < -B_sat) B = -B_sat;
+    return B;
+}
+
+float UpeEM_InductanceSolenoid(float N_turns, float area_m2, float length_m) {
+    const float MU0 = 1.2566370614e-6f;
+    if (N_turns <= 0.0f || area_m2 <= 0.0f || length_m <= 0.0f) return 0.0f;
+    return MU0 * N_turns * N_turns * area_m2 / length_m;
+}

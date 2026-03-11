@@ -90,6 +90,12 @@ UpeVec3 UpeOptics_ComputeInScattering(const UpeVolumetricGrid *volume, UpeVec3 v
 float UpeOptics_FresnelSchlick(float cos_theta, float ior_from, float ior_to);
 UpeVec3 UpeOptics_DispersionRefract(UpeVec3 incident, UpeVec3 normal, float ior, float wavelength);
 
+/* E = hf − W  (photoelectric effect); returns kinetic energy [J], 0 if below threshold */
+float UpeOptics_PhotoelectricEnergy(float frequency_Hz, float work_function_J);
+
+/* Albedo = reflected power / incident power */
+float UpeOptics_Albedo(float reflected_power, float incident_power);
+
 #ifdef __cplusplus
 }
 #endif

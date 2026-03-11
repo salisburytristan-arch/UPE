@@ -392,3 +392,27 @@ void UpeDestructionTracker_PropagateFracture(UpeDestructionTracker *tracker,
         }
     }
 }
+
+float UpeDestruction_SpallingDepth(float impact_pressure_Pa, float material_tensile_Pa) {
+    if (impact_pressure_Pa <= 0.0f || material_tensile_Pa <= 0.0f) return 0.0f;
+    /* Approximate spall depth scales with pressure ratio */
+    float ratio = impact_pressure_Pa / material_tensile_Pa;
+    if (ratio < 1.0f) return 0.0f;
+    return 0.001f * sqrtf(ratio);  /* meters */
+}
+
+float UpeDestruction_CrumpleForce(float axial_load_N, float yield_stress_Pa,
+                                   float tube_thickness_m, float tube_radius_m) {
+    if (yield_stress_Pa <= 0.0f || tube_thickness_m <= 0.0f || tube_radius_m <= 0.0f) return 0.0f;
+    /* Alexander-style plastic collapse force estimate */
+    float F_plastic = 2.0f * 3.14159265f * yield_stress_Pa * tube_thickness_m * tube_radius_m;
+    return (axial_load_N < F_plastic) ? axial_load_N : F_plastic;
+}
+
+float UpeDestruction_CraterRadius(float projectile_mass, float impact_velocity,
+                                   float target_density) {
+    if (projectile_mass <= 0.0f || impact_velocity <= 0.0f || target_density <= 0.0f) return 0.0f;
+    /* Energy scaling: R ~ (E / rho)^1/5 */
+    float E = 0.5f * projectile_mass * impact_velocity * impact_velocity;
+    return powf(E / target_density, 0.2f);
+}

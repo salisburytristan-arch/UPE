@@ -65,6 +65,25 @@ void UpeEM_ComputePlasmaFrequency(float charge_density, float particle_mass, flo
 float UpeEM_ComputeFieldEnergy(const UpeEMGrid *grid);
 float UpeEM_ComputeParticleEnergy(float mass, UpeVec3 velocity);
 
+/* Ohmic heating power density  P = J^2 / sigma  [W/m^3] */
+float UpeEM_OhmicHeatPower(float J_density, float conductivity);
+
+/* Eddy-current braking linear deceleration [m/s^2] */
+float UpeEM_EddyBrakingAccel(float B, float sigma, float thickness, float velocity);
+
+/* EMP field at distance: rough E-field [V/m] and B-field [T] */
+void  UpeEM_EMPulseField(float energy_J, float distance_m,
+                          float *out_E_V_m, float *out_B_T);
+
+/* Dielectric breakdown check: returns 1 if field exceeds threshold */
+int   UpeEM_ESDBreakdownCheck(float E_field_V_m, float dielectric_strength_V_m);
+
+/* Simplified BH ferromagnetic curve (Frohlich-Kennelly model) */
+float UpeEM_FerromagneticBH(float H_field, float B_sat, float mu_r);
+
+/* Solenoid inductance  L = mu0 * mu_r * N^2 * A / l  [H] */
+float UpeEM_InductanceSolenoid(float N_turns, float area_m2, float length_m);
+
 #ifdef __cplusplus
 }
 #endif

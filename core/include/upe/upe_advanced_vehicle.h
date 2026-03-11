@@ -136,6 +136,24 @@ float UpeAdvancedVehicle_GetDriftScore(UpeAdvancedVehicle *vehicle);
 void UpeAdvancedVehicle_ApplyTractionControl(UpeAdvancedVehicle *vehicle, float dt);
 void UpeAdvancedVehicle_ApplyABS(UpeAdvancedVehicle *vehicle);
 
+/* Differential slip ratio between left and right wheel speeds */
+float UpeVehicle_DifferentialSlipRatio(float wheel_speed_L, float wheel_speed_R, float v_chassis);
+
+/* Turbo lag: exponential boost pressure build-up */
+float UpeVehicle_TurbolagBoostPressure(float throttle, float boost_setpoint,
+                                        float tau_turbo, float dt);
+
+/* Clutch slip torque (progressive engagement model) */
+float UpeVehicle_ClutchSlipTorque(float engine_torque, float slip_ratio,
+                                   float clutch_capacity);
+
+/* Brake fade: coefficient increases with temperature above threshold */
+float UpeVehicle_BrakeFadeCoeff(float base_Crr, float brake_temp_C);
+
+/* NASA aquaplaning speed estimate  v = 6.36 * sqrt(tire_pressure_Pa / 6895) * ... */
+float UpeVehicle_HydroplaningSpeed(float tire_width_m, float water_depth_m,
+                                    float tire_pressure_Pa);
+
 #ifdef __cplusplus
 }
 #endif

@@ -98,6 +98,17 @@ void UpeFem_SetMaterialRubber(UpeFemSystem *fem);
 void UpeFem_SetMaterialJello(UpeFemSystem *fem);
 void UpeFem_SetMaterialMetal(UpeFemSystem *fem);
 
+/* Anisotropic material (fiber-reinforced) */
+typedef struct UpeFemAnisotropy {
+    UpeVec3 fiber_direction;  /* Unit vector along fiber axis */
+    float   E_axial;          /* Young's modulus along fiber */
+    float   E_perp;           /* Young's modulus transverse */
+} UpeFemAnisotropy;
+void UpeFem_SetAnisotropy(UpeFemSystem *fem, uint32_t elem, const UpeFemAnisotropy *a);
+
+/* Ductile tearing check: returns 1 if damage >= 1.0 (element has torn) */
+int  UpeFem_IsTorn(const UpeFemTetrahedron *tet);
+
 #ifdef __cplusplus
 }
 #endif

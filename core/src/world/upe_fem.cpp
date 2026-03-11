@@ -454,3 +454,13 @@ void UpeFem_SetMaterialMetal(UpeFemSystem *fem) {
         fem->elements[i].yield_stress = 250e6f;
     }
 }
+
+void UpeFem_SetAnisotropy(UpeFemSystem *fem, uint32_t elem, const UpeFemAnisotropy *a) {
+    if (!fem || !a || elem >= fem->element_count) return;
+    fem->elements[elem].youngs_modulus = (a->E_axial + 2.0f * a->E_perp) / 3.0f;
+}
+
+int UpeFem_IsTorn(const UpeFemTetrahedron *tet) {
+    if (!tet) return 0;
+    return (tet->damage >= 1.0f) ? 1 : 0;
+}

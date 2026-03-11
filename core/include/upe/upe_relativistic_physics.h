@@ -15,6 +15,20 @@ float UpeAstro_SchwarzschildRadius(float mass, float gravitational_constant, flo
 float UpeAstro_GravitationalTimeDilationFactor(float radius, float mass, float gravitational_constant, float light_speed);
 float UpeAstro_GravitationalRedshift(float emitted_wavelength, float radius, float mass, float gravitational_constant, float light_speed);
 
+/* Returns 1 if object at radius r is inside the Schwarzschild radius */
+int   UpeAstro_EventHorizonCapture(float r, float mass, float G, float c);
+
+/* Tidal spaghettification: differential acceleration across body_length at radius r */
+float UpeAstro_Spaghettification(float mass, float r, float G, float c,
+											  float body_length);
+
+/* Einstein ring / gravitational lensing deflection angle [rad]
+	b_impact: closest approach distance to mass */
+float UpeAstro_GravitationalLensAngle(float mass, float G, float c, float b_impact);
+
+/* Morris-Thorne wormhole stub: approximate traversal time through throat */
+float UpeAstro_WormholeTransitTime(float throat_radius, float c);
+
 #ifdef __cplusplus
 }
 #endif

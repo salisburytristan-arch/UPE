@@ -90,6 +90,10 @@ void UpeDem_SetMaterialWetSand(UpeDemSystem *dem);
 void UpeDem_SetMaterialGravel(UpeDemSystem *dem);
 void UpeDem_SetMaterialSnow(UpeDemSystem *dem);
 
+/* Dilatancy — volumetric expansion under shear stress (Rowe / Taylor) */
+float UpeDem_DilatancyVolumeChange(float shear_strain_rate, float dilatancy_angle_rad);
+void  UpeDem_ApplyDilatancy(UpeDemSystem *dem, float shear_strain_rate);
+
 #ifdef __cplusplus
 }
 #endif

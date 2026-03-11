@@ -54,6 +54,14 @@ void UpeThermalGrid_Destroy(UpeThermalGrid *grid) {
     memset(grid, 0, sizeof(*grid));
 }
 
+float UpeThermal_ConvectiveHeatFlux(float h_conv, float T_surface, float T_fluid) {
+    return h_conv * (T_surface - T_fluid);
+}
+
+float UpeThermal_ThermalExpansion(float length, float alpha_cte, float delta_T) {
+    return alpha_cte * length * delta_T;
+}
+
 // ============================================================================
 // Heat Diffusion (Fourier's Law)
 // ============================================================================

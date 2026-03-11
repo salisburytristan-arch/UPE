@@ -67,6 +67,21 @@ float UpeViscoelastic_GetEffectiveModulus(const UpeViscoelasticSystem *visco, ui
 float UpeViscoelastic_CreepCompliance_KV(float E, float eta, float time);
 float UpeViscoelastic_StressRelaxation_Maxwell(float E, float eta, float time);
 
+/* Rate-dependent stress hysteresis (Preisach-style history buffer) */
+#define UPE_HYSTERESIS_HISTORY 8
+typedef struct UpeHysteresisState {
+  float stress_history[UPE_HYSTERESIS_HISTORY];
+  float strain_history[UPE_HYSTERESIS_HISTORY];
+  uint32_t idx;
+  float tau;   /* relaxation time constant  */
+  float eta;   /* viscosity coefficient      */
+} UpeHysteresisState;
+
+/* Returns updated stress given new strain and strain rate.
+   E: elastic modulus  dt: timestep */
+float UpeHysteresis_Stress(UpeHysteresisState *s, float strain, float strain_rate,
+              float E, float dt);
+
 #ifdef __cplusplus
 }
 #endif
