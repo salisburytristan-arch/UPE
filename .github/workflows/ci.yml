@@ -403,6 +403,103 @@ jobs:
         } >> "$GITHUB_STEP_SUMMARY"
 
   # =============================================================================
+  # Windows Determinism Proof
+  # =============================================================================
+  determinism-windows:
+    name: Determinism (Windows)
+    runs-on: windows-latest
+    needs: [quick-doc-link-gate]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure + Build
+      run: |
+        cmake -S . -B build-proof-win -DCMAKE_BUILD_TYPE=Release -DUPE_BUILD_TESTS=ON -DUPE_BUILD_EXAMPLES=OFF -DUPE_DETERMINISTIC=ON
+        cmake --build build-proof-win --parallel
+
+    - name: Run Determinism Proof
+      run: cmd /c tools\run_determinism_proof.bat build-proof-win
+
+    - name: Upload Determinism Artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-determinism-proof-windows
+        path: proof/RUNS/
+        if-no-files-found: warn
+
+    - name: Publish Windows Determinism Summary
+      if: always()
+      shell: bash
+      run: |
+        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        if [ -z "$HASH1" ]; then HASH1="missing"; fi
+        if [ -z "$HASH2" ]; then HASH2="missing"; fi
+        {
+          echo "## Determinism (Windows)"
+          echo ""
+          echo "- hash_run_1: \\`${HASH1}\\`"
+          echo "- hash_run_2: \\`${HASH2}\\`"
+          echo "- Artifact: \\`proof/RUNS/\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+  # =============================================================================
+  # macOS Determinism Proof
+  # =============================================================================
+  determinism-macos:
+    name: Determinism (macOS)
+    runs-on: macos-latest
+    needs: [quick-doc-link-gate]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: brew install cmake ninja
+
+    - name: Configure + Build
+      run: |
+        cmake -S . -B build-proof-macos -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DUPE_BUILD_TESTS=ON \
+          -DUPE_BUILD_EXAMPLES=OFF \
+          -DUPE_DETERMINISTIC=ON
+        cmake --build build-proof-macos --parallel
+
+    - name: Run Determinism Proof
+      run: bash tools/run_determinism_proof.sh build-proof-macos
+
+    - name: Upload Determinism Artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: upe-determinism-proof-macos
+        path: proof/RUNS/
+        if-no-files-found: warn
+
+    - name: Publish macOS Determinism Summary
+      if: always()
+      run: |
+        HASH1=$(grep -h -m1 '^hash_run_1=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        HASH2=$(grep -h -m1 '^hash_run_2=' proof/RUNS/determinism_*.log 2>/dev/null | tail -1 | cut -d= -f2)
+        if [ -z "$HASH1" ]; then HASH1="missing"; fi
+        if [ -z "$HASH2" ]; then HASH2="missing"; fi
+        {
+          echo "## Determinism (macOS)"
+          echo ""
+          echo "- hash_run_1: \\`${HASH1}\\`"
+          echo "- hash_run_2: \\`${HASH2}\\`"
+          echo "- Artifact: \\`proof/RUNS/\\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+  # =============================================================================
   # Canonical Benchmark Proof
   # =============================================================================
   benchmark-canonical-scenes:
@@ -532,7 +629,7 @@ jobs:
   release-package-gate:
     name: Release Package Gate
     runs-on: ubuntu-latest
-    needs: [quick-doc-link-gate, strict-warnings-linux, benchmark-canonical-scenes]
+    needs: [quick-doc-link-gate, strict-warnings-linux, benchmark-canonical-scenes, determinism-test, cross-compiler-determinism, determinism-windows, determinism-macos]
 
     steps:
     - name: Checkout

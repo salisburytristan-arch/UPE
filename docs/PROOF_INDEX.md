@@ -17,12 +17,26 @@ Why it matters:
 
 ## Determinism Proof
 
+One-command local proof:
+
+```bash
+python scripts/run_buyer_determinism_proof.py
+```
+
+Windows alternative:
+
+```bat
+py -3 scripts\run_buyer_determinism_proof.py
+```
+
 What to inspect:
 
 - `proof/RUNS/determinism_<timestamp>.log`
 - `proof/RUNS/det_run1_<timestamp>.txt`
 - `proof/RUNS/det_run2_<timestamp>.txt`
 - Cross-compiler logs: `gcc_output.log`, `clang_output.log`
+- Windows determinism artifact lane (`upe-determinism-proof-windows`)
+- macOS determinism artifact lane (`upe-determinism-proof-macos`)
 
 Why it matters:
 

@@ -40,7 +40,7 @@ The repository does not currently guarantee bit-exact determinism across all ope
 
 What is guaranteed:
 
-- Per-platform determinism proof tooling and CI evidence lanes
+- Per-platform determinism proof tooling and CI evidence lanes (Linux, Windows, macOS)
 
 What is not guaranteed:
 
@@ -88,6 +88,14 @@ The CI workflow publishes a summary block describing:
 That summary is meant to be readable by buyers without requiring them to parse raw logs first.
 
 ## Local Reproduction
+
+Fastest buyer command:
+
+```bash
+python scripts/run_buyer_determinism_proof.py
+```
+
+This command configures a deterministic test build, builds it, runs determinism proof, and points to the generated log file.
 
 ### Windows
 
