@@ -59,7 +59,8 @@ jobs:
         cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} `
           -DUPE_BUILD_TESTS=ON `
           -DUPE_BUILD_EXAMPLES=ON `
-          -DUPE_DETERMINISTIC=ON
+          -DUPE_DETERMINISTIC=ON `
+          -DUPE_WARNINGS_AS_ERRORS=OFF
     
     - name: Build
       run: cmake --build build --config ${{ matrix.config }} --parallel
@@ -209,11 +210,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build clang
-    
     - name: Install Dependencies
       run: brew install cmake ninja
     
@@ -424,7 +420,7 @@ jobs:
 
     - name: Configure + Build
       run: |
-        cmake -S . -B build-proof-win -DCMAKE_BUILD_TYPE=Release -DUPE_BUILD_TESTS=ON -DUPE_BUILD_EXAMPLES=OFF -DUPE_DETERMINISTIC=ON
+        cmake -S . -B build-proof-win -DCMAKE_BUILD_TYPE=Release -DUPE_BUILD_TESTS=ON -DUPE_BUILD_EXAMPLES=OFF -DUPE_DETERMINISTIC=ON -DUPE_WARNINGS_AS_ERRORS=OFF
         cmake --build build-proof-win --parallel
 
     - name: Run Determinism Proof

@@ -234,7 +234,7 @@ void UpeThermalGrid_AddHeatSource(UpeThermalGrid *grid,
                     ny >= 0 && ny < (int)grid->height &&
                     nz >= 0 && nz < (int)grid->depth) {
                     
-                    float dist_sq = dx*dx + dy*dy + dz*dz;
+                    float dist_sq = (float)(dx*dx + dy*dy + dz*dz);
                     float r_sq = radius_cells * radius_cells;
                     
                     // Gaussian falloff: exp(-r²/r₀²)

@@ -118,6 +118,7 @@ void UpeWindField_UpdateGustTurbulence(UpeWindField *field, float dt) {
 
 void UpeWindField_AffectClothParticle(UpeWindField *field, UpeVec3 position, float mass, float drag_coeff, UpeVec3 *out_force) {
     if (!field || !out_force) return;
+    (void)mass;
     
     UpeVec3 wind_vel = UpeWindField_SampleVelocity(field, position);
     

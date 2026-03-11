@@ -170,15 +170,15 @@ void UpeRope_Update(UpeRope *rope, UpeWorld *world, float dt) {
         
         // Apply motor dynamics if active
         if (constraint->motor_enabled) {
-            UpeVec3 r_a = UpeQuat_RotateVec3(body_a->rotation, constraint->anchor_a);
-            UpeVec3 r_b = UpeQuat_RotateVec3(body_b->rotation, constraint->anchor_b);
-            UpeVec3 world_anchor_a = UpeVec3_Add(body_a->position, r_a);
-            UpeVec3 world_anchor_b = UpeVec3_Add(body_b->position, r_b);
-            UpeVec3 diff = UpeVec3_Sub(world_anchor_b, world_anchor_a);
-            float dist = UpeVec3_Length(diff);
+            UpeVec3 r_a_motor = UpeQuat_RotateVec3(body_a->rotation, constraint->anchor_a);
+            UpeVec3 r_b_motor = UpeQuat_RotateVec3(body_b->rotation, constraint->anchor_b);
+            UpeVec3 world_anchor_a_motor = UpeVec3_Add(body_a->position, r_a_motor);
+            UpeVec3 world_anchor_b_motor = UpeVec3_Add(body_b->position, r_b_motor);
+            UpeVec3 diff_motor = UpeVec3_Sub(world_anchor_b_motor, world_anchor_a_motor);
+            float dist_motor = UpeVec3_Length(diff_motor);
             
-            if (dist > 0.0001f) {
-                UpeVec3 dir = UpeVec3_Scale(diff, 1.0f / dist);
+            if (dist_motor > 0.0001f) {
+                UpeVec3 dir = UpeVec3_Scale(diff_motor, 1.0f / dist_motor);
                 
                 // Target length changes at motor speed
                 float target_velocity = constraint->motor_speed;
@@ -188,8 +188,8 @@ void UpeRope_Update(UpeRope *rope, UpeWorld *world, float dt) {
                 }
                 
                 // Get relative velocity at attachment points
-                UpeVec3 vel_a = UpeVec3_Add(body_a->velocity, UpeVec3_Cross(body_a->angular_velocity, r_a));
-                UpeVec3 vel_b = UpeVec3_Add(body_b->velocity, UpeVec3_Cross(body_b->angular_velocity, r_b));
+                UpeVec3 vel_a = UpeVec3_Add(body_a->velocity, UpeVec3_Cross(body_a->angular_velocity, r_a_motor));
+                UpeVec3 vel_b = UpeVec3_Add(body_b->velocity, UpeVec3_Cross(body_b->angular_velocity, r_b_motor));
                 (void)vel_a;
                 (void)vel_b;
                 
@@ -197,8 +197,8 @@ void UpeRope_Update(UpeRope *rope, UpeWorld *world, float dt) {
                 float force_scale = constraint->max_motor_force / (constraint->constraint_count > 0 ? (float)constraint->constraint_count : 1.0f);
                 
                 // Apply motor impulse if not at limits
-                if ((constraint->motor_speed < 0 && dist > constraint->min_length) ||
-                    (constraint->motor_speed > 0 && dist < constraint->max_length)) {
+                if ((constraint->motor_speed < 0 && dist_motor > constraint->min_length) ||
+                    (constraint->motor_speed > 0 && dist_motor < constraint->max_length)) {
                     float motor_impulse = -force_scale * constraint->motor_speed * dt;
                     UpeVec3 impulse = UpeVec3_Scale(dir, motor_impulse);
                     

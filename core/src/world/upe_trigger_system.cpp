@@ -6,6 +6,19 @@
 #include <stdio.h>
 #include <math.h>
 
+static void upe_copy_name(char *dst, size_t dst_size, const char *src) {
+    if (!dst || dst_size == 0) {
+        return;
+    }
+    const char *safe_src = src ? src : "";
+    size_t i = 0;
+    while (i + 1 < dst_size && safe_src[i] != '\0') {
+        dst[i] = safe_src[i];
+        ++i;
+    }
+    dst[i] = '\0';
+}
+
 void UpeTriggerSystem_Init(UpeTriggerSystem *sys, void *field_system) {
     if (!sys) {
         return;
@@ -55,7 +68,7 @@ uint32_t UpeTrigger_CreateBox(UpeTriggerSystem *sys, UpeVec3 center, UpeVec3 hal
     UpeTrigger *trigger = &sys->triggers[id];
     
     trigger->id = id;
-    strncpy(trigger->name, name ? name : "Box", sizeof(trigger->name) - 1);
+    upe_copy_name(trigger->name, sizeof(trigger->name), name ? name : "Box");
     trigger->type = UPE_TRIGGER_BOX;
     trigger->position = center;
     trigger->rotation = rotation;
@@ -83,7 +96,7 @@ uint32_t UpeTrigger_CreateSphere(UpeTriggerSystem *sys, UpeVec3 center, float ra
     UpeTrigger *trigger = &sys->triggers[id];
     
     trigger->id = id;
-    strncpy(trigger->name, name ? name : "Sphere", sizeof(trigger->name) - 1);
+    upe_copy_name(trigger->name, sizeof(trigger->name), name ? name : "Sphere");
     trigger->type = UPE_TRIGGER_SPHERE;
     trigger->position = center;
     trigger->rotation = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -109,7 +122,7 @@ uint32_t UpeTrigger_CreateCapsule(UpeTriggerSystem *sys, UpeVec3 point_a, UpeVec
     UpeTrigger *trigger = &sys->triggers[id];
     
     trigger->id = id;
-    strncpy(trigger->name, name ? name : "Capsule", sizeof(trigger->name) - 1);
+    upe_copy_name(trigger->name, sizeof(trigger->name), name ? name : "Capsule");
     trigger->type = UPE_TRIGGER_CAPSULE;
     trigger->position = UpeVec3_Scale(UpeVec3_Add(point_a, point_b), 0.5f);
     trigger->rotation = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -139,7 +152,7 @@ uint32_t UpeTrigger_CreateField(UpeTriggerSystem *sys, uint32_t field_id,
     UpeTrigger *trigger = &sys->triggers[id];
     
     trigger->id = id;
-    strncpy(trigger->name, name ? name : "Field", sizeof(trigger->name) - 1);
+    upe_copy_name(trigger->name, sizeof(trigger->name), name ? name : "Field");
     trigger->type = UPE_TRIGGER_FIELD;
     trigger->field_id = field_id;
     trigger->condition = condition;

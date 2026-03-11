@@ -348,8 +348,8 @@ int UpeWorld_Raycast(const UpeWorld *world, UpeVec3 origin, UpeVec3 direction, f
             continue;
         }
 
-        float t;
-        UpeVec3 normal;
+        float t = 0.0f;
+        UpeVec3 normal = {0.0f, 0.0f, 0.0f};
         int hit = 0;
 
         if (shape->type == UPE_SHAPE_SPHERE) {
@@ -449,8 +449,8 @@ int UpeWorld_RaycastAll(const UpeWorld *world, UpeVec3 origin, UpeVec3 direction
             continue;
         }
 
-        float t;
-        UpeVec3 normal;
+        float t = 0.0f;
+        UpeVec3 normal = {0.0f, 0.0f, 0.0f};
         int hit = 0;
 
         if (shape->type == UPE_SHAPE_SPHERE) {
@@ -577,8 +577,8 @@ uint32_t UpeWorld_RaycastBatch(const UpeWorld *world,
                 continue;
             }
             
-            float t;
-            UpeVec3 normal;
+            float t = 0.0f;
+            UpeVec3 normal = {0.0f, 0.0f, 0.0f};
             int hit = 0;
             
             if (shape->type == UPE_SHAPE_SPHERE) {
@@ -798,8 +798,7 @@ int UpeWorld_SweepSphere(UpeWorld *world, UpeSphere sphere, UpeVec3 velocity, fl
             continue;
         }
         
-        UpeCcdResult ccd;
-        ccd.hit = 0;
+        UpeCcdResult ccd = {0};
         
         // Test CCD based on shape type
         switch (shape->type) {
@@ -892,8 +891,7 @@ int UpeWorld_SweepBox(UpeWorld *world, UpeAabb3 box, UpeVec3 velocity, float max
             continue;
         }
         
-        UpeCcdResult ccd;
-        ccd.hit = 0;
+        UpeCcdResult ccd = {0};
         
         // Test CCD based on shape type
         UpeVec3 zero_vel = {0, 0, 0};
@@ -1006,8 +1004,7 @@ int UpeWorld_SweepCapsule(UpeWorld *world, UpeCapsule capsule, UpeVec3 velocity,
             continue;
         }
         
-        UpeCcdResult ccd;
-        ccd.hit = 0;
+        UpeCcdResult ccd = {0};
         
         // Test CCD based on shape type
         UpeVec3 zero_vel = {0, 0, 0};

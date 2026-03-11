@@ -308,6 +308,7 @@ void UpeScientific_ProjectConstraints(
     const float *masses, const ConservationState *conservation,
     int max_iterations)
 {
+    (void)max_iterations;
     if (!positions || num_particles == 0) return;
     
     // Simple constraint: maintain center of mass
