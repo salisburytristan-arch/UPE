@@ -1,13 +1,23 @@
 # UPE Determinism Proof Tooling
 
-Status: Windows reference run validated
-Last verified: 2026-02-18
-Script to validate: tools/run_determinism_proof.(bat|sh)
+Status: determinism proof tooling available and CI-integrated
+Primary scripts: tools/run_determinism_proof.(bat|sh)
+
+## Claim Model (Authoritative)
+
+Authoritative determinism claim levels are defined in [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md):
+
+- Level 1: repeated-run determinism (guaranteed in the proof path)
+- Level 2: toolchain-scoped reproducibility
+- Level 3: cross-compiler drift visibility (not guaranteed identical)
+- Level 4: cross-platform bit-exact parity (only when explicitly proven)
+
+If wording in this file appears stronger than the certification document, the certification document wins.
 
 ## Core Principle
-**Unified Physics Engine includes determinism proof tooling for repeatable runs on a given toolchain. Validated by tools/run_determinism_proof for bit-exact simulation given identical inputs. Cross-platform bit-exact is not claimed unless you reproduce it on your toolchains.**
+**Unified Physics Engine includes determinism proof tooling for repeatable runs on a given binary/toolchain setup. Cross-platform bit-exact identity is not a blanket claim.**
 
-## Determinism Layers
+## Determinism Mechanisms
 
 ### 1. Floating Point Determinism
 - All math operations use IEEE 754 single-precision (32-bit float)
@@ -76,10 +86,10 @@ Frame:  1 | Hash: 0x23456789 | Inputs: [position=(0,-0.49,0), force=(0,-9.8,0)]
 - **Rollback**: Rollback N frames → resimulate → verify convergence
 
 ### CI Validation
-- Every commit runs determinism suite
-- Platforms: Windows x64, Linux x64, macOS ARM64
-- Reference hashes are authoritative per toolchain configuration
-- Regression flagged if hash mismatch
+- CI includes determinism evidence lanes for Linux, Windows, and macOS.
+- Repeated-run hash matching is enforced via the proof scripts.
+- Cross-compiler outputs are captured for drift visibility.
+- Use workflow artifacts as the source of truth for current validation coverage.
 
 ## Known Limitations
 

@@ -1,12 +1,12 @@
 # Buyer Start Here (15-Minute Evaluation Path)
 
-Headline: **Deterministic rollback-ready physics core (C API, no dependencies) with snapshots, replay validation, state hashing, and proven solver convergence.**
+Headline: **Rollback-ready native physics core (C API, no mandatory runtime dependencies) with reproducible determinism proof tooling, snapshots/replay, and state hashing.**
 
 ## What You're Evaluating
 
 This is the UPE v1.0.0 **core physics engine**:
 - **Rigid body dynamics**: collision detection, constraint solving, integration
-- **Determinism**: bit-exact reproducibility across builds and platforms (with `DUPE_DETERMINISTIC=ON`)
+- **Determinism**: repeated-run determinism proof plus toolchain/platform evidence lanes (see certification doc for guarantee levels)
 - **Rollback support**: snapshots, replay, hashing for netcode/time-travel debugging
 - **Zero mandatory dependencies**: pure C implementation using stdlib only
 - **Production quality**: warm-starting, manifold caching, island sleeping, CCD
@@ -39,10 +39,10 @@ tools\run_determinism_proof.bat build
 ```
 **What this demonstrates**: 
 - Same scene simulated twice produces identical frame-by-frame state.
-- CRC64 hashes match across runs (no floating-point drift).
+- Hashes match across repeated runs of the same proof path.
 - Proof logs stored in `proof/RUNS/determinism_*.log`.
 
-For the CI-backed certification surface and artifact expectations, see [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md).
+For determinism guarantee levels and CI-backed artifact expectations, see [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md).
 
 ## 4) Run Seven Core Examples
 
@@ -122,7 +122,7 @@ python scripts\verify_everything.py --release-dir releases_ci --strict-warnings
 ## 7) What You Should Conclude
 
 ✅ **Core pipeline builds and runs** (strict, deterministic, proven)
-✅ **Determinism checks pass** (bit-exact, validated via proof tooling)
+✅ **Determinism proof tooling is reproducible** (repeated-run hash checks + artifact capture)
 ✅ **Examples exercise all major subsystems** (vehicles, characters, ragdolls, cloth, fluids)
 ✅ **Rollback/replay tooling exists and is measurable** (snapshots, hashing, playback)
 ✅ **Zero mandatory dependencies** (pure C, no external libs)
@@ -147,6 +147,6 @@ python scripts\verify_everything.py --release-dir releases_ci --strict-warnings
 ## Next Steps
 
 1. **If evaluating for game integration**: Read `INTEGRATION_GUIDE.md` and study example bindings.
-2. **If evaluating for determinism/netcode**: Run `tools/run_determinism_proof.bat` and read `DETERMINISM_GUIDE.md`.
+2. **If evaluating for determinism/netcode**: Run `python scripts/run_buyer_determinism_proof.py` and read `DETERMINISM_CERTIFICATION.md`.
 3. **If evaluating specific domains** (vehicles, fluids, etc.): Review `IMPLEMENTATION_STATUS.md` and run corresponding examples.
 4. **For licensing/commercial questions**: Review `COMMERCIAL_LICENSE_AGREEMENT.md` and `LICENSE`.

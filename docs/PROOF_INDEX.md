@@ -2,6 +2,11 @@
 
 This page is the buyer-facing index for CI-generated proof artifacts.
 
+## Purpose
+
+Use this page as the fastest path to verify current evidence, not marketing claims.
+If another document conflicts with this proof surface, treat this page and the linked proof documents as authoritative.
+
 ## Build Proof
 
 What to inspect:
@@ -94,3 +99,4 @@ Why it matters:
 - [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md)
 - [BENCHMARK_BASELINES.md](BENCHMARK_BASELINES.md)
 - [PLATFORM_SUPPORT_MATRIX.md](PLATFORM_SUPPORT_MATRIX.md)
+- [TRUTH_HIERARCHY.md](TRUTH_HIERARCHY.md)

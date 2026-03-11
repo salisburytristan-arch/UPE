@@ -1,5 +1,14 @@
 # Release Notes v1.0.0
 
+## Validation Scope Authority
+
+For current buyer-verifiable validation scope and proof artifacts, treat the following as authoritative:
+
+- [CI_GATES.md](CI_GATES.md)
+- [DETERMINISM_CERTIFICATION.md](DETERMINISM_CERTIFICATION.md)
+- [BENCHMARK_BASELINES.md](BENCHMARK_BASELINES.md)
+- [PROOF_INDEX.md](PROOF_INDEX.md)
+
 ## Headline
 
 **Deterministic rollback-ready physics core with full-featured rigid body dynamics, vehicles, articulated bodies, character control, and snapshot/replay infrastructure. Zero mandatory dependencies. C API only.**
@@ -54,7 +63,7 @@
 - **State capture**: `UpeSnapshot_Capture()` serializes all bodies, shapes, joints, vehicles, articulated bodies.
 - **State restore**: `UpeSnapshot_Restore()` rolls back world and all associated objects.
 - **CRC64 hashing**: `UpeWorld_GetStateHash()` produces bit-identical hashes for netcode verification.
-- **Replay validation**: Run identical input sequences across platforms; hashes must match for determinism certification.
+- **Replay validation**: Run identical input sequences and compare hashes using the determinism proof flow; cross-platform identity is only claimed when explicitly proven.
 - **Binary format**: Compact, immediate serialization with no file I/O required.
 
 ### Queries
@@ -101,10 +110,10 @@ Beyond v1.0.0 core scope (available as side-project modules):
 ## Validation & Certification
 
 ### Determinism Proof
-- **Bit-exact reproducibility**: Same inputs → same state across builds.
-- **Platform coverage**: Validated on Windows (MSVC) and Linux (GCC) with `DUPE_DETERMINISTIC=ON`.
-- **Methodology**: Record 10-frame canonical scene; replay 3x; compare CRC64 hashes for all frames.
-- **Result**: PASS (zero frame mismatch, 100% hash agreement).
+- **Repeated-run proof**: Same binary/path, same inputs, same timestep should produce matching determinism hashes.
+- **Cross-compiler visibility**: GCC and Clang output logs are captured for drift inspection.
+- **Cross-platform lanes**: Linux, Windows, and macOS determinism lanes are present with artifact capture.
+- **Guarantee boundaries**: Universal cross-platform bit-exact identity is not a blanket claim.
 
 ### Performance Baselines
 - **Per-subsystem gates**: Broadphase < 0.5ms, narrowphase < 1ms, solve < 2ms (60-body scene, 60 Hz).
@@ -117,6 +126,8 @@ Beyond v1.0.0 core scope (available as side-project modules):
 - **Memory efficiency**: Typical 60-body scene uses < 5 MB (excluding diagnostic buffers).
 
 ## Buyer Evaluation Checklist
+
+Use the proof-index path as the primary diligence flow: [PROOF_INDEX.md](PROOF_INDEX.md).
 
 See `BUYER_START_HERE.md` for the 15-minute quickstart:
 
