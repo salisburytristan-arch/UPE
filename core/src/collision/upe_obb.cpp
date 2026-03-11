@@ -515,7 +515,7 @@ UpeMat3 UpeOBB_InertiaTensor(const UpeOBB *obb, float mass) {
     float d = obb->half_extents.z * 2.0f;
     float factor = mass / 12.0f;
 
-    UpeMat3 I_local = { 0 };
+    UpeMat3 I_local = {{{0.0f}}};
     I_local.m[0][0] = factor * (h * h + d * d);
     I_local.m[1][1] = factor * (w * w + d * d);
     I_local.m[2][2] = factor * (w * w + h * h);

@@ -61,7 +61,7 @@ int main() {
     UpeShapeDesc sphere_shape_desc = {};
     sphere_shape_desc.type = UPE_SHAPE_SPHERE;
     sphere_shape_desc.body_id = sphere_body_id;
-    sphere_shape_desc.sphere = {0.0f, 0.0f, 0.0f, 0.3f};  /* 0.3m radius */
+    sphere_shape_desc.sphere = {{0.0f, 0.0f, 0.0f}, 0.3f};  /* 0.3m radius */
     sphere_shape_desc.friction = 0.5f;
     UpeWorld_CreateShape(world, &sphere_shape_desc);
 

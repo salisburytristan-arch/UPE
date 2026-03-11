@@ -7,6 +7,7 @@ static float sdf_min(float a, float b) { return a < b ? a : b; }
 static float sdf_clamp(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
 static float v3_len(UpeVec3 v) { return sqrtf(v.x*v.x + v.y*v.y + v.z*v.z); }
+static UpeVec3 v3_make(float x, float y, float z) { UpeVec3 r = {x, y, z}; return r; }
 static UpeVec3 v3_abs(UpeVec3 v) { UpeVec3 r = {fabsf(v.x), fabsf(v.y), fabsf(v.z)}; return r; }
 static UpeVec3 v3_sub(UpeVec3 a, UpeVec3 b) { UpeVec3 r = {a.x-b.x, a.y-b.y, a.z-b.z}; return r; }
 static UpeVec3 v3_max0(UpeVec3 v) { UpeVec3 r = {sdf_max(v.x,0.f), sdf_max(v.y,0.f), sdf_max(v.z,0.f)}; return r; }
@@ -49,7 +50,8 @@ float UpeSDF_Cylinder(UpeVec3 p, UpeVec3 center, float radius, float half_height
     UpeVec3 q = v3_sub(p, center);
     float dr = sqrtf(q.x*q.x + q.z*q.z) - radius;
     float dy = fabsf(q.y) - half_height;
-    return sdf_min(sdf_max(dr, dy), 0.0f) + v3_len((UpeVec3){sdf_max(dr,0.f),sdf_max(dy,0.f),0.f});
+    UpeVec3 outside = v3_make(sdf_max(dr, 0.0f), sdf_max(dy, 0.0f), 0.0f);
+    return sdf_min(sdf_max(dr, dy), 0.0f) + v3_len(outside);
 }
 
 float UpeSDF_Cone(UpeVec3 p, UpeVec3 apex, UpeVec3 axis_dir, float half_angle_rad, float height) {
@@ -59,7 +61,6 @@ float UpeSDF_Cone(UpeVec3 p, UpeVec3 apex, UpeVec3 axis_dir, float half_angle_ra
     float h = (q.x*axis_dir.x + q.y*axis_dir.y + q.z*axis_dir.z) / al;
     float r = sqrtf(q.x*q.x + q.y*q.y + q.z*q.z - h*h);
     /* SDF: check distance to cone surface and cap */
-    float c = h / cosf(half_angle_rad);
     float s = r - h * tanf(half_angle_rad);
     return sdf_max(s, h - height);
 }
@@ -74,7 +75,12 @@ float UpeSDF_Ellipsoid(UpeVec3 p, UpeVec3 center, UpeVec3 radii) {
     UpeVec3 q = v3_sub(p, center);
     UpeVec3 s = { q.x/radii.x, q.y/radii.y, q.z/radii.z };
     float k1 = v3_len(s);
-    float k0 = v3_len((UpeVec3){q.x/(radii.x*radii.x), q.y/(radii.y*radii.y), q.z/(radii.z*radii.z)});
+    UpeVec3 inv_r2 = v3_make(
+        q.x / (radii.x * radii.x),
+        q.y / (radii.y * radii.y),
+        q.z / (radii.z * radii.z)
+    );
+    float k0 = v3_len(inv_r2);
     if (k0 < 1e-10f) return -sdf_min(sdf_min(radii.x,radii.y),radii.z);
     return k1 * (k1 - 1.0f) / k0;
 }
@@ -118,12 +124,15 @@ UpeVec3 UpeSDF_RepeatDomain(UpeVec3 p, UpeVec3 period) {
 
 UpeVec3 UpeSDF_EstimateNormal(UpeVec3 p, UpeSDF_Func func, void *user_data, float h) {
     UpeVec3 n;
-    n.x = func((UpeVec3){p.x+h, p.y,   p.z},   user_data)
-         -func((UpeVec3){p.x-h, p.y,   p.z},   user_data);
-    n.y = func((UpeVec3){p.x,   p.y+h, p.z},   user_data)
-         -func((UpeVec3){p.x,   p.y-h, p.z},   user_data);
-    n.z = func((UpeVec3){p.x,   p.y,   p.z+h}, user_data)
-         -func((UpeVec3){p.x,   p.y,   p.z-h}, user_data);
+    UpeVec3 pxp = v3_make(p.x + h, p.y, p.z);
+    UpeVec3 pxm = v3_make(p.x - h, p.y, p.z);
+    UpeVec3 pyp = v3_make(p.x, p.y + h, p.z);
+    UpeVec3 pym = v3_make(p.x, p.y - h, p.z);
+    UpeVec3 pzp = v3_make(p.x, p.y, p.z + h);
+    UpeVec3 pzm = v3_make(p.x, p.y, p.z - h);
+    n.x = func(pxp, user_data) - func(pxm, user_data);
+    n.y = func(pyp, user_data) - func(pym, user_data);
+    n.z = func(pzp, user_data) - func(pzm, user_data);
     float len = sqrtf(n.x*n.x + n.y*n.y + n.z*n.z);
     if (len < 1e-7f) { n.y = 1.0f; return n; }
     n.x /= len; n.y /= len; n.z /= len;

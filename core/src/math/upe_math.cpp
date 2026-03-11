@@ -281,22 +281,24 @@ void UpeMat3_EigenSymmetric(UpeMat3 m, float eigenvalues[3], UpeVec3 eigenvector
 
 UpeMat4 UpeMat4_Perspective(float fovY_rad, float aspect, float near_z, float far_z) {
     float f = 1.0f / tanf(fovY_rad * 0.5f);
-    return {
-        f / aspect, 0.0f, 0.0f, 0.0f,
-        0.0f, f, 0.0f, 0.0f,
-        0.0f, 0.0f, (far_z + near_z) / (near_z - far_z), -1.0f,
-        0.0f, 0.0f, (2.0f * far_z * near_z) / (near_z - far_z), 0.0f
-    };
+    UpeMat4 m = {{
+        {f / aspect, 0.0f, 0.0f, 0.0f},
+        {0.0f, f, 0.0f, 0.0f},
+        {0.0f, 0.0f, (far_z + near_z) / (near_z - far_z), -1.0f},
+        {0.0f, 0.0f, (2.0f * far_z * near_z) / (near_z - far_z), 0.0f}
+    }};
+    return m;
 }
 
 UpeMat4 UpeMat4_LookAt(UpeVec3 eye, UpeVec3 target, UpeVec3 up) {
     UpeVec3 f = UpeVec3_Normalize(UpeVec3_Sub(target, eye));
     UpeVec3 r = UpeVec3_Normalize(UpeVec3_Cross(f, up));
     UpeVec3 u = UpeVec3_Cross(r, f);
-    return {
-         r.x,  u.x, -f.x, 0.0f,
-         r.y,  u.y, -f.y, 0.0f,
-         r.z,  u.z, -f.z, 0.0f,
-        -UpeVec3_Dot(r, eye), -UpeVec3_Dot(u, eye), UpeVec3_Dot(f, eye), 1.0f
-    };
+    UpeMat4 m = {{
+        {r.x,  u.x, -f.x, 0.0f},
+        {r.y,  u.y, -f.y, 0.0f},
+        {r.z,  u.z, -f.z, 0.0f},
+        {-UpeVec3_Dot(r, eye), -UpeVec3_Dot(u, eye), UpeVec3_Dot(f, eye), 1.0f}
+    }};
+    return m;
 }

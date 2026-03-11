@@ -81,7 +81,7 @@ jobs:
     
     - name: Upload Build Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-windows-${{ matrix.config }}
         path: |
@@ -91,7 +91,7 @@ jobs:
 
     - name: Upload Test Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-windows-tests-${{ matrix.config }}
         path: proof/ci/windows-tests-${{ matrix.config }}.log
@@ -167,7 +167,7 @@ jobs:
     
     - name: Upload Build Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-linux-${{ matrix.compiler }}-${{ matrix.config }}
         path: |
@@ -177,7 +177,7 @@ jobs:
 
     - name: Upload Test Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-linux-tests-${{ matrix.compiler }}-${{ matrix.config }}
         path: proof/ci/linux-tests-${{ matrix.compiler }}-${{ matrix.config }}.log
@@ -231,7 +231,7 @@ jobs:
     
     - name: Upload Build Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-macos-${{ matrix.config }}
         path: |
@@ -241,7 +241,7 @@ jobs:
 
     - name: Upload Test Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-macos-tests-${{ matrix.config }}
         path: proof/ci/macos-tests-${{ matrix.config }}.log
@@ -304,7 +304,7 @@ jobs:
 
     - name: Upload Determinism Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-determinism-proof
         path: |
@@ -379,7 +379,7 @@ jobs:
 
     - name: Upload Cross-Compiler Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-cross-compiler-determinism
         path: |
@@ -427,7 +427,7 @@ jobs:
 
     - name: Upload Determinism Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-determinism-proof-windows
         path: proof/RUNS/
@@ -478,7 +478,7 @@ jobs:
 
     - name: Upload Determinism Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-determinism-proof-macos
         path: proof/RUNS/
@@ -549,7 +549,7 @@ jobs:
 
     - name: Upload Benchmark Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-canonical-benchmarks
         path: |
@@ -648,7 +648,7 @@ jobs:
 
     - name: Upload Release Gate Artifacts
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: upe-release-gate
         path: |

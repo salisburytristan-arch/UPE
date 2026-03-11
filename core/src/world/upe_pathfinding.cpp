@@ -13,12 +13,6 @@ static float v3_dist(UpeVec3 a, UpeVec3 b) {
     return sqrtf(dx*dx + dy*dy + dz*dz);
 }
 
-static UpeNavNode *find_node(const UpeNavGraph *g, uint32_t id) {
-    for (uint32_t i = 0; i < g->node_count; i++)
-        if (g->nodes[i].id == id) return &g->nodes[i];
-    return NULL;
-}
-
 static uint32_t find_node_idx(const UpeNavGraph *g, uint32_t id) {
     for (uint32_t i = 0; i < g->node_count; i++)
         if (g->nodes[i].id == id) return i;
@@ -213,7 +207,8 @@ void UpeNav_Dijkstra(const UpeNavGraph *g, uint32_t start_id,
     uint32_t si = find_node_idx(g, start_id);
     if (si == UPE_PATH_NULL_NODE) { free(open); return; }
     cost_out[si] = 0.0f;
-    heap_push(open, &open_size, (AStarNode){0.0f, start_id});
+    AStarNode start = {0.0f, start_id};
+    heap_push(open, &open_size, start);
 
     while (open_size > 0) {
         AStarNode cur = heap_pop(open, &open_size);
@@ -229,7 +224,8 @@ void UpeNav_Dijkstra(const UpeNavGraph *g, uint32_t start_id,
             if (nc < cost_out[ni]) {
                 cost_out[ni] = nc;
                 if (prev_out) prev_out[ni] = ci;
-                heap_push(open, &open_size, (AStarNode){nc, g->nodes[ni].id});
+                AStarNode next = {nc, g->nodes[ni].id};
+                heap_push(open, &open_size, next);
             }
         }
     }

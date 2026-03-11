@@ -103,7 +103,7 @@ void UpeBallistic_Step(UpeBallistic *b, const UpeBallisticWind *wind,
     float sound = wind ? wind->sound_speed_ms : 343.0f;
 
     /* Relative velocity to air */
-    UpeVec3 wind_vel = wind ? wind->velocity_ms : (UpeVec3){0.0f,0.0f,0.0f};
+    UpeVec3 wind_vel = wind ? wind->velocity_ms : UpeVec3{0.0f, 0.0f, 0.0f};
     UpeVec3 rel_vel = { b->vel.x - wind_vel.x,
                         b->vel.y - wind_vel.y,
                         b->vel.z - wind_vel.z };
