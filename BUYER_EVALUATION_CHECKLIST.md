@@ -531,3 +531,5 @@ Once acquired, follow this timeline:
 **Recommended Evaluation Duration**: 2-4 weeks  
 **Status**: Ready for buyer assessment teams
 
+**Positioning Note**: Prioritize `production-ready` and `validated` capabilities for purchase-critical decisions; treat broader scientific/exotic modules as optional upside unless they map directly to your roadmap.
+

@@ -24,6 +24,8 @@ evaluation of the Unified Physics Engine v1.0.0.
 Attached is everything you need to perform a comprehensive technical assessment 
 of the engine and its integration feasibility for your use case.
 
+Evaluation posture: start with the deterministic core path first. The repository includes broader scientific and advanced modules, but those should be evaluated by maturity and roadmap relevance rather than treated as equal production commitments.
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📦 PACKAGE CONTENTS
@@ -70,7 +72,7 @@ To verify integrity:
    build/bin/examples/advanced_vehicle_demo   [shows vehicle dynamics]
    build/bin/examples/ragdoll_character_demo  [shows articulated bodies]
 
-Expected result: ✅ All tests pass, determinism hashes match, examples run correctly
+Expected result: ✅ Core build/test/proof path passes, determinism hashes match, and representative examples run correctly
 
 If you hit any build issues, see "TROUBLESHOOTING.md" in the package.
 

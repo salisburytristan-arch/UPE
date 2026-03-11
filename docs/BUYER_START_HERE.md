@@ -2,6 +2,8 @@
 
 Headline: **Rollback-ready native physics core (C API, no mandatory runtime dependencies) with reproducible determinism proof tooling, snapshots/replay, and state hashing.**
 
+Positioning note: this evaluation path is intentionally core-first. The repo contains broader scientific and advanced simulation modules, but buyers should assess those by domain maturity and roadmap relevance rather than assuming equal production readiness across all systems.
+
 ## What You're Evaluating
 
 This is the UPE v1.0.0 **core physics engine**:
@@ -11,7 +13,7 @@ This is the UPE v1.0.0 **core physics engine**:
 - **Zero mandatory dependencies**: pure C implementation using stdlib only
 - **Production quality**: warm-starting, manifold caching, island sleeping, CCD
 
-Optional modules (beyond v1.0.0 scope): soft bodies, fluids, thermal, plasma, fracture, orbital mechanics.
+Broader modules exist beyond the core buyer path, including soft bodies, fluids, thermal, fracture, orbital mechanics, and additional scientific extensions. Those systems expand the technical surface area, but the primary diligence case remains the deterministic core and validated integration path.
 
 ## 1) Build (core-focused)
 
@@ -127,6 +129,12 @@ python scripts\verify_everything.py --release-dir releases_ci --strict-warnings
 ✅ **Rollback/replay tooling exists and is measurable** (snapshots, hashing, playback)
 ✅ **Zero mandatory dependencies** (pure C, no external libs)
 ✅ **Production quality checks pass** (warnings errors, platform builds, all tests)
+✅ **Acquisition diligence can start immediately** (the core proof package is present today)
+
+What you should not conclude:
+- That every module in the repository has identical production maturity
+- That advanced scientific breadth matters equally to every buyer
+- That valuation should be driven by module count alone instead of integration value and proof quality
 
 ## 8) Why Choose UPE
 

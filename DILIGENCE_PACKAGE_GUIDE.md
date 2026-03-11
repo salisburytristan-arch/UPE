@@ -19,6 +19,8 @@ Validation authority: treat these documents as canonical for current claim scope
 
 Thank you for signing the NDA and advancing to the diligence phase. This package contains everything you need to perform a comprehensive technical and business evaluation of the Unified Physics Engine.
 
+Evaluation posture: use a core-first review. The deterministic runtime path and validated integration surface are the primary acceptance baseline; broader scientific and exotic modules should be assessed by maturity and fit to your roadmap.
+
 ### Included Archives
 
 | File | Size | Contents |
@@ -81,7 +83,7 @@ cmake --build build -j$(nproc)
 Build files have been written to: <path>/build
 ```
 
-No errors, no warnings. If you see build errors, check **TROUBLESHOOTING.md**.
+No build errors expected. Warning policy depends on toolchain and flags; if you see blocking issues, check **TROUBLESHOOTING.md**.
 
 ### Step 4: Run Tests (10 min)
 

@@ -13,7 +13,7 @@ Validation authority: when this summary conflicts with proof/maturity docs, defe
 
 ## INVESTMENT OPPORTUNITY
 
-**Unified Physics Engine (UPE)** is a comprehensive physics simulation framework with 39+ integrated systems—ready for deployment in game development, simulation software, and scientific computing.
+**Unified Physics Engine (UPE)** is a comprehensive physics simulation framework with 39+ integrated systems. It is ready for qualified buyer evaluation and integration planning, with the highest confidence in the deterministic core pipeline and selective advanced systems.
 
 ---
 
@@ -21,7 +21,7 @@ Validation authority: when this summary conflicts with proof/maturity docs, defe
 
 | Metric | Value |
 |--------|-------|
-| **Completeness** | 39+ physics systems, all core modules integrated |
+| **Completeness** | 39+ physics systems spanning production-ready core, validated subsystems, and scientific/experimental extensions |
 | **Code** | 55,000+ lines, 66 tests passing, zero compiler warnings |
 | **Features** | Rigid bodies, soft bodies, fluids, cloth, vehicles, ragdolls, and more |
 | **API** | 200+ functions across all systems |
@@ -64,6 +64,11 @@ Validation authority: when this summary conflicts with proof/maturity docs, defe
 - CPU-only (no GPU acceleration currently)
 - Single-threaded by default
 - Self-support model (no included support)
+
+**Acquisition Readiness**
+- Buyer-ready for technical diligence: build/test/proof surface is present and reviewable now
+- Primary value is concentrated in the deterministic production core, integration path, and proof package
+- Broader scientific and exotic modules expand upside, but should be evaluated by maturity and buyer relevance rather than counted as equal production assets
 
 ---
 
@@ -119,6 +124,14 @@ Soft Bodies → Fluids → Particle Systems → Determinism Validation
 
 ---
 
+## MATURITY SNAPSHOT
+
+- **Production-ready core**: rigid bodies, collision, constraints, determinism, replay/snapshots, core integration path
+- **Validated secondary systems**: vehicles, ragdolls, cloth, fluids, key tooling and examples
+- **Scientific/exotic breadth**: additional domains are implemented in-repo, but not all carry the same production evidence or buyer-critical weight
+
+---
+
 ## SCOPE & EXPECTATIONS
 
 - **Source Code Model**: Full source provided; no precompiled binaries
@@ -153,6 +166,11 @@ Soft Bodies → Fluids → Particle Systems → Determinism Validation
 - Months 2-4: Core integration and feature work (2-3 FTE)
 - Months 5-6: Optimization and platform verification (1-2 FTE)
 - Ongoing: Maintenance and customization (internal team)
+
+**Positioning Guidance**:
+- Treat the engine as buyout-ready for serious evaluation, not as a claim that every domain is equally production-mature
+- Anchor valuation to the deterministic core, documentation quality, proof artifacts, and integration leverage
+- Treat advanced scientific breadth as strategic upside that may matter materially only for buyers with matching roadmap needs
 
 ---
 

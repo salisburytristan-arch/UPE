@@ -368,17 +368,17 @@ python scripts/plot_benchmarks.py benchmark_results.csv
 | Determinism | Certified (4/4 tests) | Premium pricing |
 | Performance Proof | 5 benchmarks | Marketing claims |
 
-### Valuation Increase
+### Commercial Positioning Shift
 
 **Before**: Research project (interesting but unpolished)
 - RFP Score: ⭐⭐⭐ (50%)
 - Enterprise Confidence: LOW
 - Pricing Power: $0-10K
 
-**After**: Commercial SDK (professional, certified)
+**After**: Buyer-evaluable SDK (professional, documented, certified on the core proof path)
 - RFP Score: ⭐⭐⭐⭐⭐ (95%)
 - Enterprise Confidence: HIGH
-- Pricing Power: $50K-250K+ (5-10x increase)
+- Pricing Power: materially improved, subject to buyer fit, diligence outcome, and scope of rights transferred
 
 ---
 

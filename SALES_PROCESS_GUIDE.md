@@ -21,7 +21,7 @@ Target companies that would benefit from physics engine IP:
 Share the **EXECUTIVE_SUMMARY.md** and **QUICK_START.md** (no IP exposure yet):
 - 1-page headline: "Deterministic physics core, 55k LOC, zero dependencies"
 - Feature overview (rigid bodies, vehicles, articulated, cloth, fluids)
-- Timeline: "Ready for immediate integration"
+- Timeline: "Ready for qualified technical diligence and core integration planning"
 - Request: "Are you interested in a confidential technical evaluation?"
 
 ### 1.3 Schedule Discovery Call (30 min)
@@ -144,6 +144,7 @@ Within 2 days of sending package, schedule **Technical Kickoff (1 hour)**:
 - "60+ unit tests, comprehensive examples, full CMake build system"
 - "You can build and validate everything in 1-2 hours"
 - "We provide implementation details, not black boxes"
+- "The deterministic core drives the value case; broader scientific modules should be evaluated by fit and maturity"
 
 ---
 
@@ -198,6 +199,14 @@ Buyer presents recommendation:
 
 **NO-GO**: "Not a good fit for our roadmap"  
 → Thank them, archive NDA/DOCs, move to next buyer
+
+### 5.1A Positioning Discipline
+
+Use the following framing consistently during evaluation:
+- Present UPE as buyout-ready for serious diligence, with an immediately reviewable build, test, and proof surface
+- Lead with the deterministic production core, integration path, and documentation quality
+- Describe broader scientific and exotic domains as implemented upside, not as equal-maturity guarantees
+- Avoid fixed valuation multipliers; final price depends on buyer fit, diligence outcome, and strategic overlap
 
 ### 5.2 Your Response to GO
 
