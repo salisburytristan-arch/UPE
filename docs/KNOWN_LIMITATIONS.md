@@ -7,7 +7,7 @@
 
 ## Determinism Scope
 
-- Determinism is guaranteed across platforms when using identical compiler flags
+- Cross-platform bit-exact determinism is not universally guaranteed by default
 - Required flags: `/fp:precise` (MSVC), `-ffp-contract=off` (GCC/Clang)
 - Multithreading requires deterministic parallel mode enabled
 - System allocator usage breaks determinism guarantees; use UpeAllocator
