@@ -93,6 +93,38 @@ Why it matters:
 
 - Shows packaging and documentation integrity gates passed together.
 
+## Latest Full-Matrix Verification Record
+
+Use this section to record the most recent evidence-backed CI matrix pass.
+
+- Verification date (UTC): `PENDING`
+- Workflow run URL: `PENDING`
+- Workflow run ID: `PENDING`
+- Commit SHA verified: `d9164ee`
+- Section B status in `SCIENTIFIC_COMPLETENESS_PLAN.md`: `pending CI evidence capture`
+
+Expected lanes for this record:
+
+- Linux Debug/Release (gcc, clang)
+- Windows Debug/Release
+- macOS Debug/Release
+- strict warnings (gcc, clang)
+- cross-compiler check
+- determinism lanes (Windows, macOS)
+- determinism certification
+- world-step benchmarks
+- release package gate
+
+Artifacts to record after pass:
+
+- Artifact names: `PENDING`
+- Artifact IDs: `PENDING`
+- Determinism artifact set: `PENDING`
+- Benchmark artifact set: `PENDING`
+- Release gate artifact set: `PENDING`
+
+When this record is completed, update Section B checkboxes in `docs/SCIENTIFIC_COMPLETENESS_PLAN.md` from pending to verified.
+
 ## Related References
 
 - [CI_GATES.md](CI_GATES.md)
