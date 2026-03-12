@@ -449,9 +449,9 @@ jobs:
         }
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Determinism (Windows)"
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ""
-        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- hash_run_1: `$hash1`"
-        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- hash_run_2: `$hash2`"
-        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "- Artifact: `proof/RUNS/`"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ('- hash_run_1: `{0}`' -f $hash1)
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value ('- hash_run_2: `{0}`' -f $hash2)
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value '- Artifact: `proof/RUNS/`'
 
   # =============================================================================
   # macOS Determinism Proof
