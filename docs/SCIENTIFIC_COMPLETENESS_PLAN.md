@@ -140,3 +140,83 @@ The following features are implemented as **scientific-approximation** models. T
 - `core/include/upe/upe_rendering_math.h` (header-only)
 - `core/include/upe/upe_noise.h` + `core/src/math/upe_noise.cpp`
 - Extensions: `upe_math.h`, `upe_math_toolbox.h`, `upe_friction.h`, `upe_solver.h`, `upe_net_delta.h`
+
+---
+
+## Top-to-Bottom Verification Status (2026-03-11)
+
+Status convention in this section:
+- `[x]` verified by repo evidence or local reproducible checks
+- `[ ]` pending CI rerun or additional evidence capture
+
+### A. Repository Truth Surface
+- [x] `TRUTH_HIERARCHY.md` reviewed
+- [x] `PROOF_INDEX.md` reviewed
+- [x] `MATURITY_MATRIX.md` reviewed
+- [x] `PLATFORM_SUPPORT_MATRIX.md` reviewed
+- [x] `FEATURE_STATUS_MATRIX.md` reviewed
+- [x] `SIMULATION_DOMAIN_REGISTRY.md` reviewed
+- [x] `SCIENTIFIC_COMPLETENESS_PLAN.md` reviewed
+- [x] Root docs checked for contradiction (`python scripts/check_markdown_links.py` passed)
+
+### B. CI / Build Verification
+- [ ] Linux Debug/Release gcc passes (pending latest CI rerun confirmation)
+- [ ] Linux Debug/Release clang passes (pending latest CI rerun confirmation)
+- [ ] Windows Debug/Release passes (pending latest CI rerun confirmation)
+- [ ] macOS Debug/Release passes (pending latest CI rerun confirmation)
+- [ ] Cross-compiler check passes (pending latest CI rerun confirmation)
+- [ ] Strict warnings gcc passes (pending latest CI rerun confirmation)
+- [ ] Strict warnings clang passes (pending latest CI rerun confirmation)
+- [ ] Determinism Windows passes (fixes pushed; pending rerun)
+- [ ] Determinism macOS passes (pending latest CI rerun confirmation)
+- [ ] Determinism Certification passes (pending latest CI rerun confirmation)
+- [ ] World-Step Benchmarks pass (pending latest CI rerun confirmation)
+- [x] Release gate behavior verified (local `python scripts/verify_release_gate.py --create --dir releases_ci_local2`)
+
+### C. Proof Artifacts
+- [x] Determinism logs current (local `proof/RUNS/` has fresh runs)
+- [x] Benchmark logs current (`proof/RUNS/` benchmark artifacts present)
+- [x] Release proof artifacts current (release gate validated locally)
+- [x] Baseline reference logs tracked (`proof/REFERENCE_RUNS/*.log` tracked in git)
+- [x] `PROOF_INDEX` paths verified
+
+### D. Feature / Domain Status
+- [x] Core production-ready systems confirmed (`MATURITY_MATRIX.md`)
+- [x] Validated adjacent systems confirmed (`MATURITY_MATRIX.md`)
+- [x] Approximation domains labeled correctly (`FEATURE_STATUS_MATRIX.md` + honesty table)
+- [x] Experimental/exotic domains labeled correctly (`MATURITY_MATRIX.md`, `SIMULATION_DOMAIN_REGISTRY.md`)
+- [x] New expansion modules mapped to domain registry (`SIMULATION_DOMAIN_REGISTRY.md`)
+
+### E. Provenance / Originality
+- [x] High-risk files identified (`PROVENANCE_AUDIT.md`)
+- [x] AI-assisted files identified/audited (`PROVENANCE_AUDIT.md` provenance section)
+- [x] Suspicious snippets searched (`PROVENANCE_AUDIT.md` snippet analysis)
+- [x] Dependencies and copied assets audited (`PROVENANCE_AUDIT.md` dependency chain)
+- [x] Uncertain code rewritten or documented (documentation path completed)
+- [x] Maintainer signoff recorded per subsystem (`PROVENANCE_AUDIT.md` signoff section)
+
+### F. Release / Packaging
+- [x] Release package gate verified
+- [x] Acceptance checklist verified present (`docs/ACCEPTANCE_CHECKLIST.md`)
+- [x] Release manifests checked (`scripts/create_release.py`, `scripts/verify_release_gate.py`)
+- [x] Artifact paths documented (`docs/PROOF_INDEX.md`)
+
+### G. Buyer-Readiness
+- [x] `BUYER_START_HERE` path verified
+- [x] Deterministic replay showcase verified present (`docs/SHOWCASE_DETERMINISTIC_REPLAY_SPEC.md`)
+- [x] Public C API integration path verified (`docs/INTEGRATION_GUIDE.md`, `docs/API_REFERENCE.md`)
+- [x] Platform support statements evidence-backed (`docs/PLATFORM_SUPPORT_MATRIX.md`)
+- [x] Provenance/legal packet assembled (`PROVENANCE_AUDIT.md`, `DUE_DILIGENCE_PACK.md`)
+
+### H. Risk Register
+- [x] Known caveats documented (`docs/KNOWN_LIMITATIONS.md`)
+- [x] Experimental areas documented (`docs/MATURITY_MATRIX.md`)
+- [x] CI caveats documented (`BUILD_STATUS.md`)
+- [x] Provenance caveats documented (`PROVENANCE_AUDIT.md` legal reality section)
+- [x] Buyer-facing wording aligned to truth hierarchy (`docs/TRUTH_HIERARCHY.md`)
+
+### Remaining Critical Path
+
+1. Re-run full GitHub Actions matrix on latest `main`.
+2. Flip Section B checkboxes from pending to verified based on run artifacts.
+3. Record CI run URL and artifact IDs in `docs/PROOF_INDEX.md`.
