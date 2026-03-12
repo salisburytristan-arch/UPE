@@ -421,7 +421,7 @@ jobs:
     - name: Configure + Build
       run: |
         cmake -S . -B build-proof-win -DCMAKE_BUILD_TYPE=Release -DUPE_BUILD_TESTS=ON -DUPE_BUILD_EXAMPLES=OFF -DUPE_DETERMINISTIC=ON -DUPE_WARNINGS_AS_ERRORS=OFF
-        cmake --build build-proof-win --parallel
+        cmake --build build-proof-win --config Release --parallel
 
     - name: Run Determinism Proof
       run: cmd /c tools\run_determinism_proof.bat build-proof-win

@@ -13,8 +13,10 @@ set TEST_EXE=
 if exist "%BUILD_DIR%\bin\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\upe_tests.exe
 if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\bin\Release\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\Release\upe_tests.exe
 if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\bin\Debug\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\Debug\upe_tests.exe
 if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\Release\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\Release\upe_tests.exe
 if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\RelWithDebInfo\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\RelWithDebInfo\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\Debug\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\Debug\upe_tests.exe
 if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\upe_tests.exe
 if not exist "%TEST_EXE%" (
   echo [UPE] Missing test executable. > "%LOG_FILE%"
@@ -23,8 +25,10 @@ if not exist "%TEST_EXE%" (
   echo [UPE]   - %BUILD_DIR%\bin\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE]   - %BUILD_DIR%\bin\Release\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE]   - %BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\bin\Debug\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE]   - %BUILD_DIR%\Release\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE]   - %BUILD_DIR%\RelWithDebInfo\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\Debug\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE]   - %BUILD_DIR%\upe_tests.exe >> "%LOG_FILE%"
   echo [UPE] Missing test executable. Review log: %LOG_FILE%
   exit /b 1
