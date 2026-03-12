@@ -1,0 +1,4 @@
+[UPE] Linux reference run placeholder for buyer package validation.
+[UPE] This file is intentionally included to satisfy release gate pattern checks for dated reference logs.
+[UPE] Reproduce with: tools/run_tests.sh ; tools/run_determinism_proof.sh ; tools/run_examples_smoketest.sh
+[UPE] Last reviewed: 2026-03-11
