@@ -5,6 +5,8 @@
 /build_linux/
 /build_windows/
 /releases_ci/
+/releases_ci_local/
+/releases_ci_local2/
 /proof/RUNS/
 *.log
 !proof/REFERENCE_RUNS/*.log

@@ -34,9 +34,23 @@ Validation authority: when this pack conflicts with current proof/maturity docs,
 
 ## EXECUTIVE SUMMARY
 
+### Lean Sale Packet Positioning
+
+This repository is suitable for **current-state, as-is technical asset sale conversations now**.
+
+This package should be presented as:
+- a one-time wholesale technical asset sale,
+- with full source, docs, proof infrastructure, and packaging materials,
+- subject to buyer technical and legal diligence,
+- without representing every subsystem as equally production-mature.
+
+It should **not** be positioned as a guaranteed turnkey enterprise platform.
+
 ### Business Overview
 
 The **Unified Physics Engine (UPE)** is a comprehensive physics simulation framework capable of modeling rigid body dynamics, fluid mechanics, soft bodies, thermal systems, vehicles, ragdolls, and specialized domains. Built from scratch with determinism as a core requirement.
+
+The strongest sale case is the deterministic core, build/test/proof surface, documentation quality, packaging discipline, and integration leverage. The broader scientific and exotic systems add upside, but should be treated as varying-maturity in-repo capability rather than equal buyer-critical production assets.
 
 **Key Metrics:**
 
@@ -62,6 +76,60 @@ The **Unified Physics Engine (UPE)** is a comprehensive physics simulation frame
 4. **Determinism-First Architecture**: Built from ground up for reproducible physics (useful for networking, rollback, replay)
 5. **Modular Design**: Core systems plus optional domain modules
 6. **Clean Build System**: CMake with cross-platform support
+
+### What Buyer Gets
+
+- Full source code repository
+- Documentation set and buyer evaluation path
+- Deterministic replay, proof, and release-gate infrastructure
+- Feature, maturity, platform, and domain registry documentation
+- Scientific completeness and approximation disclosure docs
+- Benchmark, determinism, and packaging materials
+- Build scripts, release scripts, and validation scripts
+- Public API surface and language bindings present in-repo
+- Associated rights only as transferred under final signed agreement
+
+### Current-State Maturity Statement
+
+- The **production-ready core** is the rigid-body, collision, constraint, determinism, replay, and integration path.
+- A broader set of **validated** systems exists, including vehicles, articulation, cloth, fluids, and supporting tooling.
+- Additional scientific, exotic, and approximation domains are present in-repo but are **not all equally production-mature**.
+- Buyers should rely on `docs/PROOF_INDEX.md`, `docs/TRUTH_HIERARCHY.md`, `docs/MATURITY_MATRIX.md`, and `docs/PLATFORM_SUPPORT_MATRIX.md` for current truth.
+
+### Proof / Documentation Index
+
+Primary diligence references:
+- `docs/PROOF_INDEX.md`
+- `docs/TRUTH_HIERARCHY.md`
+- `docs/MATURITY_MATRIX.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/FEATURE_STATUS_MATRIX.md`
+- `docs/SIMULATION_DOMAIN_REGISTRY.md`
+- `docs/SCIENTIFIC_COMPLETENESS_PLAN.md`
+- `PROVENANCE_AUDIT.md`
+
+### Provenance / Ownership Statement
+
+- Repository is proprietary and offered only for confidential evaluation and acquisition discussions.
+- Ownership and confidentiality posture are defined in `LICENSE` and `COMMERCIAL_LICENSE_AGREEMENT.md`.
+- Provenance review, subsystem risk review, and dependency audit are assembled in `PROVENANCE_AUDIT.md`.
+- Buyer should still perform independent legal diligence before closing.
+
+### As-Is Sale Terms Summary
+
+- Sale posture: **as-is, current-state wholesale technical asset sale**
+- No implied promise that every subsystem is enterprise-ready today
+- No implied promise of equal maturity across all modules
+- Buyer is expected to perform technical validation and legal diligence
+- Rights transfer, warranties, indemnities, support, and exclusivity are governed only by signed final agreements
+
+### Risks That Should Be Explicitly Disclosed
+
+- current-state sale
+- maturity varies by subsystem
+- buyers should rely on proof/maturity docs for current truth
+- advanced domains are not equally production-mature
+- buyer performs its own technical and legal diligence
 
 ### Recommended Use Cases
 

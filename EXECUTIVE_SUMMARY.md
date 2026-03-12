@@ -1,3 +1,143 @@
+# UNIFIED PHYSICS ENGINE - EXECUTIVE SUMMARY (LEAN SALE PACKET)
+
+**Prepared**: March 2026 | **Status**: As-Is Wholesale Technical Asset Sale Candidate | **Confidential**
+
+Validation authority: if this summary conflicts with proof or maturity docs, defer to:
+- `docs/PROOF_INDEX.md`
+- `docs/TRUTH_HIERARCHY.md`
+- `docs/MATURITY_MATRIX.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/FEATURE_STATUS_MATRIX.md`
+
+---
+
+## One-Page Overview
+
+Unified Physics Engine (UPE) is a proprietary physics-engine codebase being offered as a **current-state, as-is technical asset sale**.
+
+The value is not just the code volume. The value is the combination of:
+- deterministic core simulation infrastructure,
+- replay/snapshot/state-hash tooling,
+- cross-platform build and CI gate surface,
+- proof and packaging scripts,
+- structured maturity and feature documentation,
+- and a broad in-repo simulation surface that a buyer can selectively operationalize.
+
+This is suitable for a sell-now process if the goal is a clean one-time exit rather than additional months of polishing.
+
+---
+
+## What Buyer Is Acquiring
+
+- Full repository source code
+- Core rigid-body, collision, solver, determinism, replay, and rollback-oriented infrastructure
+- Broader in-repo systems including vehicles, articulation, cloth, fluids, thermal, fracture, orbital, and other advanced domains
+- Documentation set, proof index, maturity matrix, platform matrix, feature matrix, and simulation domain registry
+- Determinism, benchmark, release-gate, and packaging scripts
+- Public API surface and language bindings present in-repo
+- Associated rights only to the extent granted in final signed transaction documents
+
+---
+
+## Why It Is Valuable
+
+- Determinism-first architecture is useful for rollback, replay, auditability, and simulation reproducibility
+- Source is self-contained with no mandatory third-party runtime dependency stack
+- Buyer receives both implementation and structured diligence surface, not just a code dump
+- Maturity and scope are already partitioned, which reduces ambiguity during buyer evaluation
+- Advanced domain breadth provides roadmap upside for the right buyer without pretending equal production readiness across all modules
+
+---
+
+## Current-State Maturity Statement
+
+- **Production-ready core**: rigid body pipeline, collision, constraints, determinism, replay/snapshots, core integration path
+- **Validated secondary systems**: vehicles, articulation, cloth, fluids, key tooling and examples
+- **Present but not equally mature**: advanced scientific, exotic, and approximation-heavy domains
+
+Buyers should rely on:
+- `docs/PROOF_INDEX.md` for evidence and artifacts
+- `docs/TRUTH_HIERARCHY.md` for conflict resolution
+- `docs/MATURITY_MATRIX.md` for maturity labels
+- `docs/PLATFORM_SUPPORT_MATRIX.md` for support scope
+
+---
+
+## Proof / Docs Index
+
+Primary sale-packet references:
+- `docs/BUYER_START_HERE.md`
+- `docs/PROOF_INDEX.md`
+- `docs/TRUTH_HIERARCHY.md`
+- `docs/MATURITY_MATRIX.md`
+- `docs/PLATFORM_SUPPORT_MATRIX.md`
+- `docs/FEATURE_STATUS_MATRIX.md`
+- `docs/SIMULATION_DOMAIN_REGISTRY.md`
+- `docs/SCIENTIFIC_COMPLETENESS_PLAN.md`
+- `PROVENANCE_AUDIT.md`
+- `DUE_DILIGENCE_PACK.md`
+
+---
+
+## Provenance / Ownership Statement
+
+- Repository is proprietary and confidential.
+- Evaluation access does not grant commercialization rights.
+- Ownership, confidentiality, and transfer posture are governed by `LICENSE` and `COMMERCIAL_LICENSE_AGREEMENT.md`.
+- Provenance review, dependency review, and subsystem audit are assembled in `PROVENANCE_AUDIT.md`.
+- Buyer should still perform independent legal diligence.
+
+---
+
+## As-Is Sale Terms Summary
+
+- Offered as an **as-is wholesale technical asset sale**
+- Not represented as a turnkey enterprise platform with equal maturity across all modules
+- Buyer should perform its own technical validation and legal diligence
+- Rights, warranties, indemnities, support, exclusivity, and transfer scope are defined only in final signed agreements
+
+---
+
+## What Buyer Gets In Practice
+
+- Full codebase
+- Documentation
+- Deterministic replay / proof infrastructure
+- Feature and maturity matrices
+- Simulation domain registry
+- Scientific completeness plan
+- Benchmark, determinism, and release-gate materials
+- Build and packaging scripts
+- Public API surface
+- Associated rights, subject to final agreement terms
+
+---
+
+## Risks To Disclose Up Front
+
+- current-state sale
+- maturity varies by subsystem
+- buyer should rely on proof and maturity docs for current truth
+- advanced domains are not all equally production-mature
+- buyer performs its own technical and legal diligence
+
+This honesty strengthens the sale process rather than weakening it.
+
+---
+
+## Bottom-Line Positioning
+
+Can this be sold now as a one-time, whole-sale asset exit?
+
+**Yes.**
+
+The cleanest path is:
+- sell it now,
+- sell it honestly,
+- position it as a current-state technical asset,
+- and anchor the diligence discussion on the deterministic core, proof surface, documentation quality, and integration leverage.
+
+That is a stronger and more defensible sale posture than waiting for every checkbox in every subsystem to become perfect.
 # UNIFIED PHYSICS ENGINE - EXECUTIVE SUMMARY (1-PAGE)
 
 **Prepared**: February 2026 | **Status**: Qualified Buyer Evaluation Ready | **Confidential**
