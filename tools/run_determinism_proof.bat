@@ -9,14 +9,29 @@ set LOG_DIR=proof\RUNS
 set LOG_FILE=%LOG_DIR%\determinism_%TS%.log
 if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 
-set TEST_EXE=%BUILD_DIR%\bin\upe_tests.exe
-if not exist "%TEST_EXE%" set TEST_EXE=%BUILD_DIR%\upe_tests.exe
+set TEST_EXE=
+if exist "%BUILD_DIR%\bin\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\bin\Release\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\Release\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\Release\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\Release\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\RelWithDebInfo\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\RelWithDebInfo\upe_tests.exe
+if "%TEST_EXE%"=="" if exist "%BUILD_DIR%\upe_tests.exe" set TEST_EXE=%BUILD_DIR%\upe_tests.exe
 if not exist "%TEST_EXE%" (
-  echo [UPE] Missing test executable: %BUILD_DIR%\bin\upe_tests.exe > "%LOG_FILE%"
+  echo [UPE] Missing test executable. > "%LOG_FILE%"
+  echo [UPE] Build dir: %BUILD_DIR% >> "%LOG_FILE%"
+  echo [UPE] Checked: >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\bin\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\bin\Release\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\bin\RelWithDebInfo\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\Release\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\RelWithDebInfo\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE]   - %BUILD_DIR%\upe_tests.exe >> "%LOG_FILE%"
+  echo [UPE] Missing test executable. Review log: %LOG_FILE%
   exit /b 1
 )
 
 echo [UPE] determinism proof started at %TS% > "%LOG_FILE%"
+echo [UPE] Using test executable: %TEST_EXE% >> "%LOG_FILE%"
 "%TEST_EXE%" > "%LOG_DIR%\det_run1_%TS%.txt" 2>&1
 if errorlevel 1 goto fail
 "%TEST_EXE%" > "%LOG_DIR%\det_run2_%TS%.txt" 2>&1
