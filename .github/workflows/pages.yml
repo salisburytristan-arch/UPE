@@ -1,0 +1,68 @@
+name: Deploy Landing Page to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - TECHNICAL_ASSESSMENT.md
+      - DUE_DILIGENCE_PACK.md
+      - PROVENANCE_AUDIT.md
+      - COMMERCIAL_LICENSE_AGREEMENT.md
+      - docs/DETERMINISM.md
+      - docs/BENCHMARK_BASELINES.md
+      - CNAME
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build static site artifact
+        run: |
+          set -euo pipefail
+          mkdir -p _site/docs
+
+          cp index.html _site/index.html
+          cp TECHNICAL_ASSESSMENT.md _site/TECHNICAL_ASSESSMENT.md
+          cp DUE_DILIGENCE_PACK.md _site/DUE_DILIGENCE_PACK.md
+          cp PROVENANCE_AUDIT.md _site/PROVENANCE_AUDIT.md
+          cp COMMERCIAL_LICENSE_AGREEMENT.md _site/COMMERCIAL_LICENSE_AGREEMENT.md
+          cp docs/DETERMINISM.md _site/docs/DETERMINISM.md
+          cp docs/BENCHMARK_BASELINES.md _site/docs/BENCHMARK_BASELINES.md
+
+          # Prevent Jekyll processing and preserve intended file structure.
+          touch _site/.nojekyll
+
+          if [ -f CNAME ]; then
+            cp CNAME _site/CNAME
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
