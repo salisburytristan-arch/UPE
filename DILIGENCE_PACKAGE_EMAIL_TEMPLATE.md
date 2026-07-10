@@ -9,7 +9,7 @@
 Choose one:
 - `[UPE] Unified Physics Engine v1.0.0 – Evaluation Package Ready`
 - `Unified Physics Engine – Confidential Diligence Package Attached`
-- `UPE v1.0.0 – Your Exclusive Evaluation Package (NDA-Protected)`
+- `UPE v1.0.0 – Your Private Evaluation Package (NDA-Protected)`
 
 ---
 
@@ -26,18 +26,20 @@ of the engine and its integration feasibility for your use case.
 
 Evaluation posture: start with the deterministic core path first. The repository includes broader scientific and advanced modules, but those should be evaluated by maturity and roadmap relevance rather than treated as equal production commitments.
 
+Commercial path note: evaluation can convert into a pilot, internal-use source license, enterprise source license, field-limited exclusive deal, or full acquisition depending on fit.
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📦 PACKAGE CONTENTS
 
-File: UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip
-Size: 0.93 MB
-Files: 694 (source code, examples, tests, documentation, proof artifacts)
+File: [insert latest evaluation package filename].zip
+Size: under 100 MB compressed
+Files: source code, examples, tests, documentation, and proof artifacts
 SHA256: [INSERT HASH HERE]
 
 To verify integrity:
-  Windows PowerShell:  Get-FileHash UnifiedPhysicsEngine-1.0.0-buyout-*.zip
-  Linux/macOS:        sha256sum UnifiedPhysicsEngine-1.0.0-buyout-*.zip
+  Windows PowerShell:  Get-FileHash <package>.zip
+  Linux/macOS:        sha256sum <package>.zip
 
 (Compare against the SHA256 above to ensure file wasn't corrupted in transit)
 
@@ -46,8 +48,8 @@ To verify integrity:
 🚀 GETTING STARTED (60 MINUTES)
 
 1. Extract the package to a secure, access-controlled workstation
-   Windows: Expand-Archive -Path UnifiedPhysicsEngine-1.0.0-buyout-*.zip -DestinationPath C:\Physics
-   Linux:   unzip UnifiedPhysicsEngine-1.0.0-buyout-*.zip -d ~/Physics
+   Windows: Expand-Archive -Path UnifiedPhysicsEngine*.zip -DestinationPath C:\Physics
+   Linux:   unzip UnifiedPhysicsEngine*.zip -d ~/Physics
 
 2. Open and read: docs/BUYER_START_HERE.md (15 min)
    This is your quick-start guide—it explains what's in the engine and 
@@ -267,12 +269,12 @@ Before sending, get the hash of your ZIP:
 
 **Windows (PowerShell)**:
 ```powershell
-Get-FileHash UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip | Select-Object Hash
+Get-FileHash <package>.zip | Select-Object Hash
 ```
 
 **Linux/macOS**:
 ```bash
-sha256sum UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip
+sha256sum <package>.zip
 ```
 
 Copy the hash and paste into the `[INSERT HASH HERE]` section.
@@ -280,7 +282,7 @@ Copy the hash and paste into the `[INSERT HASH HERE]` section.
 ### 3. **Add the Attachment**
 
 Attach the ZIP file to the email:
-- File: `UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip` (0.93 MB)
+- File: `[insert latest evaluation package filename].zip` (keep it under 100 MB compressed)
 - Or provide a download link (Google Drive, OneDrive, etc.) if email size is an issue
 
 ### 4. **Send with Professional Tone**
@@ -314,9 +316,9 @@ URL: [INSERT SECURE LINK]
      Password: [IF NEEDED]
      Expires: [DATE, e.g., March 26, 2026]
 
-File size: 0.93 MB
+File size: under 100 MB compressed
 SHA256: [HASH]
-Expected extraction: ~3 MB (after decompression)
+Expected extraction: varies by package refresh
 
 Download, extract to a secure workstation, and verify the SHA256 hash 
 matches the value above to confirm file integrity.

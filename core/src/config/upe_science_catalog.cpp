@@ -12,9 +12,9 @@ static const UpeScienceDomainStatus kScienceDomainStatuses[] = {
     },
     {
         UPE_SCIENCE_DOMAIN_CHEM,
-        UPE_SCIENCE_LEVEL_NOT_IMPLEMENTED,
+        UPE_SCIENCE_LEVEL_JUST_STARTED,
         "CHEM",
-        "Chemistry stack represented in catalog but not implemented as simulation modules.",
+        "Chemistry-adjacent molecular, thermal, and calibration foundations now exist; full reaction and transport chemistry stacks are still pending.",
         0,
         0
     },
@@ -22,15 +22,15 @@ static const UpeScienceDomainStatus kScienceDomainStatuses[] = {
         UPE_SCIENCE_DOMAIN_ASTROLOGY,
         UPE_SCIENCE_LEVEL_NOT_IMPLEMENTED,
         "ASTROLOGY",
-        "Astrology topics cataloged only; no runtime implementation.",
+        "Legacy non-scientific enum retained only for compatibility; excluded from scientific runtime claims.",
         0,
         0
     },
     {
         UPE_SCIENCE_DOMAIN_ASTRONOMY,
-        UPE_SCIENCE_LEVEL_JUST_STARTED,
+        UPE_SCIENCE_LEVEL_MINIMAL,
         "ASTRONOMY",
-        "Astronomy represented with initial celestial mechanics subset through orbital tools.",
+        "Astronomy now has a minimal celestial-mechanics base through orbital stability, N-body, and space-oriented runtime utilities.",
         0,
         0
     },
@@ -46,7 +46,7 @@ static const UpeScienceDomainStatus kScienceDomainStatuses[] = {
         UPE_SCIENCE_DOMAIN_STRING,
         UPE_SCIENCE_LEVEL_NOT_IMPLEMENTED,
         "STRING",
-        "String-theory topics cataloged only; no simulation/runtime modules implemented.",
+        "Research-only lab placeholder; not part of the production scientific core or buyer claims.",
         0,
         0
     },
@@ -54,7 +54,7 @@ static const UpeScienceDomainStatus kScienceDomainStatuses[] = {
         UPE_SCIENCE_DOMAIN_SPACE,
         UPE_SCIENCE_LEVEL_MINIMAL,
         "SPACE",
-        "Space-force and orbital/relativistic utility foundations implemented; operational space systems pending.",
+        "Space-force, orbital, and relativistic utility foundations are integrated; richer mission/propagation packs remain pending.",
         0,
         0
     },

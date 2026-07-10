@@ -4,6 +4,17 @@
 
 This document tracks the actual implementation status of all physics systems in the Unified Physics Engine.
 
+## Important limitation notes / not yet fully implemented
+
+The engine has a strong integrated baseline, but **not every advanced roadmap item is production-complete yet**. Key remaining gaps and partial areas include:
+
+- **Chemistry is now only just started**, while `ASTRONOMY` / `SPACE` remain partial according to `core/src/config/upe_science_catalog.cpp`.
+- **Warm-start reuse, telemetry thread IDs, PBD tet-volume preservation, and memory-context frame counts are now concretely implemented** rather than left as no-op placeholders.
+- **Unified multiphysics dispatch, coupling coordination, and GPU compute have been strengthened**, but they are still foundation layers rather than full production-grade CUDA/HIP/PDE orchestration stacks.
+- **Several advanced scientific areas remain partial foundations rather than full end-to-end packs**, especially full PDE/FEM/MPM workflows, rich constitutive/material science, and broad multiphysics applied packs; however, the current baseline now also includes richer PDE/FEM helpers (diffusion, Poisson with Jacobi/Gauss-Seidel solving, residual evaluation, and two-grid correction, advection, finite-volume flux/divergence, limiter-based MUSCL reconstruction, wave stepping, Crank-Nicolson stepping, tridiagonal solves, multigrid-style transfer operators, wave-CFL / phase-velocity / numerical-dispersion metrics, Gershgorin spectral-radius and power-iteration eigen helpers, Rayleigh damping / Euler buckling estimates, and 1D bar-element mass/stiffness/load plus bar-chain and Euler-Bernoulli beam stiffness assembly), early continuum/material and structural-dynamics math (elastic moduli, elastic energy density, Kelvin-Voigt / Maxwell-style viscoelastic response, von Mises / yield-utilization evaluation, perfect-plastic clamping, Drucker-Prager-style yield evaluation, Newmark-beta stepping, critical time-step / natural-frequency / damping-ratio metrics, and bar internal-force helpers), a stronger robotics/control layer with invariant auditing, scalar state estimation, alpha-beta observer tracking, 2-state constant-velocity Kalman filtering, linear-system stability/controllability checks, MPC-lite planning, scalar trajectory audit foundations, and trapezoidal motion-profile generation, plus better multiphysics coupling convergence diagnostics via `UpeCouplingCoordinator`.
+
+Read the remaining sections as: **implemented baseline plus expanding modules**, not “every roadmap ambition is complete.”
+
 ## Implementation Summary
 
 | Metric | Value |
@@ -198,6 +209,6 @@ The Unified Physics Engine has all phases 1-7 implemented and integrated. The en
 - **Scientific simulations** (gravity, EM, thermal, relativistic)
 - **Production quality** (determinism, profiling, serialization, strict build validation)
 
-**Ready for**: Game engine integration, research/educational use, commercial deployment via buyout license.
+**Ready for**: Game engine integration, research/educational use, and commercial deployment via pilot, source-license, or acquisition terms.
 
 **Next Steps for Buyers**: See `BUYER_START_HERE.md` for 15-minute evaluation, then `INTEGRATION_GUIDE.md` for embedding patterns.

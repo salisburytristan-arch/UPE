@@ -106,7 +106,7 @@ Best regards,
 Right after NDA is signed, send:
 
 1. **Access info email** with:
-   - Download link to: `UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip` (0.93 MB)
+   - Download link to the latest private evaluation package (kept under 100 MB compressed)
    - SHA256 hash of the ZIP file (for integrity verification)
    - Unzip instructions & folder structure overview
 

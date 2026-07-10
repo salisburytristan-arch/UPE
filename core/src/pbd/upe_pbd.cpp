@@ -245,6 +245,53 @@ static void SolveBendingConstraint(UpePbdSystem *pbd, UpePbdBendingConstraint *c
     p3->position.z += correction.z * p3->inv_mass;
 }
 
+static void SolveVolumeConstraint(UpePbdSystem *pbd, UpePbdVolumeConstraint *c, float dt) {
+    UpePbdParticle *p0 = &pbd->particles[c->p0];
+    UpePbdParticle *p1 = &pbd->particles[c->p1];
+    UpePbdParticle *p2 = &pbd->particles[c->p2];
+    UpePbdParticle *p3 = &pbd->particles[c->p3];
+
+    float w0 = p0->inv_mass;
+    float w1 = p1->inv_mass;
+    float w2 = p2->inv_mass;
+    float w3 = p3->inv_mass;
+    if (w0 + w1 + w2 + w3 < 1.0e-6f) {
+        return;
+    }
+
+    UpeVec3 x10 = {p1->position.x - p0->position.x, p1->position.y - p0->position.y, p1->position.z - p0->position.z};
+    UpeVec3 x20 = {p2->position.x - p0->position.x, p2->position.y - p0->position.y, p2->position.z - p0->position.z};
+    UpeVec3 x30 = {p3->position.x - p0->position.x, p3->position.y - p0->position.y, p3->position.z - p0->position.z};
+
+    UpeVec3 c23 = UpeVec3_Cross(x20, x30);
+    float signed_volume = UpeVec3_Dot(x10, c23) / 6.0f;
+    float sign = (signed_volume >= 0.0f) ? 1.0f : -1.0f;
+    float volume = fabsf(signed_volume);
+
+    UpeVec3 grad1 = UpeVec3_Scale(UpeVec3_Cross(x20, x30), sign / 6.0f);
+    UpeVec3 grad2 = UpeVec3_Scale(UpeVec3_Cross(x30, x10), sign / 6.0f);
+    UpeVec3 grad3 = UpeVec3_Scale(UpeVec3_Cross(x10, x20), sign / 6.0f);
+    UpeVec3 grad0 = UpeVec3_Scale(UpeVec3_Add(UpeVec3_Add(grad1, grad2), grad3), -1.0f);
+
+    float denom = w0 * UpeVec3_Dot(grad0, grad0) +
+                  w1 * UpeVec3_Dot(grad1, grad1) +
+                  w2 * UpeVec3_Dot(grad2, grad2) +
+                  w3 * UpeVec3_Dot(grad3, grad3);
+    if (denom < 1.0e-8f) {
+        return;
+    }
+
+    float C = volume - c->rest_volume;
+    float alpha = c->compliance / (dt * dt);
+    float delta_lambda = (-C - alpha * c->lambda) / (denom + alpha);
+    c->lambda += delta_lambda;
+
+    p0->position = UpeVec3_Add(p0->position, UpeVec3_Scale(grad0, w0 * delta_lambda));
+    p1->position = UpeVec3_Add(p1->position, UpeVec3_Scale(grad1, w1 * delta_lambda));
+    p2->position = UpeVec3_Add(p2->position, UpeVec3_Scale(grad2, w2 * delta_lambda));
+    p3->position = UpeVec3_Add(p3->position, UpeVec3_Scale(grad3, w3 * delta_lambda));
+}
+
 // Ground collision
 static void SolveGroundCollision(UpePbdSystem *pbd, UpePbdParticle *p) {
     float ground_y = pbd->bounds_min.y;
@@ -313,7 +360,10 @@ void UpePbd_Step(UpePbdSystem *pbd, float dt) {
             SolveBendingConstraint(pbd, &pbd->bending_constraints[i], dt);
         }
         
-        // Volume constraints (TODO: implement proper tet volume)
+        // Volume constraints
+        for (uint32_t i = 0; i < pbd->volume_count; i++) {
+            SolveVolumeConstraint(pbd, &pbd->volume_constraints[i], dt);
+        }
     }
     
     // 4. Update velocities

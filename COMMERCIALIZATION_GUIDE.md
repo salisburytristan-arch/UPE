@@ -83,7 +83,7 @@ ctest --output-on-failure
 python scripts/package.py --tier indie --output dist/
 
 # Creates: dist/upe-indie-1.0.0/
-#   ├── include/upe/           (270+ header files)
+#   ├── include/upe/           (183 public headers at current tree state)
 #   ├── lib/                   (compiled libraries)
 #   ├── bin/examples/          (ready-to-run examples)
 #   ├── examples/src/          (example source code)
@@ -96,13 +96,13 @@ python scripts/package.py --tier indie --output dist/
 ```
 dist/upe-TIER-1.0.0/
 ├── README.md                           # Tier-specific info
-├── LICENSE                             # MIT License
+├── LICENSE                             # Proprietary evaluation / commercial terms
 ├── PACKAGE.json                        # Metadata
 ├── include/upe/                        # All tier headers
 │   ├── upe.h                          # Main include
 │   ├── upe_world.h
 │   ├── upe_body.h
-│   └── ... (270+ headers)
+│   └── ... (183 public headers at current tree state)
 ├── lib/                                # Compiled libraries
 │   ├── upe.lib  (Windows)
 │   ├── libupe.a (Unix)
@@ -807,9 +807,9 @@ The Unified Physics Engine has been successfully transformed from a research-hea
 
 ### Value Delivered
 
-- **From**: Research codebase (39 systems, 270 files, 57K LOC)
+- **From**: Broad internal codebase with mixed maturity and historical sales framing
 - **To**: Commercial SDK with a documented diligence path, proof artifacts, and integration packaging
-- **Commercial Effect**: Higher buyer confidence, clearer diligence execution, stronger negotiation position
+- **Commercial Effect**: Higher buyer confidence, clearer diligence execution, and lower perceived integration risk
 - **Time to Market**: Reduced from weeks to days
 - **Customer Confidence**: High (CMake, CI/CD, determinism certification)
 

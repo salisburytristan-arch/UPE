@@ -21,6 +21,8 @@ int main() {
     int failures = 0;
     UpeStateHash hash = {};
     UpeStateHash_Begin(&hash, 0xC0FFEEULL);
+    UpeStateHash transform_hash = {};
+    UpeStateHash_Begin(&transform_hash, 0xFACEB00CULL);
     for (int i = 0; i < g_test_count; ++i) {
         try {
             g_tests[i].fn();
@@ -35,6 +37,10 @@ int main() {
         }
     }
     uint64_t final_hash = UpeStateHash_Final(&hash);
+    UpeStateHash_PushU32(&transform_hash, (uint32_t)g_test_count);
+    UpeStateHash_PushU32(&transform_hash, (uint32_t)failures);
+    UpeStateHash_PushBytes(&transform_hash, &final_hash, (uint32_t)sizeof(final_hash));
+    uint64_t transform_final_hash = UpeStateHash_Final(&transform_hash);
     const char *expected = getenv("UPE_EXPECT_HASH");
     if (expected && strlen(expected) > 0) {
         uint64_t expect_val = strtoull(expected, nullptr, 16);
@@ -44,6 +50,7 @@ int main() {
         }
     }
     printf("Test determinism hash: 0x%llX\n", (unsigned long long)final_hash);
+    printf("Test final-state transform hash: 0x%llX\n", (unsigned long long)transform_final_hash);
     if (failures) {
         printf("%d tests failed\n", failures);
         return 1;

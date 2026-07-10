@@ -126,6 +126,15 @@ struct UpeWorld {
     double total_kinetic_energy;
     double total_potential_energy;
     double energy_dissipated_this_frame;
+    double last_total_energy;
+    float last_energy_drift_ratio;
+    float last_total_linear_momentum;
+    float last_max_contact_penetration;
+    float last_courant_number;
+    float last_froude_number;
+    float last_reynolds_estimate;
+    float last_uncertainty_margin_si;
+    uint32_t last_stability_flags;
 
     // Query acceleration (BVH)
     UpeAabb3 *query_bounds;
@@ -141,6 +150,7 @@ struct UpeWorld {
     struct UpeProfiler *profiler;
 
     uint32_t solver_iterations;
+    uint32_t base_solver_iterations;
     uint32_t solver_friction_iterations;
     uint32_t solver_thread_count;
     uint32_t max_pairs;
@@ -150,9 +160,25 @@ struct UpeWorld {
     int enable_warm_starting;
     int enable_sleeping;
     int ccd_enabled;
+    int ccd_requested_by_user;
+    int adaptive_runtime_enabled;
+    int scientific_diagnostics_enabled;
+    UpeAdaptiveMode adaptive_mode;
+    UpeIntegratorMode integrator_mode;
+    UpeIntegratorMode last_resolved_integrator_mode;
+    UpeUnits units;
+    UpePhysicalConstants constants;
+    UpeScienceErrorBudget error_budget;
     int enable_parallel_island_solver;
     int owns_thread_pool;
     float ccd_threshold_sq;
+    float adaptive_target_step_time_ms;
+    float max_expected_linear_speed;
+    float max_energy_drift_ratio;
+    uint32_t adaptive_min_solver_iterations;
+    uint32_t adaptive_max_solver_iterations;
+    float adaptive_ccd_velocity_threshold_sq;
+    float last_peak_linear_speed;
     uint32_t ccd_candidate_pairs;
     uint32_t ccd_tested_pairs;
     uint32_t ccd_contact_hits;

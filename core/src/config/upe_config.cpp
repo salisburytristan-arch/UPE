@@ -95,6 +95,9 @@ UpeCapabilities UpeEngine_GetCapabilities(void) {
     caps.capability_bits |= UPE_CAP_FIELD_FORCES;
     caps.capability_bits |= UPE_CAP_SCIENCE_CATALOG;
     caps.capability_bits |= UPE_CAP_SCIENCE_TOPICS;
+    caps.capability_bits |= UPE_CAP_ADAPTIVE_RUNTIME;
+    caps.capability_bits |= UPE_CAP_SCIENTIFIC_RUNTIME;
+    caps.capability_bits |= UPE_CAP_NUMERICAL_TOOLBOX;
 
 #ifdef UPE_ENABLE_SIMD
 #if defined(__AVX512F__)
@@ -128,4 +131,37 @@ const char *UpeEngine_GetVersionString(void) {
 
 const char *UpeEngine_GetBuildConfig(void) {
     return kUpeBuildConfig;
+}
+
+UpeAdaptiveRuntimeConfig UpeAdaptiveRuntimeConfig_Default(void) {
+    UpeAdaptiveRuntimeConfig config = {};
+    config.enabled = 1;
+    config.mode = UPE_ADAPTIVE_BALANCED;
+    config.target_step_time_ms = 0.0f;
+    config.min_solver_iterations = 2;
+    config.max_solver_iterations = 8;
+    config.ccd_velocity_threshold = 12.0f;
+    return config;
+}
+
+UpeScienceErrorBudget UpeScienceErrorBudget_Default(void) {
+    UpeScienceErrorBudget budget = {};
+    budget.length_tolerance_si = 1.0e-4f;
+    budget.velocity_tolerance_si = 1.0e-3f;
+    budget.energy_tolerance_ratio = 0.20f;
+    budget.contact_margin_factor = 0.05f;
+    budget.uncertainty_sigma = 2.0f;
+    return budget;
+}
+
+UpeScientificRuntimeConfig UpeScientificRuntimeConfig_Default(void) {
+    UpeScientificRuntimeConfig config = {};
+    config.enabled = 1;
+    config.units = UpeUnits_SI();
+    config.constants = UpePhysicalConstants_SI();
+    config.error_budget = UpeScienceErrorBudget_Default();
+    config.integrator_mode = UPE_INTEGRATOR_ADAPTIVE;
+    config.max_expected_linear_speed = 250.0f;
+    config.max_energy_drift_ratio = 0.20f;
+    return config;
 }

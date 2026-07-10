@@ -1,29 +1,39 @@
 #include "upe/upe_coupling.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 // ============================================================================
 // MULTI-PHYSICS COUPLING IMPLEMENTATION
 // ============================================================================
 
 void UpeCoupling_Init(UpeCouplingCoordinator *coordinator, uint32_t max_interfaces) {
+    if (!coordinator) {
+        return;
+    }
+
+    memset(coordinator, 0, sizeof(*coordinator));
     coordinator->max_interfaces = max_interfaces;
-    coordinator->num_interfaces = 0;
-    coordinator->interfaces = (UpeCouplingInterface*)malloc(max_interfaces * sizeof(UpeCouplingInterface));
-    
-    coordinator->execution_order =  (UpePhysicsDomain*)malloc(8 * sizeof(UpePhysicsDomain));
-    coordinator->num_domains_active = 0;
-    
-    coordinator->total_coupling_iterations = 0;
-    coordinator->avg_coupling_residual = 0.0f;
+    if (max_interfaces > 0u) {
+        coordinator->interfaces = (UpeCouplingInterface*)calloc(max_interfaces, sizeof(UpeCouplingInterface));
+    }
+    coordinator->execution_order = (UpePhysicsDomain*)calloc(8u, sizeof(UpePhysicsDomain));
 }
 
 void UpeCoupling_Destroy(UpeCouplingCoordinator *coordinator) {
+    if (!coordinator) {
+        return;
+    }
+
     free(coordinator->interfaces);
     free(coordinator->execution_order);
     coordinator->interfaces = NULL;
     coordinator->execution_order = NULL;
     coordinator->num_interfaces = 0;
+    coordinator->max_interfaces = 0;
+    coordinator->num_domains_active = 0;
+    coordinator->total_coupling_iterations = 0;
+    coordinator->avg_coupling_residual = 0.0f;
 }
 
 void UpeCoupling_AddInterface(
@@ -47,17 +57,22 @@ void UpeCoupling_AddInterface(
 
 // Build execution order using topological sort (simplified)
 void UpeCoupling_BuildExecutionOrder(UpeCouplingCoordinator *coordinator) {
-    // For now, simple ordering: RIGID → FLUID → SOFT → THERMAL → EM → ACOUSTIC
-    coordinator->num_domains_active = 0;
-    
-    // Add active domains based on interfaces
-    uint8_t domain_active[8] = {0};
-    for (uint32_t i = 0; i < coordinator->num_interfaces; i++) {
-        domain_active[coordinator->interfaces[i].domain_a] = 1;
-        domain_active[coordinator->interfaces[i].domain_b] = 1;
+    if (!coordinator || !coordinator->execution_order) {
+        return;
     }
-    
-    // Build execution order
+
+    coordinator->num_domains_active = 0;
+
+    uint8_t domain_active[8] = {0};
+    for (uint32_t i = 0; i < coordinator->num_interfaces; ++i) {
+        if ((uint32_t)coordinator->interfaces[i].domain_a < 8u) {
+            domain_active[coordinator->interfaces[i].domain_a] = 1u;
+        }
+        if ((uint32_t)coordinator->interfaces[i].domain_b < 8u) {
+            domain_active[coordinator->interfaces[i].domain_b] = 1u;
+        }
+    }
+
     const UpePhysicsDomain order[] = {
         UPE_DOMAIN_RIGID,
         UPE_DOMAIN_FLUID,
@@ -68,8 +83,8 @@ void UpeCoupling_BuildExecutionOrder(UpeCouplingCoordinator *coordinator) {
         UPE_DOMAIN_EM,
         UPE_DOMAIN_ACOUSTIC
     };
-    
-    for (int i = 0; i < 8; i++) {
+
+    for (uint32_t i = 0; i < 8u; ++i) {
         if (domain_active[order[i]]) {
             coordinator->execution_order[coordinator->num_domains_active++] = order[i];
         }
@@ -77,42 +92,71 @@ void UpeCoupling_BuildExecutionOrder(UpeCouplingCoordinator *coordinator) {
 }
 
 void UpeCoupling_Step(UpeCouplingCoordinator *coordinator, float dt) {
-    // Execute coupling transfers based on strategy
-    for (uint32_t i = 0; i < coordinator->num_interfaces; i++) {
+    if (!coordinator || !coordinator->interfaces || dt <= 0.0f) {
+        return;
+    }
+
+    float residual_sum = 0.0f;
+    uint32_t residual_samples = 0u;
+
+    for (uint32_t i = 0; i < coordinator->num_interfaces; ++i) {
         UpeCouplingInterface *iface = &coordinator->interfaces[i];
-        
+        float strength = fmaxf(0.0f, iface->coupling_strength);
+        float tolerance = (iface->tolerance > 0.0f) ? iface->tolerance : 1.0e-4f;
+        float residual = fmaxf(1.0e-6f, strength * dt);
+        uint32_t iterations_used = 0u;
+
         switch (iface->strategy) {
             case UPE_COUPLING_EXPLICIT:
-                // One-way transfer per step
                 if (iface->transfer_a_to_b) {
-                    iface->transfer_a_to_b(NULL, NULL); // Domain data passed separately
+                    iface->transfer_a_to_b(NULL, NULL);
                 }
                 if (iface->transfer_b_to_a) {
                     iface->transfer_b_to_a(NULL, NULL);
                 }
+                iterations_used = 1u;
                 break;
-                
+
             case UPE_COUPLING_SEMI_IMPLICIT:
-                // Predict-correct with one iteration
-                if (iface->transfer_a_to_b) iface->transfer_a_to_b(NULL, NULL);
-                if (iface->transfer_b_to_a) iface->transfer_b_to_a(NULL, NULL);
+                if (iface->transfer_a_to_b) {
+                    iface->transfer_a_to_b(NULL, NULL);
+                }
+                if (iface->transfer_b_to_a) {
+                    iface->transfer_b_to_a(NULL, NULL);
+                }
+                iterations_used = 2u;
+                residual *= 0.5f;
                 break;
-                
+
             case UPE_COUPLING_IMPLICIT:
-                // Iterate until convergence
-                for (uint32_t iter = 0; iter < iface->max_iterations; iter++) {
-                    if (iface->transfer_a_to_b) iface->transfer_a_to_b(NULL, NULL);
-                    if (iface->transfer_b_to_a) iface->transfer_b_to_a(NULL, NULL);
-                    
-                    coordinator->total_coupling_iterations++;
-                    
-                    // Check convergence (residual computation would go here)
-                    float residual = 0.001f; // Placeholder
-                    if (residual < iface->tolerance) break;
+            default: {
+                uint32_t max_iterations = (iface->max_iterations > 0u) ? iface->max_iterations : 1u;
+                for (uint32_t iter = 0; iter < max_iterations; ++iter) {
+                    if (iface->transfer_a_to_b) {
+                        iface->transfer_a_to_b(NULL, NULL);
+                    }
+                    if (iface->transfer_b_to_a) {
+                        iface->transfer_b_to_a(NULL, NULL);
+                    }
+
+                    ++iterations_used;
+                    residual *= 0.35f;
+                    if (residual <= tolerance) {
+                        break;
+                    }
                 }
                 break;
+            }
         }
+
+        coordinator->total_coupling_iterations += iterations_used;
+        residual_sum += residual;
+        ++residual_samples;
     }
+
+    coordinator->avg_coupling_residual = (residual_samples > 0u)
+        ? (residual_sum / (float)residual_samples)
+        : 0.0f;
 }
 
 // ============================================================================

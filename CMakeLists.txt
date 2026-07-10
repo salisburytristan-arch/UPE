@@ -218,6 +218,15 @@ if(UPE_BUILD_EXAMPLES)
             endif()
         endif()
     endforeach()
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/site_visual_capture/main.cpp AND NOT TARGET site_visual_capture)
+        add_executable(site_visual_capture ${CMAKE_CURRENT_SOURCE_DIR}/examples/site_visual_capture/main.cpp)
+        target_link_libraries(site_visual_capture PRIVATE upe)
+        target_include_directories(site_visual_capture PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+        set_target_properties(site_visual_capture PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/examples
+        )
+    endif()
 endif()
 
 # =============================================================================
@@ -238,6 +247,22 @@ if(UPE_BUILD_BENCHMARKS)
     )
     target_link_libraries(upe_bench_science_export PRIVATE upe)
     set_target_properties(upe_bench_science_export PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks
+    )
+
+    add_executable(upe_bench_performance_suite
+        benchmarks/bench_performance_suite.cpp
+    )
+    target_link_libraries(upe_bench_performance_suite PRIVATE upe)
+    set_target_properties(upe_bench_performance_suite PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks
+    )
+
+    add_executable(upe_bench_broadphase_compare
+        benchmarks/bench_broadphase_compare.cpp
+    )
+    target_link_libraries(upe_bench_broadphase_compare PRIVATE upe)
+    set_target_properties(upe_bench_broadphase_compare PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/benchmarks
     )
 

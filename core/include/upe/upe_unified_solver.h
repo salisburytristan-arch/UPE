@@ -24,18 +24,18 @@
 // ============================================================================
 
 typedef enum UpeSolverType {
-    UPE_SOLVER_CONSTRAINT = 0,    // PGS/SI for rigid bodies
-    UPE_SOLVER_IMPULSE = 1,       // Impulse-based for fast collisions
-    UPE_SOLVER_FEM = 2,           // Co-rotational FEM for soft bodies
-    UPE_SOLVER_SPH = 3,           // Smoothed Particle Hydrodynamics
-    UPE_SOLVER_FLIP = 4,          // Grid-based fluids
-    UPE_SOLVER_MPM = 5,           // Material Point Method
-    UPE_SOLVER_PBD = 6,           // Position-Based Dynamics
-    UPE_SOLVER_XPBD = 7,          // Extended PBD
-    UPE_SOLVER_IMPLICIT = 8,      // Backward Euler (scientific mode)
-    UPE_SOLVER_NBODY = 9,         // N-body gravity (planetary)
-    UPE_SOLVER_MOLECULAR = 10,    // Molecular dynamics
-    UPE_SOLVER_HYBRID = 11        // Multiple solvers active
+    UPE_UNIFIED_SOLVER_CONSTRAINT = 0,    // PGS/SI for rigid bodies
+    UPE_UNIFIED_SOLVER_IMPULSE = 1,       // Impulse-based for fast collisions
+    UPE_UNIFIED_SOLVER_FEM = 2,           // Co-rotational FEM for soft bodies
+    UPE_UNIFIED_SOLVER_SPH = 3,           // Smoothed Particle Hydrodynamics
+    UPE_UNIFIED_SOLVER_FLIP = 4,          // Grid-based fluids
+    UPE_UNIFIED_SOLVER_MPM = 5,           // Material Point Method
+    UPE_UNIFIED_SOLVER_PBD = 6,           // Position-Based Dynamics
+    UPE_UNIFIED_SOLVER_XPBD = 7,          // Extended PBD
+    UPE_UNIFIED_SOLVER_IMPLICIT = 8,      // Backward Euler (scientific mode)
+    UPE_UNIFIED_SOLVER_NBODY = 9,         // N-body gravity (planetary)
+    UPE_UNIFIED_SOLVER_MOLECULAR = 10,    // Molecular dynamics
+    UPE_UNIFIED_SOLVER_HYBRID = 11        // Multiple solvers active
 } UpeSolverType;
 
 // Guarantees that solvers must provide

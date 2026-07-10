@@ -27,6 +27,19 @@ UpeWorldDesc UpeWorldDesc_Default(void) {
     desc.enable_ccd = 0;
     desc.enable_warm_starting = 1;
     desc.enable_manifold_caching = 1;
+    desc.enable_adaptive_runtime = 1;
+    desc.adaptive_mode = UPE_ADAPTIVE_BALANCED;
+    desc.adaptive_target_step_time_ms = 0.0f;
+    desc.adaptive_min_solver_iterations = 2;
+    desc.adaptive_max_solver_iterations = 8;
+    desc.adaptive_ccd_velocity_threshold = 12.0f;
+    desc.integrator_mode = UPE_INTEGRATOR_ADAPTIVE;
+    desc.enable_scientific_diagnostics = 1;
+    desc.max_expected_linear_speed = 250.0f;
+    desc.max_energy_drift_ratio = 0.20f;
+    desc.units = UpeUnits_SI();
+    desc.constants = UpePhysicalConstants_SI();
+    desc.error_budget = UpeScienceErrorBudget_Default();
     return desc;
 }
 
@@ -53,6 +66,49 @@ UpeError UpeWorldDesc_Validate(const UpeWorldDesc *desc) {
 
     if (desc->slider_bias < 0.0f || desc->slider_bias > 1.0f) {
         return UPE_ERR_INVALID_ARGUMENT;
+    }
+
+    if (desc->adaptive_mode < UPE_ADAPTIVE_DISABLED || desc->adaptive_mode > UPE_ADAPTIVE_STABLE) {
+        return UPE_ERR_INVALID_ARGUMENT;
+    }
+
+    if (desc->integrator_mode < UPE_INTEGRATOR_EULER || desc->integrator_mode > UPE_INTEGRATOR_ADAPTIVE) {
+        return UPE_ERR_INVALID_ARGUMENT;
+    }
+
+    if (desc->max_expected_linear_speed < 0.0f || desc->max_energy_drift_ratio < 0.0f) {
+        return UPE_ERR_INVALID_ARGUMENT;
+    }
+
+    if (desc->enable_scientific_diagnostics) {
+        if (!UpeUnits_IsValid(&desc->units)) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
+        if (desc->constants.standard_gravity <= 0.0 ||
+            desc->constants.speed_of_light <= 0.0 ||
+            desc->constants.standard_air_density_kg_per_m3 <= 0.0 ||
+            desc->constants.dynamic_viscosity_air_pascal_seconds <= 0.0) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
+        if (desc->error_budget.length_tolerance_si < 0.0f ||
+            desc->error_budget.velocity_tolerance_si < 0.0f ||
+            desc->error_budget.energy_tolerance_ratio < 0.0f ||
+            desc->error_budget.contact_margin_factor < 0.0f ||
+            desc->error_budget.uncertainty_sigma < 0.0f) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
+    }
+
+    if (desc->enable_adaptive_runtime) {
+        if (desc->adaptive_min_solver_iterations == 0 || desc->adaptive_max_solver_iterations == 0) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
+        if (desc->adaptive_min_solver_iterations > desc->adaptive_max_solver_iterations) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
+        if (desc->adaptive_target_step_time_ms < 0.0f || desc->adaptive_ccd_velocity_threshold < 0.0f) {
+            return UPE_ERR_INVALID_ARGUMENT;
+        }
     }
 
     return UPE_OK;

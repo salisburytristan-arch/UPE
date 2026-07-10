@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "upe/upe_config.h"
 
 #ifndef UPE_ENABLE_DESCRIPTOR_UTILS
 #define UPE_ENABLE_DESCRIPTOR_UTILS 0
@@ -75,6 +76,23 @@ typedef struct {
     int enable_ccd;                     /**< Enable continuous collision detection */
     int enable_warm_starting;           /**< Keep constraint impulses across frames */
     int enable_manifold_caching;        /**< Reuse contact manifolds across frames */
+
+    /* Adaptive runtime tuning */
+    int enable_adaptive_runtime;        /**< Allow the runtime to tune solver quality and CCD under load */
+    UpeAdaptiveMode adaptive_mode;      /**< Tuning bias for adaptive runtime behavior */
+    float adaptive_target_step_time_ms; /**< Desired step budget in milliseconds (0 = derive from fixed_dt) */
+    uint32_t adaptive_min_solver_iterations; /**< Lower clamp for runtime-selected solver iterations */
+    uint32_t adaptive_max_solver_iterations; /**< Upper clamp for runtime-selected solver iterations */
+    float adaptive_ccd_velocity_threshold;   /**< Auto-enable CCD when peak speed exceeds this threshold */
+
+    /* Scientific runtime / metrology */
+    UpeIntegratorMode integrator_mode;  /**< Integration scheme for dynamic body advancement */
+    int enable_scientific_diagnostics;  /**< Track energy, momentum, and stability diagnostics per step */
+    float max_expected_linear_speed;    /**< Speed budget before a stability warning is raised (units/sec) */
+    float max_energy_drift_ratio;       /**< Fractional total-energy drift budget before flagging */
+    UpeUnits units;                     /**< SI scale metadata for interpreting world-space values */
+    UpePhysicalConstants constants;     /**< Physical constants used for dimensionless/scientific reporting */
+    UpeScienceErrorBudget error_budget; /**< Error-budget and uncertainty controls */
     
     uint32_t reserved[16];              /**< Reserved for future expansion */
 } UpeWorldDesc;

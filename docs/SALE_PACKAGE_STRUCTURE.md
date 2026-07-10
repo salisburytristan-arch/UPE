@@ -39,6 +39,7 @@ Purpose: close-stage legal and technical diligence.
 
 Recommended contents:
 
+- `BUYER_LICENSE_PACKAGE.md` *(top-level commercial and diligence index)*
 - `docs/PROVENANCE_AND_OWNERSHIP.md`
 - `IP_CHAIN_OF_TITLE_CHECKLIST.md`
 - `COMMERCIAL_LICENSE_AGREEMENT.md`

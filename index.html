@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acquire Unified Physics Engine | Deterministic C/C++ Core</title>
-<meta name="description" content="Acquire Unified Physics Engine: deterministic C/C++ physics core with rollback support, diligence-ready documentation, and clean IP transfer package.">
-<meta property="og:title" content="Acquire Unified Physics Engine">
-<meta property="og:description" content="39+ systems, deterministic replay, zero runtime dependencies, and full technical + legal diligence package.">
+<title>Arctic Codex | UPE Flagship Site</title>
+<meta name="description" content="Arctic Codex is a product company for licensable native systems. UPE is the flagship: deterministic native physics with proof, demos, benchmarks, docs, and commercial licensing.">
+<meta property="og:title" content="Arctic Codex | UPE Flagship Site">
+<meta property="og:description" content="Deterministic native physics and simulation runtime with a visible proof surface, technical trust, and straightforward licensing.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0b1220">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -384,6 +384,71 @@ h2 {
   gap: 12px;
 }
 
+.eval-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.eval-card {
+  border: 1px solid var(--line);
+  background: var(--surface2);
+  padding: 20px;
+}
+
+.eval-card .idx {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eval-card h3 {
+  margin: 8px 0 8px;
+  font-family: "Sora", sans-serif;
+  font-size: 18px;
+}
+
+.eval-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.eval-card pre {
+  margin: 12px 0 0;
+  border: 1px solid rgba(110, 231, 255, 0.14);
+  background: #09111e;
+  color: #dff7ff;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.scope-box {
+  margin-top: 26px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(15, 23, 40, 0.94), rgba(9, 14, 25, 0.94));
+  padding: 24px;
+}
+
+.scope-box h3 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+  font-size: 22px;
+}
+
+.scope-box p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
 .step {
   border: 1px solid var(--line);
   background: var(--surface2);
@@ -498,12 +563,30 @@ textarea {
   letter-spacing: 0.05em;
 }
 
+.footer-links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.footer-links a {
+  color: #b8d8ff;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
 @media (max-width: 980px) {
   .nav-links a { display: none; }
   .stat-grid { grid-template-columns: 1fr 1fr; }
   .stat { border-right: 0; border-bottom: 1px solid var(--line); }
   .card-grid { grid-template-columns: 1fr 1fr; }
   .process { grid-template-columns: 1fr 1fr; }
+  .eval-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 720px) {
@@ -512,6 +595,7 @@ textarea {
   .card-grid,
   .why-grid,
   .process,
+  .eval-grid,
   .form { grid-template-columns: 1fr; }
   .nav-cta { padding: 10px 12px; }
   .section-eyebrow { letter-spacing: 0.1em; }
@@ -523,27 +607,33 @@ textarea {
 
 <header class="topbar">
   <div class="wrap nav">
-    <div class="brand">Unified Physics Engine</div>
+    <div class="brand">Arctic Codex | UPE</div>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#why">Why Acquire</a>
-      <a href="#proof">Proof</a>
-      <a href="#package">Package</a>
-      <a href="#process">Process</a>
-      <a href="#faq">FAQ</a>
+      <a href="index.html">Home</a>
+      <a href="upe.html">UPE</a>
+      <a href="visual-tests.html">Visual Tests</a>
+      <a href="determinism.html">Determinism</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="licensing.html">Licensing</a>
+      <a href="docs.html">Docs</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
-    <a class="nav-cta" href="#inquiry">Request Deal Packet</a>
+    <a class="nav-cta" href="contact.html">Request Licensing Info</a>
   </div>
 </header>
 
 <main id="content">
   <section class="hero">
     <div class="wrap">
-      <div class="eyebrow">Acquisition Opportunity | Clean IP Transfer</div>
-      <h1>Skip Years of Engine R&amp;D.<span class="accent">Acquire Production Physics Now.</span></h1>
-      <p class="hero-sub">Unified Physics Engine is a deterministic C/C++ simulation core with rollback-ready workflows, test artifacts, and buyer-grade diligence documentation.</p>
+      <div class="eyebrow">Arctic Codex | Flagship product company site</div>
+      <h1>Deterministic native physics and simulation runtime<span class="accent">for games, tools, robotics, and rollback-capable systems.</span></h1>
+      <p class="hero-sub">UPE is the flagship Arctic Codex product: a native source-integrated engine with replay / snapshot / hash tooling, proof-driven visual demos, technical documentation, and commercial non-exclusive licensing.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#inquiry">Request Deal Packet</a>
-        <a class="btn btn-ghost" href="#proof">Review Proof Assets</a>
+        <a class="btn btn-primary" href="visual-tests.html">Explore Visual Tests</a>
+        <a class="btn btn-ghost" href="contact.html">Request Licensing Info</a>
+        <a class="btn btn-ghost" href="determinism.html">View Determinism Proof</a>
+        <a class="btn btn-ghost" href="docs.html">Read Docs</a>
       </div>
 
       <div class="stat-grid" aria-label="Key metrics">
@@ -555,18 +645,18 @@ textarea {
       </div>
 
       <div class="trust-strip" aria-label="Trust indicators">
-        <div class="tag">Determinism Documentation Included</div>
-        <div class="tag">CTest + Bench Baselines Included</div>
-        <div class="tag">Chain-of-Title + License Artifacts</div>
-        <div class="tag">NDA-Gated Evaluation Flow</div>
+        <div class="tag">Flagship Product: UPE</div>
+        <div class="tag">Proof, Demos, and Benchmarks</div>
+        <div class="tag">Commercial Source Licensing</div>
+        <div class="tag">Determinism + Diligence Surface</div>
       </div>
     </div>
   </section>
 
   <section id="why">
     <div class="wrap">
-      <div class="section-eyebrow">Why Teams Acquire</div>
-      <h2>Move from physics uncertainty to product execution.</h2>
+      <div class="section-eyebrow">Why Teams Evaluate UPE</div>
+      <h2>Move from simulation uncertainty to product execution.</h2>
       <p class="lead">Most teams underestimate the time cost of deterministic simulation, replay correctness, and cross-language integration. This package compresses that risk into a transfer-ready engine and evidence stack.</p>
 
       <div class="why-grid">
@@ -669,6 +759,55 @@ textarea {
     </div>
   </section>
 
+  <section id="evaluate">
+    <div class="wrap">
+      <div class="section-eyebrow">Fast Evaluation Path</div>
+      <h2>Validate the core before term discussions.</h2>
+      <p class="lead">The buyer path is intentionally core-first: build the engine, run the tests, inspect the determinism evidence, and only then decide how deeply to assess the broader modules.</p>
+
+      <div class="eval-grid">
+        <article class="eval-card">
+          <div class="idx">Step A</div>
+          <h3>Build + run tests</h3>
+          <p>Compile the current release candidate and confirm the baseline in your own environment.</p>
+          <pre>cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure</pre>
+        </article>
+        <article class="eval-card">
+          <div class="idx">Step B</div>
+          <h3>Run determinism proof</h3>
+          <p>Use the included proof tooling to validate repeatability and rollback-oriented confidence.</p>
+          <pre>tools\run_determinism_proof.bat build
+# logs emit into proof/RUNS/</pre>
+        </article>
+        <article class="eval-card">
+          <div class="idx">Step C</div>
+          <h3>Review buyer docs</h3>
+          <p>Hand architecture, provenance, and commercial docs to engineering, legal, and exec stakeholders in parallel.</p>
+          <pre>docs/BUYER_START_HERE.md
+docs/PROOF_INDEX.md
+PROVENANCE_AUDIT.md</pre>
+        </article>
+      </div>
+
+      <div class="scope-box">
+        <h3>Best fit and honest scope</h3>
+        <p>UPE is strongest today for teams that value a deterministic native core, rollback/replay tooling, and a diligence-ready transfer package. Broader scientific and advanced simulation modules are present, but should be evaluated by maturity and business relevance rather than assumed to be equally production-complete.</p>
+        <div class="trust-strip" aria-label="Ideal buyer profile">
+          <div class="tag">Rollback / Netcode Games</div>
+          <div class="tag">Simulation Platforms</div>
+          <div class="tag">Native Middleware</div>
+          <div class="tag">Audit-Friendly Runtime</div>
+        </div>
+        <div class="hero-actions" style="margin-top: 18px;">
+          <a class="btn btn-primary" href="docs/BUYER_START_HERE.md">Open Buyer Start Here</a>
+          <a class="btn btn-ghost" href="docs/PROOF_INDEX.md">Open Proof Index</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="package">
     <div class="wrap">
       <div class="section-eyebrow">What Is Included</div>
@@ -704,11 +843,19 @@ textarea {
     </div>
   </section>
 
+  <section>
+    <div class="wrap">
+      <div class="section-eyebrow">Future products</div>
+      <h2>Arctic Codex will expand carefully.</h2>
+      <p class="lead">Additional licensable native systems and code products can be added later under Arctic Codex. On day one, the site stays centered on UPE so the flagship has a coherent proof surface and serious licensing story.</p>
+    </div>
+  </section>
+
   <section id="process">
     <div class="wrap">
-      <div class="section-eyebrow">Acquisition Process</div>
+      <div class="section-eyebrow">Evaluation and licensing process</div>
       <h2>Fast, structured, and buyer-friendly.</h2>
-      <p class="lead">Designed to move qualified acquirers from first contact to confident close without ambiguity.</p>
+      <p class="lead">Designed to move qualified buyers from first contact to technical confidence and clear commercial next steps without ambiguity.</p>
 
       <div class="process">
         <article class="step">
@@ -718,18 +865,18 @@ textarea {
         </article>
         <article class="step">
           <div class="idx">Step 02</div>
-          <h3>NDA + Evaluation Pack</h3>
-          <p>Receive diligence packet, key documents, and review guidance for technical and legal stakeholders.</p>
+          <h3>Evaluation Pack</h3>
+          <p>Receive the proof materials, key docs, and review guidance for engineering, legal, and product stakeholders.</p>
         </article>
         <article class="step">
           <div class="idx">Step 03</div>
           <h3>Technical Validation</h3>
-          <p>Your team validates claims using provided tests, benchmarks, and documentation in your own environment.</p>
+          <p>Your team validates determinism, benchmarks, examples, and integration posture in your own environment.</p>
         </article>
         <article class="step">
           <div class="idx">Step 04</div>
-          <h3>Term Alignment + Transfer</h3>
-          <p>Finalize commercial terms and execute transfer steps with legal artifacts prepared for clean handoff.</p>
+          <h3>License Execution</h3>
+          <p>Finalize the commercial source agreement, receive the package, and optionally start onboarding or deeper review.</p>
         </article>
       </div>
     </div>
@@ -741,8 +888,8 @@ textarea {
       <h2>Questions CTOs and legal teams ask first.</h2>
       <div class="faq">
         <article class="faq-item">
-          <h3>Is this a license or a true acquisition path?</h3>
-          <p>This page is positioned for acquisition-oriented conversations and transfer-ready diligence. Term structure and scope are handled during formal negotiation.</p>
+          <h3>What is the default commercial model?</h3>
+          <p>The default path is a negotiated non-exclusive commercial source license. Exclusivity or acquisition can be discussed separately when relevant.</p>
         </article>
         <article class="faq-item">
           <h3>How do we validate technical claims quickly?</h3>
@@ -755,8 +902,8 @@ textarea {
       </div>
 
       <div class="inquiry" id="inquiry">
-        <h2 style="font-size: clamp(24px, 4vw, 38px); margin: 0;">Request the Acquisition Deal Packet</h2>
-        <p class="lead" style="margin-top: 10px;">Share your team profile and intended use. Qualified buyers receive NDA workflow and diligence materials.</p>
+        <h2 style="font-size: clamp(24px, 4vw, 38px); margin: 0;">Request the Evaluation or Licensing Pack</h2>
+        <p class="lead" style="margin-top: 10px;">Share your team profile and intended use. Qualified buyers receive the right documentation, proof links, and commercial next steps.</p>
 
         <form id="deal-form" class="form" novalidate>
           <div>
@@ -772,7 +919,7 @@ textarea {
             <input id="company" name="company" type="text" autocomplete="organization" required>
           </div>
           <div>
-            <label for="timeline">Acquisition Timeline</label>
+            <label for="timeline">Evaluation Timeline</label>
             <select id="timeline" name="timeline" required>
               <option value="">Select timeline</option>
               <option>0-30 days</option>
@@ -798,7 +945,30 @@ textarea {
 </main>
 
 <footer class="footer">
-  <div class="wrap">Unified Physics Engine v1.0.0 | Proprietary | Acquisition conversations only</div>
+  <div class="wrap">
+    <div>Arctic Codex | UPE is the flagship product | Built around proof, demos, benchmarks, docs, and licensing.</div>
+    <div class="footer-links">
+      <a href="products.html">Products</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="status.html">Status</a>
+      <a href="faq.html">FAQ</a>
+      <a href="release-notes.html">Release Notes</a>
+      <a href="integration-guide.html">Integration Guide</a>
+      <a href="proof-index.html">Proof Index</a>
+    </div>
+    <div class="footer-links">
+      <a href="legal/terms.html">Terms of Use</a>
+      <a href="legal/privacy.html">Privacy Policy</a>
+      <a href="legal/cookies.html">Cookie Policy</a>
+      <a href="legal/acceptable-use.html">Acceptable Use Policy</a>
+      <a href="legal/disclaimer.html">Disclaimer</a>
+      <a href="legal/copyright-ip.html">Copyright / IP Notice</a>
+      <a href="legal/trademark.html">Trademark Notice</a>
+      <a href="legal/accessibility.html">Accessibility Statement</a>
+      <a href="legal/security.html">Security Disclosure</a>
+      <a href="legal/commercial-sales-policy.html">Commercial Sales Policy</a>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -827,7 +997,7 @@ textarea {
       "Use Case: " + data.get("usecase")
     ].join("\n");
 
-    var subject = encodeURIComponent("UPE Acquisition Inquiry");
+    var subject = encodeURIComponent("Arctic Codex UPE Inquiry");
     var mailto = "mailto:arcticasters@gmail.com?subject=" + subject + "&body=" + encodeURIComponent(body);
 
     window.location.href = mailto;

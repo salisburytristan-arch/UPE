@@ -4,13 +4,15 @@ Headline: **Rollback-ready native physics core (C API, no mandatory runtime depe
 
 Positioning note: this evaluation path is intentionally core-first. The repo contains broader scientific and advanced simulation modules, but buyers should assess those by domain maturity and roadmap relevance rather than assuming equal production readiness across all systems.
 
+Commercial note: evaluation can lead to a pilot license, internal-use source license, enterprise source license, field-limited exclusive deal, or full acquisition path. See [PURCHASE_OPTIONS.md](PURCHASE_OPTIONS.md).
+
 ## What You're Evaluating
 
 This is the UPE v1.0.0 **core physics engine**:
 - **Rigid body dynamics**: collision detection, constraint solving, integration
 - **Determinism**: repeated-run determinism proof plus toolchain/platform evidence lanes (see certification doc for guarantee levels)
 - **Rollback support**: snapshots, replay, hashing for netcode/time-travel debugging
-- **Zero mandatory dependencies**: pure C implementation using stdlib only
+- **Zero mandatory dependencies**: C++20 implementation with a stable C API boundary and stdlib-only runtime
 - **Production quality**: warm-starting, manifold caching, island sleeping, CCD
 
 Broader modules exist beyond the core buyer path, including soft bodies, fluids, thermal, fracture, orbital mechanics, and additional scientific extensions. Those systems expand the technical surface area, but the primary diligence case remains the deterministic core and validated integration path.
@@ -127,8 +129,8 @@ python scripts\verify_everything.py --release-dir releases_ci --strict-warnings
 ✅ **Determinism proof tooling is reproducible** (repeated-run hash checks + artifact capture)
 ✅ **Examples exercise all major subsystems** (vehicles, characters, ragdolls, cloth, fluids)
 ✅ **Rollback/replay tooling exists and is measurable** (snapshots, hashing, playback)
-✅ **Zero mandatory dependencies** (pure C, no external libs)
-✅ **Production quality checks pass** (warnings errors, platform builds, all tests)
+✅ **Zero mandatory dependencies** (C++20 core with stable C API, no external libs)
+✅ **Production quality checks pass** (warning gates, platform builds, proof-backed validation)
 ✅ **Acquisition diligence can start immediately** (the core proof package is present today)
 
 What you should not conclude:

@@ -13,8 +13,8 @@ Status legend:
 | Platform | Toolchain | Status | Evidence |
 | --- | --- | --- | --- |
 | Windows x64 | MSVC (Release/Debug) | verified-in-ci | CI Windows matrix + uploaded test logs/artifacts |
-| Linux x64 | GCC | verified-in-ci | CI Linux matrix + strict warnings + benchmark and determinism jobs |
-| Linux x64 | Clang | verified-in-ci | CI Linux matrix + strict warnings + cross-compiler determinism logs |
+| Linux x64 | GCC | verified-in-ci | CI Linux matrix — see .github/workflows/ci.yml |
+| Linux x64 | Clang | verified-in-ci | CI Linux matrix — see .github/workflows/ci.yml |
 | macOS | Apple Clang | verified-in-ci | CI macOS matrix build/test logs present |
 | Windows x64 | MinGW/GCC | experimental | Local build paths exist; not part of official CI matrix contract |
 | Linux ARM64 | GCC/Clang | not-yet-validated | No active CI lane in current workflow |

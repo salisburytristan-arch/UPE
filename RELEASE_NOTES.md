@@ -172,7 +172,7 @@ UnifiedPhysicsEngine/
 │   │   ├── upe_engine.h                   # NEW: Orchestration API ⭐
 │   │   ├── upe_world.h
 │   │   ├── upe_body.h
-│   │   └── ... (270+ headers)
+│   │   └── ... (public headers under `core/include/upe`)
 │   └── src/
 │       ├── upe.cpp                        # Main library
 │       └── world/

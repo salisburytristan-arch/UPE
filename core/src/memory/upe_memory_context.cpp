@@ -165,18 +165,27 @@ void UpeMemoryContext_PrepareFrame(UpeMemoryContext *ctx) {
 
 void UpeMemoryContext_FinalizeFrame(UpeMemoryContext *ctx, double frame_time_ms) {
     assert(ctx);
-    
-    /* Record frame metrics */
-    UpeMemoryStats stats;
-    UpeMemory_GetStats(&stats);
-    
+
+    uint32_t contact_count = ctx->pool_contacts ? ctx->pool_contacts->count : 0u;
+    uint32_t manifold_count = ctx->pool_manifolds ? ctx->pool_manifolds->count : 0u;
+    uint32_t constraint_count = ctx->pool_constraints ? ctx->pool_constraints->count : 0u;
+    uint32_t particle_count = ctx->pool_particles ? ctx->pool_particles->count : 0u;
+    uint32_t body_count = (ctx->pool_bodies && ctx->pool_bodies->table) ? ctx->pool_bodies->table->count : 0u;
+
+    uint64_t candidate_pairs = (body_count > 1u)
+        ? ((uint64_t)body_count * (uint64_t)(body_count - 1u)) / 2u
+        : 0u;
+    if (candidate_pairs > ctx->budget_broadphase) {
+        candidate_pairs = ctx->budget_broadphase;
+    }
+
     UpeMemoryDiag_RecordFrameMetrics(
         frame_time_ms,
-        128,  /* Placeholder contact count - in real code, query actual */
-        32,   /* Placeholder manifold count */
-        64,   /* Placeholder constraint count */
-        512,  /* Placeholder particle count */
-        1024  /* Placeholder pair count */
+        contact_count,
+        manifold_count,
+        constraint_count,
+        particle_count,
+        (uint32_t)candidate_pairs
     );
 }
 

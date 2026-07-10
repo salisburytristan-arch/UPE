@@ -34,6 +34,7 @@ UPE is a source-available C/C++ physics foundation focused on deterministic simu
 ## Commercial and Diligence Inputs
 
 - `COMMERCIAL_LICENSE_AGREEMENT.md`
+- `docs/PURCHASE_OPTIONS.md`
 - `docs/PROVENANCE_AND_OWNERSHIP.md`
 - `docs/DEPENDENCY_INVENTORY.md`
 - `IP_CHAIN_OF_TITLE_CHECKLIST.md`

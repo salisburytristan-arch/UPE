@@ -74,6 +74,7 @@ int main() {
 
 ## What's Included
 
+
 ### ✅ Core Features (Phases 1-7 Complete)
 
 - **Rigid Body Dynamics**: Full 6DOF simulation with constraints
@@ -81,7 +82,7 @@ int main() {
 - **Advanced Physics**: Soft bodies, cloth, fluids (SPH), particles
 - **Specialized Systems**: Vehicles, ragdolls, character controllers
 - **Determinism**: Bit-exact reproducible across platforms
-- **Performance**: Optimized for 60 FPS with thousands of bodies
+- **Performance**: Optimized for real-time simulation — see BENCHMARK_BASELINES.md for validated performance numbers
 
 ### 📁 Repository Structure
 
@@ -144,10 +145,16 @@ UpeEngine *engine = UpeEngine_CreateCustom(&config);
 
 ## Performance Expectations
 
-Typical performance on a modern CPU (single-threaded):
-- **1,000 bodies**: ~5ms per frame (200 FPS)
-- **5,000 bodies**: ~15ms per frame (60 FPS)
-- **10,000+ bodies**: Enable multithreading or islands
+Validated single-threaded performance on a modern CPU (see BENCHMARK_BASELINES.md):
+
+| Body Count | Frame Time (ms) | Steps/sec (FPS) |
+|------------|-----------------|-----------------|
+| 128        | 2.05            | 487             |
+| 256        | 5.86            | 171             |
+| 512        | 13.87           | 72              |
+| 1024       | 29.15           | 34              |
+
+For higher body counts or 60+ FPS at large scale, enable multithreading or simulation islands.
 
 ## Platform Support
 

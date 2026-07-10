@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "upe/upe_units.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,6 +25,73 @@ typedef enum {
     UPE_DETERMINISM_FIXED_POINT = 1, /**< Q48.16 fixed-point scalars, deterministic across platforms */
     UPE_DETERMINISM_COMPATIBLE = 2, /**< Deterministic within same binary version, new version may differ */
 } UpeDeterminismMode;
+
+/**
+ * Adaptive runtime tuning mode.
+ * Lets the engine scale solver quality and CCD aggressiveness based on scene pressure.
+ */
+typedef enum {
+    UPE_ADAPTIVE_DISABLED = 0,   /**< Fixed behavior only; no runtime tuning */
+    UPE_ADAPTIVE_BALANCED = 1,   /**< Balance stability and frame budget */
+    UPE_ADAPTIVE_RESPONSIVE = 2, /**< Prefer throughput and low-latency response */
+    UPE_ADAPTIVE_STABLE = 3,     /**< Prefer more solver quality under heavy contact load */
+} UpeAdaptiveMode;
+
+/**
+ * Runtime tuning knobs for adaptive stepping quality.
+ */
+typedef struct {
+    int enabled;                          /**< Non-zero to enable adaptive runtime tuning */
+    UpeAdaptiveMode mode;                /**< Tuning bias */
+    float target_step_time_ms;           /**< Target simulation budget in milliseconds (0 = derive from fixed_dt) */
+    uint32_t min_solver_iterations;      /**< Lower clamp for runtime-selected solver iterations */
+    uint32_t max_solver_iterations;      /**< Upper clamp for runtime-selected solver iterations */
+    float ccd_velocity_threshold;        /**< Auto-enable CCD above this speed (units/sec) */
+} UpeAdaptiveRuntimeConfig;
+
+/**
+ * Integrator selection for world stepping.
+ */
+typedef enum {
+    UPE_INTEGRATOR_EULER = 0,           /**< Fast baseline, least stable */
+    UPE_INTEGRATOR_SEMI_IMPLICIT = 1,   /**< Stable default for rigid-body gameplay */
+    UPE_INTEGRATOR_VELOCITY_VERLET = 2, /**< Better energy behavior for scientific/long-horizon runs */
+    UPE_INTEGRATOR_ADAPTIVE = 3,        /**< Runtime chooses between fast/stable schemes */
+} UpeIntegratorMode;
+
+/**
+ * Stability/status flags surfaced in step metrics.
+ */
+typedef enum {
+    UPE_STABILITY_OK = 0u,
+    UPE_STABILITY_HIGH_SPEED = (1u << 0),
+    UPE_STABILITY_ENERGY_DRIFT = (1u << 1),
+    UPE_STABILITY_DEEP_PENETRATION = (1u << 2),
+    UPE_STABILITY_NONFINITE = (1u << 3),
+    UPE_STABILITY_HIGH_COURANT = (1u << 4),
+    UPE_STABILITY_HIGH_REYNOLDS = (1u << 5),
+} UpeScientificStabilityFlags;
+
+typedef struct {
+    float length_tolerance_si;
+    float velocity_tolerance_si;
+    float energy_tolerance_ratio;
+    float contact_margin_factor;
+    float uncertainty_sigma;
+} UpeScienceErrorBudget;
+
+/**
+ * Scientific runtime controls for units, integrator selection, and quality diagnostics.
+ */
+typedef struct {
+    int enabled;                         /**< Non-zero to collect deeper scientific diagnostics */
+    UpeUnits units;                     /**< SI scale metadata for converting engine values */
+    UpePhysicalConstants constants;     /**< Physical constants registry for non-dimensional diagnostics */
+    UpeScienceErrorBudget error_budget; /**< Error budget and uncertainty propagation knobs */
+    UpeIntegratorMode integrator_mode;  /**< Requested integration scheme */
+    float max_expected_linear_speed;    /**< Speed budget before a stability flag is raised */
+    float max_energy_drift_ratio;       /**< Allowed fractional total-energy drift before flagging */
+} UpeScientificRuntimeConfig;
 
 /**
  * Feature capability bits: runtime discovery for bindings/tools
@@ -52,6 +120,9 @@ typedef enum {
     UPE_CAP_FIELD_FORCES = (1u << 20),            /**< Vector field forces (wind, buoyancy, etc) */
     UPE_CAP_SCIENCE_CATALOG = (1u << 21),         /**< Science domain status/catalog API available */
     UPE_CAP_SCIENCE_TOPICS = (1u << 22),          /**< Science topic-level catalog API available */
+    UPE_CAP_ADAPTIVE_RUNTIME = (1u << 23),        /**< Adaptive runtime quality tuning exposed through the public API */
+    UPE_CAP_SCIENTIFIC_RUNTIME = (1u << 24),      /**< Unit-aware diagnostics and scientific runtime controls available */
+    UPE_CAP_NUMERICAL_TOOLBOX = (1u << 25),       /**< Sparse solvers, ODE steppers, FFT, and optimization helpers available */
 } UpeCapabilityBits;
 
 /**
@@ -101,6 +172,21 @@ const char *UpeEngine_GetVersionString(void);
  * Returns static pointer, do not free
  */
 const char *UpeEngine_GetBuildConfig(void);
+
+/**
+ * Get recommended default adaptive runtime tuning settings.
+ */
+UpeAdaptiveRuntimeConfig UpeAdaptiveRuntimeConfig_Default(void);
+
+/**
+ * Get recommended default uncertainty/error budget settings.
+ */
+UpeScienceErrorBudget UpeScienceErrorBudget_Default(void);
+
+/**
+ * Get recommended default scientific runtime settings.
+ */
+UpeScientificRuntimeConfig UpeScientificRuntimeConfig_Default(void);
 
 #ifdef __cplusplus
 }

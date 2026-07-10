@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <functional>
+#include <thread>
 
 /**
  * Event name and unit lookup tables
@@ -105,7 +107,7 @@ void UpeTelemetry_Record(UpeTelemetryBuffer *buffer, uint64_t frame_number,
     impl->entries[pos].frame_number = frame_number;
     impl->entries[pos].event_id = event_id;
     impl->entries[pos].value = value;
-    impl->entries[pos].thread_id = 0;  /* TODO: get thread ID */
+    impl->entries[pos].thread_id = (uint32_t)(std::hash<std::thread::id>{}(std::this_thread::get_id()) & 0xFFFFFFFFu);
 
     /* Update statistics (lock-free approximate aggregates) */
     uint32_t stat_base = event_id * 4;
@@ -160,7 +162,7 @@ char *UpeTelemetry_DumpJson(const UpeTelemetryBuffer *buffer) {
     uint32_t actual_count = (entry_count > impl->capacity) ? impl->capacity : (uint32_t)entry_count;
 
     /* Estimate JSON size and allocate */
-    size_t json_size = 512 + actual_count * 128;
+    size_t json_size = 512 + actual_count * 160;
     char *json = (char *)UpeTelemetry_Alloc(json_size);
     if (json == NULL) {
         return NULL;
@@ -190,11 +192,12 @@ char *UpeTelemetry_DumpJson(const UpeTelemetryBuffer *buffer) {
         size_t remaining = json_size - pos;
         int chunk = snprintf(json + pos,
                              remaining,
-                             "%s{\"frame\":%llu,\"event\":\"%s\",\"value\":%llu}",
+                             "%s{\"frame\":%llu,\"event\":\"%s\",\"value\":%llu,\"thread_id\":%u}",
                              (i > 0) ? "," : "",
                              (unsigned long long)entry->frame_number,
                              kEventNames[entry->event_id],
-                             (unsigned long long)entry->value);
+                             (unsigned long long)entry->value,
+                             entry->thread_id);
         if (chunk < 0) {
             break;
         }

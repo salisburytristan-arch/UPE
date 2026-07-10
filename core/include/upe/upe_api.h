@@ -59,6 +59,14 @@ void UpeWorld_Destroy(UpeWorld *world);
 void UpeWorld_Step(UpeWorld *world);
 float UpeWorld_Time(const UpeWorld *world);
 
+/* Adaptive runtime tuning */
+void UpeWorld_SetAdaptiveRuntimeConfig(UpeWorld *world, const UpeAdaptiveRuntimeConfig *config);
+void UpeWorld_GetAdaptiveRuntimeConfig(const UpeWorld *world, UpeAdaptiveRuntimeConfig *out_config);
+
+/* Scientific runtime controls */
+void UpeWorld_SetScientificRuntimeConfig(UpeWorld *world, const UpeScientificRuntimeConfig *config);
+void UpeWorld_GetScientificRuntimeConfig(const UpeWorld *world, UpeScientificRuntimeConfig *out_config);
+
 // Determinism/replay hooks
 void UpeWorld_AttachReplayRecorder(UpeWorld *world, struct UpeReplayRecorder *replay, int enable_apply);
 struct UpeReplayRecorder *UpeWorld_GetReplayRecorder(const UpeWorld *world);

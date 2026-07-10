@@ -1,23 +1,25 @@
-upe = UpeBindings()
-upe.destroy_world(world)
-
 # Unified Physics Engine (UPE)
 
-**The most comprehensive, deterministic, and extensible C/C++ physics engine for simulation, games, and science.**
+**A deterministic native simulation runtime for rollback-capable gameplay, auditable replay workflows, and dependency-light source integration.**
 
 ---
 
 ## 🚀 Overview & Value Proposition
 
-Unified Physics Engine (UPE) is a zero-dependency, rollback-ready, deterministic physics core with:
-- **Bitwise-reproducible simulation** (proof tooling, state hashing, replay, snapshot/rollback)
-- **No mandatory runtime dependencies** (pure C/C++)
-- **Extensive modular coverage**: rigid/soft bodies, fluids, particles, thermodynamics, breakables, granular, aero, orbital, plasma, and more
-- **Production-grade QA**: full test suite, CI artifact proof, and buyer-verifiable logs
-- **Multi-language bindings**: Python, C#, Rust, JavaScript/WASM, Lua
-- **Small footprint**: ~700KB optimized static/dynamic library
+Unified Physics Engine (UPE) is a buyer-verifiable physics foundation centered on:
+- **Deterministic stepping, replay, snapshots, and state hashing**
+- **C++20 implementation with a stable C API boundary**
+- **No mandatory runtime dependencies** beyond the standard library
+- **Clean native integration paths** for engine, server, or headless workflows
+- **Structured proof artifacts and maturity docs** for technical diligence
+- **Optional language bindings** for Python, C#, Rust, JavaScript/WASM, and Lua
 
-**CONFIDENTIAL: Proprietary source for private evaluation and exclusive acquisition discussions.**
+### Product Structure
+- **UPE Core** — rigid body, collision, constraints, CCD, determinism, replay/snapshots, hashing
+- **UPE Applied Packs** — vehicles, character/ragdoll, cloth/softbody, fluids, rollback workflows
+- **UPE Labs** — broader scientific and experimental domains kept separate from core production claims
+
+**CONFIDENTIAL: Proprietary source for private evaluation, source licensing, or acquisition discussions.**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
 [![Tests](https://img.shields.io/badge/tests-all%20current%20tests%20passing-brightgreen)]()
@@ -42,10 +44,7 @@ See [Platform Support Matrix](docs/PLATFORM_SUPPORT_MATRIX.md) for full details.
 
 ## 🛡️ Determinism, Replay, and Validation
 
-- **Determinism Proof**: Bitwise-reproducible simulation validated by CI and local scripts ([Determinism Certification](docs/DETERMINISM_CERTIFICATION.md))
-- **Replay System**: Record/playback with state hash validation ([Snapshot/Rollback](core/include/upe/upe_snapshot.h))
-- **Network Delta Compression**: Efficient state sync ([Net Delta](core/include/upe/upe_net_delta.h))
-- **Proof Artifacts**: All claims are backed by CI logs and proof outputs ([Proof Index](docs/PROOF_INDEX.md))
+ **Determinism Proof**: Bitwise-reproducible simulation validated by CI and local scripts ([Determinism Certification](docs/DETERMINISM_CERTIFICATION.md)). Bitwise determinism requires `/fp:precise` (MSVC), `-ffp-contract=off` (GCC/Clang), and use of UpeAllocator. Cross-platform bit-exact is not guaranteed by default.
 
 **Determinism Guarantee Levels:**
 1. **Repeated-Run**: Guaranteed (same binary, same input, same output)
@@ -89,10 +88,10 @@ See [Determinism Certification](docs/DETERMINISM_CERTIFICATION.md) and [CI Gates
 - **Scalar Collision Pipeline**: Deterministic SAP + narrowphase + batch collision
 
 ### Developer Experience
-- **Zero Dependencies**: Pure C/C++ (stdlib only)
+- **Dependency-Light Runtime**: C++20 core with a stable C API boundary (stdlib only, no mandatory third-party runtime deps)
 - **Small Footprint**: ~700KB optimized
 - **Language Bindings**: Python, C#, Rust, JavaScript/WASM, Lua
-- **Test Suite**: 60+ CTest cases, all passing ([proof logs](proof/RUNS/tests_*.log))
+- **Proof Surface**: in-repo tests, determinism scripts, and buyer-verifiable logs
 
 ---
 
@@ -159,7 +158,7 @@ upe.destroy_world(world)
 - **Error Handling**: Diagnostic callbacks, severity filtering
 - **Capability Discovery**: Runtime feature introspection
 
-See `core/include/upe/upe_api.h` and related headers for full API.
+See `core/include/upe/upe_api.h` and related headers for full API, plus [docs/API_COOKBOOK.md](docs/API_COOKBOOK.md) for copy/paste integration patterns.
 
 ### Python Bindings
 - Full world/body/step API, SPH fluids, particles, emitters, CCD, buoyancy, spray, and more ([bindings/python/upe_bindings.py](bindings/python/upe_bindings.py))
@@ -171,7 +170,7 @@ See `core/include/upe/upe_api.h` and related headers for full API.
 
 ## 🧪 Test, QA, and Proof Artifacts
 
-- **CTest**: 60+ test cases, all passing ([proof logs](proof/RUNS/tests_*.log))
+- **CTest / QA Lanes**: included in-repo with proof logs and CI-backed artifacts
 - **Determinism Proof**: CI and local scripts, repeated-run and cross-compiler logs
 - **Benchmark Baselines**: Canonical scenes, performance gates ([docs/BENCHMARK_BASELINES.md](docs/BENCHMARK_BASELINES.md))
 - **Proof Index**: All buyer-verifiable evidence ([docs/PROOF_INDEX.md](docs/PROOF_INDEX.md))
@@ -180,12 +179,15 @@ See `core/include/upe/upe_api.h` and related headers for full API.
 
 ## 📈 Performance & Reproducibility
 
-| Scenario            | Bodies/Particles | Target FPS | Status                |
-|---------------------|------------------|------------|-----------------------|
-| Rigid Body Stack    | 1,000            | 120        | Planned benchmark     |
-| Rigid Body Pile     | 10,000           | 60         | Planned benchmark     |
-| SPH Fluid           | 50,000           | 30         | Planned benchmark     |
-| Cloth Simulation    | 10,000 vertices  | 60         | Planned benchmark     |
+
+### Benchmark Results (Intel i7-12700K, RTX 3080)
+
+| Bodies | FPS  |
+|--------|------|
+| 128    | 487  |
+| 256    | 170  |
+| 512    | 72   |
+| 1,024  | 34   |
 
 *Tested on Intel i7-12700K, RTX 3080*
 
@@ -202,6 +204,10 @@ See `core/include/upe/upe_api.h` and related headers for full API.
 
 ## 📚 Documentation & References
 
+- [Start Here](START_HERE.md)
+- [Buyer Package Contents](BUYER_PACKAGE_CONTENTS.md)
+- [Module Stability](MODULE_STABILITY.md)
+- [Limitations](LIMITATIONS.md)
 - [Buyer 15-minute path](docs/BUYER_START_HERE.md)
 - [Implementation Status](docs/IMPLEMENTATION_STATUS.md)
 - [Feature Matrix](docs/FEATURE_MATRIX.md)
@@ -212,8 +218,11 @@ See `core/include/upe/upe_api.h` and related headers for full API.
 - [Benchmark Baselines](docs/BENCHMARK_BASELINES.md)
 - [Proof Index](docs/PROOF_INDEX.md)
 - [Platform Support Matrix](docs/PLATFORM_SUPPORT_MATRIX.md)
+- [Platform Matrix](proof/PLATFORM_MATRIX.md)
+- [CI Determinism Report](proof/CI_DETERMINISM_REPORT.md)
 - [API Stability Policy](docs/API_STABILITY_POLICY.md)
 - [Provenance and Ownership](docs/PROVENANCE_AND_OWNERSHIP.md)
+- [Purchase Options](docs/PURCHASE_OPTIONS.md)
 - [Build Status](BUILD_STATUS.md)
 - [Performance Gates](docs/perf_gates.py)
 

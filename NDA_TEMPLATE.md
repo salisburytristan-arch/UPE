@@ -22,7 +22,7 @@
 
 ## 1. PURPOSE
 
-Seller is considering a potential exclusive acquisition, licensing, or partnership involving proprietary physics simulation software ("**Unified Physics Engine v1.0.0**" or the "**Proprietary Material**"). This agreement permits Buyer to evaluate the Proprietary Material under strict confidentiality terms for the purpose of determining acquisition or licensing interest.
+Seller is considering a potential acquisition, licensing, or partnership involving proprietary physics simulation software ("**Unified Physics Engine v1.0.0**" or the "**Proprietary Material**"). This agreement permits Buyer to evaluate the Proprietary Material under strict confidentiality terms for the purpose of determining acquisition or licensing interest.
 
 ---
 
@@ -276,7 +276,7 @@ This schedule is flexible and can be adjusted by mutual written consent.
 
 Confidential Information includes the following items provided to Buyer:
 
-- [ ] UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip (694 files, 0.93 MB)
+- [ ] Latest private evaluation package ZIP (source, docs, tests, proof artifacts; under 100 MB compressed)
 - [ ] Source code (C/C++ implementation)
 - [ ] Example applications and test suites
 - [ ] Build system (CMake configuration)
@@ -294,7 +294,7 @@ Confidential Information includes the following items provided to Buyer:
 
 1. **Customize the bracketed sections** (dates, jurisdiction, company names, etc.)
 2. **Convert to PDF** for professional presentation (use any markdown-to-PDF converter)
-3. **Send digitally** before providing the evaluation package (`UnifiedPhysicsEngine-1.0.0-buyout-*.zip`)
+3. **Send digitally** before providing the private evaluation package ZIP
 4. **Require both signatures** before granting access
 5. **Keep a signed copy** for your records
 

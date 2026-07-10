@@ -1,8 +1,8 @@
 # DILIGENCE PACKAGE GUIDE
-## Unified Physics Engine v1.0.0 – Exclusive Evaluation
+## Unified Physics Engine v1.0.0 – Private Buyer Evaluation
 
-**Package Date**: February 26, 2026  
-**Version**: 1.0.0 (Buyer Evaluation Package)  
+**Package Date**: April 6, 2026  
+**Version**: 2026.04 (Buyer Evaluation Package Refresh)  
 **Evaluation Period**: [INSERT: 30-90 days from date]  
 **Confidentiality**: Subject to signed NDA
 
@@ -12,6 +12,8 @@ Validation authority: treat these documents as canonical for current claim scope
 - `docs/DETERMINISM_CERTIFICATION.md`
 - `docs/PLATFORM_SUPPORT_MATRIX.md`
 - `docs/TRUTH_HIERARCHY.md`
+
+Current top-level package index: `BUYER_LICENSE_PACKAGE.md`
 
 ---
 
@@ -25,12 +27,12 @@ Evaluation posture: use a core-first review. The deterministic runtime path and 
 
 | File | Size | Contents |
 |------|------|----------|
-| **UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip** | 0.93 MB | Complete source code, examples, tests, build system, and documentation |
+| **[latest private evaluation package].zip** | under 100 MB compressed | Complete source code, examples, tests, build system, and documentation |
 
 **Verification**:
-- Extract and verify SHA256 hash: [INSERT HASH] 
-- Expected file count: 694 files across 30+ directories
-- All files are plain text or small binary assets (no obfuscation or license checks)
+- Extract and verify the SHA256 hash provided in the delivery email
+- Package contents are intentionally plain-text heavy for technical diligence
+- All files are provided for private evaluation only under the signed NDA and commercial terms
 
 ---
 
@@ -42,10 +44,10 @@ Follow this path to build and run your first validation:
 
 ```bash
 # Windows (PowerShell)
-Expand-Archive -Path UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip -DestinationPath C:\Physics
+Expand-Archive -Path UnifiedPhysicsEngine*.zip -DestinationPath C:\Physics
 
 # Linux/macOS
-unzip UnifiedPhysicsEngine-1.0.0-buyout-2026-02-26.zip -d ~/Physics
+unzip UnifiedPhysicsEngine*.zip -d ~/Physics
 cd ~/Physics/UnifiedPhysicsEngine
 ```
 
@@ -120,12 +122,12 @@ Frame hashes match across runs: ✅
 ### Directory Structure
 
 ```
-UnifiedPhysicsEngine-1.0.0-buyout/
-├── core/                    # Physics engine implementation (55k LOC)
-│   ├── include/upe/         # 143+ public API headers
-│   └── src/                 # 130+ implementation files
-├── examples/                # 16+ working examples (vehicles, ragdolls, fluids, etc.)
-├── tests/                   # 60+ unit tests
+UnifiedPhysicsEngine/
+├── core/                    # Physics engine implementation
+│   ├── include/upe/         # 183 public API headers
+│   └── src/                 # 173 implementation files
+├── examples/                # 32 example directories
+├── tests/                   # 80 test source files
 ├── benchmarks/              # Performance validation suite
 ├── bindings/                # Language bindings (Python, C#, Rust, JavaScript, Lua)
 ├── docs/                    # 19 buyer-facing documentation files

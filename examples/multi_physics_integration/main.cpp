@@ -72,10 +72,10 @@ void simulate_rocket_launch(void) {
     unified.multiscale.primary_scale = UPE_SCALE_MACRO;
     
     // Add rigid body solver for rocket structure
-    UpeUnified_AddSolver(&unified, UPE_SOLVER_CONSTRAINT);
+    UpeUnified_AddSolver(&unified, UPE_UNIFIED_SOLVER_CONSTRAINT);
     
     // Add fluid solver for atmosphere + exhaust
-    UpeUnified_AddSolver(&unified, UPE_SOLVER_SPH);
+    UpeUnified_AddSolver(&unified, UPE_UNIFIED_SOLVER_SPH);
     
     // Setup rigid-fluid coupling
     UpeCoupling_AddInterface(&unified.coupling,
@@ -167,8 +167,8 @@ void simulate_rocket_launch(void) {
     unified.multiscale.primary_scale = UPE_SCALE_PLANETARY;
     
     // Remove SPH (thin atmosphere), add N-body
-    UpeUnified_RemoveSolver(&unified, UPE_SOLVER_SPH);
-    UpeUnified_AddSolver(&unified, UPE_SOLVER_NBODY);
+    UpeUnified_RemoveSolver(&unified, UPE_UNIFIED_SOLVER_SPH);
+    UpeUnified_AddSolver(&unified, UPE_UNIFIED_SOLVER_NBODY);
     
     // Update coupling (remove fluid, keep thermal)
     unified.coupling.num_interfaces = 0;
@@ -273,10 +273,10 @@ void demonstrate_fluid_structure_interaction(void) {
     UpeUnified_Init(&unified);
     
     // Add FEM for wing structure
-    UpeUnified_AddSolver(&unified, UPE_SOLVER_FEM);
+    UpeUnified_AddSolver(&unified, UPE_UNIFIED_SOLVER_FEM);
     
     // Add FLIP for air flow
-    UpeUnified_AddSolver(&unified, UPE_SOLVER_FLIP);
+    UpeUnified_AddSolver(&unified, UPE_UNIFIED_SOLVER_FLIP);
     
     // FSI coupling
     UpeFSICoupling fsi;

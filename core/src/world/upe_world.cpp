@@ -22,6 +22,7 @@
 #include "upe/upe_world_ex.h"
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 
@@ -244,6 +245,443 @@ static uint64_t UpeWorld_TotalStepMicros(const UpeWorld *world) {
     return total_us;
 }
 
+static uint32_t UpeWorld_ClampIterations(uint32_t value, uint32_t min_value, uint32_t max_value) {
+    if (min_value == 0) {
+        min_value = 1;
+    }
+    if (max_value < min_value) {
+        max_value = min_value;
+    }
+    if (value < min_value) {
+        return min_value;
+    }
+    if (value > max_value) {
+        return max_value;
+    }
+    return value;
+}
+
+static float UpeWorld_ClampUnitInterval(float value) {
+    if (!isfinite((double)value)) {
+        return 0.0f;
+    }
+    if (value < 0.0f) {
+        return 0.0f;
+    }
+    if (value > 1.0f) {
+        return 1.0f;
+    }
+    return value;
+}
+
+static void UpeWorld_ComputeValidationMetricsInternal(const UpeWorld *world,
+                                                      UpeWorldValidationMetrics *out_metrics) {
+    if (!out_metrics) {
+        return;
+    }
+
+    memset(out_metrics, 0, sizeof(*out_metrics));
+    if (!world) {
+        return;
+    }
+
+    float dt_si = UpeUnits_TimeToSI(&world->units, world->fixed_dt);
+    if (!isfinite((double)dt_si) || dt_si < 0.0f) {
+        dt_si = 0.0f;
+    }
+
+    float penetration_si = UpeUnits_LengthToSI(&world->units, world->last_max_contact_penetration);
+    if (!isfinite((double)penetration_si) || penetration_si < 0.0f) {
+        penetration_si = 0.0f;
+    }
+
+    float speed_ratio = 0.0f;
+    if (world->max_expected_linear_speed > 1.0e-6f) {
+        speed_ratio = world->last_peak_linear_speed / world->max_expected_linear_speed;
+    }
+
+    float energy_budget_ratio = (world->error_budget.energy_tolerance_ratio > 1.0e-6f)
+        ? (world->last_energy_drift_ratio / world->error_budget.energy_tolerance_ratio)
+        : world->last_energy_drift_ratio;
+
+    float penetration_budget = world->error_budget.length_tolerance_si * (1.0f + world->error_budget.contact_margin_factor);
+    if (penetration_budget <= 1.0e-6f) {
+        penetration_budget = 1.0e-6f;
+    }
+    float penetration_ratio = penetration_si / penetration_budget;
+
+    float uncertainty_budget = world->error_budget.length_tolerance_si +
+        (world->error_budget.velocity_tolerance_si * dt_si) +
+        (world->error_budget.contact_margin_factor * penetration_si);
+    if (uncertainty_budget <= 1.0e-6f) {
+        uncertainty_budget = (world->error_budget.length_tolerance_si > 1.0e-6f)
+            ? world->error_budget.length_tolerance_si
+            : 1.0e-6f;
+    }
+    float uncertainty_ratio = world->last_uncertainty_margin_si / uncertainty_budget;
+
+    float conservation_score = UpeWorld_ClampUnitInterval(1.0f - fmaxf(0.0f, energy_budget_ratio - 0.25f) * 0.8f);
+    float contact_quality_score = UpeWorld_ClampUnitInterval(1.0f - fmaxf(0.0f, penetration_ratio - 0.25f) * 0.5f);
+    float timestep_quality_score = UpeWorld_ClampUnitInterval(1.0f - fmaxf(0.0f, world->last_courant_number - 0.5f) * 0.8f);
+    float uncertainty_score = UpeWorld_ClampUnitInterval(1.0f - fmaxf(0.0f, uncertainty_ratio - 1.0f) * 0.5f);
+    float speed_score = UpeWorld_ClampUnitInterval(1.0f - fmaxf(0.0f, speed_ratio - 1.0f) * 0.5f);
+
+    float plausibility_score =
+        (0.34f * conservation_score) +
+        (0.24f * contact_quality_score) +
+        (0.22f * timestep_quality_score) +
+        (0.12f * uncertainty_score) +
+        (0.08f * speed_score);
+
+    uint32_t flags = UPE_VALIDATION_PASS;
+    if (speed_ratio > 1.0f || (world->last_stability_flags & UPE_STABILITY_HIGH_SPEED) != 0u) {
+        flags |= UPE_VALIDATION_SPEED_BUDGET;
+    }
+    if (energy_budget_ratio > 1.0f || (world->last_stability_flags & UPE_STABILITY_ENERGY_DRIFT) != 0u) {
+        flags |= UPE_VALIDATION_ENERGY_BUDGET;
+    }
+    if (penetration_ratio > 1.0f || (world->last_stability_flags & UPE_STABILITY_DEEP_PENETRATION) != 0u) {
+        flags |= UPE_VALIDATION_PENETRATION_BUDGET;
+    }
+    if (world->last_courant_number > 1.0f || (world->last_stability_flags & UPE_STABILITY_HIGH_COURANT) != 0u) {
+        flags |= UPE_VALIDATION_TIMESTEP_BUDGET;
+    }
+    if (uncertainty_ratio > 1.0f) {
+        flags |= UPE_VALIDATION_UNCERTAINTY_BUDGET;
+    }
+    if ((world->last_stability_flags & UPE_STABILITY_NONFINITE) != 0u ||
+        !isfinite((double)plausibility_score) ||
+        !isfinite((double)uncertainty_ratio) ||
+        !isfinite((double)energy_budget_ratio)) {
+        flags |= UPE_VALIDATION_NONFINITE;
+        plausibility_score = 0.0f;
+        conservation_score = 0.0f;
+        contact_quality_score = 0.0f;
+        timestep_quality_score = 0.0f;
+        uncertainty_ratio = 0.0f;
+    }
+    if (plausibility_score < 0.5f) {
+        flags |= UPE_VALIDATION_PLAUSIBILITY_LOW;
+    }
+
+    out_metrics->validation_flags = flags;
+    out_metrics->plausibility_score = UpeWorld_ClampUnitInterval(plausibility_score);
+    out_metrics->conservation_score = UpeWorld_ClampUnitInterval(conservation_score);
+    out_metrics->contact_quality_score = UpeWorld_ClampUnitInterval(contact_quality_score);
+    out_metrics->timestep_quality_score = UpeWorld_ClampUnitInterval(timestep_quality_score);
+    out_metrics->uncertainty_ratio = isfinite((double)uncertainty_ratio) ? uncertainty_ratio : 0.0f;
+    out_metrics->speed_budget_ratio = isfinite((double)speed_ratio) ? speed_ratio : 0.0f;
+    out_metrics->energy_budget_ratio = isfinite((double)energy_budget_ratio) ? energy_budget_ratio : 0.0f;
+    out_metrics->penetration_budget_ratio = isfinite((double)penetration_ratio) ? penetration_ratio : 0.0f;
+}
+
+static float UpeWorld_ComputePeakLinearSpeed(const UpeWorld *world,
+                                             const uint32_t *dynamic_ids,
+                                             uint32_t dynamic_count) {
+    if (!world || !dynamic_ids || dynamic_count == 0 || !world->bodies) {
+        return 0.0f;
+    }
+
+    float peak_speed_sq = 0.0f;
+    for (uint32_t i = 0; i < dynamic_count; ++i) {
+        uint32_t body_id = dynamic_ids[i];
+        if (body_id >= world->body_capacity) {
+            continue;
+        }
+        const UpeBody *body = &world->bodies[body_id];
+        float speed_sq = UpeVec3_Dot(body->velocity, body->velocity);
+        if (speed_sq > peak_speed_sq) {
+            peak_speed_sq = speed_sq;
+        }
+    }
+
+    return sqrtf(peak_speed_sq);
+}
+
+static int UpeWorld_ShouldUseAdaptiveCcd(const UpeWorld *world, float peak_linear_speed) {
+    if (!world) {
+        return 0;
+    }
+    if (world->ccd_requested_by_user) {
+        return 1;
+    }
+    if (!world->adaptive_runtime_enabled || world->adaptive_ccd_velocity_threshold_sq <= 0.0f) {
+        return 0;
+    }
+    return (peak_linear_speed * peak_linear_speed) >= world->adaptive_ccd_velocity_threshold_sq;
+}
+
+static uint32_t UpeWorld_ComputeAdaptiveSolverIterations(const UpeWorld *world,
+                                                         uint32_t active_body_count,
+                                                         uint32_t pair_count,
+                                                         uint32_t contact_count) {
+    if (!world) {
+        return 1;
+    }
+
+    uint32_t base_iterations = (world->base_solver_iterations > 0)
+        ? world->base_solver_iterations
+        : ((world->solver_iterations > 0) ? world->solver_iterations : 1u);
+
+    if (!world->adaptive_runtime_enabled) {
+        return base_iterations;
+    }
+
+    uint32_t min_iterations = (world->adaptive_min_solver_iterations > 0)
+        ? world->adaptive_min_solver_iterations
+        : 1u;
+    uint32_t max_iterations = (world->adaptive_max_solver_iterations > 0)
+        ? world->adaptive_max_solver_iterations
+        : base_iterations;
+
+    base_iterations = UpeWorld_ClampIterations(base_iterations, min_iterations, max_iterations);
+
+    int pressure_score = 0;
+    if (contact_count > 0) {
+        float contacts_per_body = (active_body_count > 0)
+            ? ((float)contact_count / (float)active_body_count)
+            : (float)contact_count;
+        if (contacts_per_body > 1.5f) {
+            pressure_score += 1;
+        }
+        if (contacts_per_body > 3.5f) {
+            pressure_score += 1;
+        }
+    }
+    if (pair_count > (active_body_count * 2u)) {
+        pressure_score += 1;
+    }
+    if (world->ccd_candidate_pairs > 0 || world->ccd_contact_hits > 0) {
+        pressure_score += 1;
+    }
+    if (world->adaptive_ccd_velocity_threshold_sq > 0.0f &&
+        (world->last_peak_linear_speed * world->last_peak_linear_speed) >= world->adaptive_ccd_velocity_threshold_sq) {
+        pressure_score += 1;
+    }
+
+    int mode_bias = 0;
+    switch (world->adaptive_mode) {
+        case UPE_ADAPTIVE_RESPONSIVE:
+            mode_bias = -1;
+            break;
+        case UPE_ADAPTIVE_STABLE:
+            mode_bias = 1;
+            break;
+        case UPE_ADAPTIVE_BALANCED:
+        case UPE_ADAPTIVE_DISABLED:
+        default:
+            mode_bias = 0;
+            break;
+    }
+
+    int tuned_iterations = (int)base_iterations + pressure_score + mode_bias;
+
+    float target_step_time_ms = (world->adaptive_target_step_time_ms > 0.0f)
+        ? world->adaptive_target_step_time_ms
+        : (world->fixed_dt * 1000.0f);
+    uint64_t prior_step_us = UpeWorld_TotalStepMicros(world);
+    if (prior_step_us > 0 && target_step_time_ms > 0.0f) {
+        double target_step_us = (double)target_step_time_ms * 1000.0;
+        if ((double)prior_step_us > target_step_us * 1.15) {
+            tuned_iterations -= 1;
+        }
+        if ((double)prior_step_us > target_step_us * 1.50) {
+            tuned_iterations -= 1;
+        }
+    }
+
+    if (contact_count == 0 && active_body_count < 8u) {
+        tuned_iterations = (int)min_iterations;
+    }
+
+    uint32_t clamped = (tuned_iterations > 0) ? (uint32_t)tuned_iterations : 1u;
+    return UpeWorld_ClampIterations(clamped, min_iterations, max_iterations);
+}
+
+static UpeIntegratorMode UpeWorld_ResolveIntegratorMode(const UpeWorld *world) {
+    if (!world) {
+        return UPE_INTEGRATOR_SEMI_IMPLICIT;
+    }
+
+    switch (world->integrator_mode) {
+        case UPE_INTEGRATOR_EULER:
+            return UPE_INTEGRATOR_EULER;
+        case UPE_INTEGRATOR_VELOCITY_VERLET:
+            return UPE_INTEGRATOR_VELOCITY_VERLET;
+        case UPE_INTEGRATOR_ADAPTIVE: {
+            int high_speed = 0;
+            if (world->max_expected_linear_speed > 0.0f) {
+                high_speed = world->last_peak_linear_speed > (world->max_expected_linear_speed * 0.5f);
+            } else {
+                high_speed = world->last_peak_linear_speed > 20.0f;
+            }
+            int heavy_contact_load = world->last_contact_count > world->last_active_body_count;
+            if ((world->adaptive_runtime_enabled && (high_speed || heavy_contact_load)) ||
+                world->adaptive_mode == UPE_ADAPTIVE_STABLE) {
+                return UPE_INTEGRATOR_VELOCITY_VERLET;
+            }
+            return UPE_INTEGRATOR_SEMI_IMPLICIT;
+        }
+        case UPE_INTEGRATOR_SEMI_IMPLICIT:
+        default:
+            return UPE_INTEGRATOR_SEMI_IMPLICIT;
+    }
+}
+
+static void UpeWorld_IntegrateBody(UpeWorld *world, UpeBody *body) {
+    if (!world || !body) {
+        return;
+    }
+
+    UpeIntegratorMode resolved = UpeWorld_ResolveIntegratorMode(world);
+    world->last_resolved_integrator_mode = resolved;
+
+    switch (resolved) {
+        case UPE_INTEGRATOR_EULER:
+            UpeIntegrator_Euler(body, world->fixed_dt, world->gravity);
+            break;
+        case UPE_INTEGRATOR_VELOCITY_VERLET:
+            UpeIntegrator_VelocityVerlet(body, world->fixed_dt, world->gravity);
+            break;
+        case UPE_INTEGRATOR_ADAPTIVE:
+        case UPE_INTEGRATOR_SEMI_IMPLICIT:
+        default:
+            UpeIntegrator_SemiImplicit(body, world->fixed_dt, world->gravity);
+            break;
+    }
+}
+
+static void UpeWorld_UpdateScientificDiagnostics(UpeWorld *world,
+                                                 const uint32_t *body_indices,
+                                                 uint32_t active_body_count) {
+    if (!world) {
+        return;
+    }
+
+    double prev_total_energy = world->last_total_energy;
+    world->total_kinetic_energy = 0.0;
+    world->total_potential_energy = 0.0;
+    world->energy_dissipated_this_frame = 0.0;
+    world->last_total_linear_momentum = 0.0f;
+    world->last_max_contact_penetration = 0.0f;
+    world->last_stability_flags = UPE_STABILITY_OK;
+
+    double momentum_x = 0.0;
+    double momentum_y = 0.0;
+    double momentum_z = 0.0;
+
+    for (uint32_t dyn = 0; dyn < active_body_count; ++dyn) {
+        uint32_t i = body_indices[dyn];
+        if (i >= world->body_capacity) {
+            continue;
+        }
+
+        UpeBody *body = &world->bodies[i];
+        double mass = (double)body->mass;
+        if (body->type != UPE_BODY_DYNAMIC || mass <= 0.0) {
+            continue;
+        }
+
+        float speed_sq = UpeVec3_Dot(body->velocity, body->velocity);
+        float angular_speed_sq = UpeVec3_Dot(body->angular_velocity, body->angular_velocity);
+        world->total_kinetic_energy += 0.5 * mass * (double)speed_sq;
+        world->total_kinetic_energy += 0.2 * mass * (double)angular_speed_sq;
+
+        double gravity_potential = -mass * (
+            (double)world->gravity.x * (double)body->position.x +
+            (double)world->gravity.y * (double)body->position.y +
+            (double)world->gravity.z * (double)body->position.z);
+        world->total_potential_energy += gravity_potential;
+
+        momentum_x += mass * (double)body->velocity.x;
+        momentum_y += mass * (double)body->velocity.y;
+        momentum_z += mass * (double)body->velocity.z;
+    }
+
+    for (uint32_t c = 0; c < world->contact_count; ++c) {
+        const UpeContactPair *pair = &world->contacts[c];
+        for (uint32_t pt = 0; pt < pair->manifold.count; ++pt) {
+            float penetration = pair->manifold.points[pt].penetration;
+            if (penetration > world->last_max_contact_penetration) {
+                world->last_max_contact_penetration = penetration;
+            }
+        }
+    }
+
+    double momentum_sq = momentum_x * momentum_x + momentum_y * momentum_y + momentum_z * momentum_z;
+    world->last_total_linear_momentum = (momentum_sq > 0.0)
+        ? (float)sqrt(momentum_sq)
+        : 0.0f;
+
+    double total_energy = world->total_kinetic_energy + world->total_potential_energy;
+    double delta_energy = total_energy - prev_total_energy;
+    if (prev_total_energy != 0.0 && fabs(prev_total_energy) > 1.0e-6) {
+        world->last_energy_drift_ratio = (float)(fabs(delta_energy) / fabs(prev_total_energy));
+    } else {
+        world->last_energy_drift_ratio = 0.0f;
+    }
+    if (delta_energy < 0.0) {
+        world->energy_dissipated_this_frame = -delta_energy;
+    }
+    world->last_total_energy = total_energy;
+
+    {
+        float reference_length_si = UpeUnits_LengthToSI(&world->units, 1.0f);
+        if (reference_length_si < 1.0e-6f) {
+            reference_length_si = 1.0f;
+        }
+        float speed_si = UpeUnits_SpeedToSI(&world->units, world->last_peak_linear_speed);
+        float dt_si = UpeUnits_TimeToSI(&world->units, world->fixed_dt);
+        float gravity_mag = UpeVec3_Length(world->gravity);
+        float gravity_mag_si = UpeUnits_AccelerationToSI(&world->units, gravity_mag);
+        if (gravity_mag_si <= 1.0e-6f) {
+            gravity_mag_si = (float)world->constants.standard_gravity;
+        }
+
+        world->last_courant_number = (reference_length_si > 1.0e-6f)
+            ? (speed_si * dt_si / reference_length_si)
+            : 0.0f;
+        world->last_froude_number = (gravity_mag_si > 1.0e-6f)
+            ? (speed_si / sqrtf(gravity_mag_si * reference_length_si))
+            : 0.0f;
+        world->last_reynolds_estimate = (float)((world->constants.dynamic_viscosity_air_pascal_seconds > 0.0)
+            ? ((world->constants.standard_air_density_kg_per_m3 * (double)speed_si * (double)reference_length_si) /
+               world->constants.dynamic_viscosity_air_pascal_seconds)
+            : 0.0);
+
+        world->last_uncertainty_margin_si =
+            world->error_budget.length_tolerance_si +
+            (world->error_budget.velocity_tolerance_si * dt_si) +
+            (world->error_budget.contact_margin_factor * UpeUnits_LengthToSI(&world->units, world->last_max_contact_penetration)) +
+            (world->error_budget.uncertainty_sigma * speed_si * dt_si * 0.01f);
+    }
+
+    if (world->scientific_diagnostics_enabled) {
+        if (!isfinite((double)world->last_peak_linear_speed) ||
+            !isfinite((double)world->last_total_linear_momentum) ||
+            !isfinite(total_energy)) {
+            world->last_stability_flags |= UPE_STABILITY_NONFINITE;
+        }
+        if (world->max_expected_linear_speed > 0.0f &&
+            world->last_peak_linear_speed > world->max_expected_linear_speed) {
+            world->last_stability_flags |= UPE_STABILITY_HIGH_SPEED;
+        }
+        if (world->max_energy_drift_ratio > 0.0f &&
+            world->last_energy_drift_ratio > world->max_energy_drift_ratio) {
+            world->last_stability_flags |= UPE_STABILITY_ENERGY_DRIFT;
+        }
+        if (UpeUnits_LengthToSI(&world->units, world->last_max_contact_penetration) > 0.05f) {
+            world->last_stability_flags |= UPE_STABILITY_DEEP_PENETRATION;
+        }
+        if (world->last_courant_number > 1.0f) {
+            world->last_stability_flags |= UPE_STABILITY_HIGH_COURANT;
+        }
+        if (world->last_reynolds_estimate > 4000.0f) {
+            world->last_stability_flags |= UPE_STABILITY_HIGH_REYNOLDS;
+        }
+    }
+}
+
 static void UpeWorld_RecordTelemetry(UpeWorld *world) {
     if (!world) {
         return;
@@ -441,6 +879,7 @@ UpeWorld *UpeWorld_Create(const UpeWorldDesc *desc) {
     world->replay = nullptr;
     world->replay_apply_enabled = 0;
     world->solver_iterations = (desc->solver_iterations > 0) ? desc->solver_iterations : 10;
+    world->base_solver_iterations = world->solver_iterations;
     world->solver_friction_iterations = (desc->solver_friction_iterations > 0) ? desc->solver_friction_iterations : 1;
     world->solver_thread_count = 1;
     world->max_pairs = (desc->max_pairs > 0) ? desc->max_pairs : 16384;
@@ -449,13 +888,68 @@ UpeWorld *UpeWorld_Create(const UpeWorldDesc *desc) {
     world->last_solver_serial_islands = 0;
     world->enable_warm_starting = desc->enable_warm_starting ? 1 : 0;
     world->enable_sleeping = desc->enable_sleeping ? 1 : 0;
-    world->ccd_enabled = (desc->enable_ccd || desc->ccd_enabled) ? 1 : 0;
+    world->ccd_requested_by_user = (desc->enable_ccd || desc->ccd_enabled) ? 1 : 0;
+    world->ccd_enabled = world->ccd_requested_by_user;
+    world->adaptive_runtime_enabled = desc->enable_adaptive_runtime ? 1 : 0;
+    world->scientific_diagnostics_enabled = desc->enable_scientific_diagnostics ? 1 : 0;
+    world->adaptive_mode = desc->adaptive_mode;
+    world->integrator_mode = desc->integrator_mode;
+    if (world->integrator_mode < UPE_INTEGRATOR_EULER || world->integrator_mode > UPE_INTEGRATOR_ADAPTIVE) {
+        world->integrator_mode = UPE_INTEGRATOR_ADAPTIVE;
+    }
+    world->last_resolved_integrator_mode = UpeWorld_ResolveIntegratorMode(world);
+    world->units = UpeUnits_IsValid(&desc->units) ? desc->units : UpeUnits_SI();
+    {
+        UpePhysicalConstants default_constants = UpePhysicalConstants_SI();
+        world->constants = (desc->constants.standard_gravity > 0.0 &&
+                            desc->constants.speed_of_light > 0.0 &&
+                            desc->constants.standard_air_density_kg_per_m3 > 0.0 &&
+                            desc->constants.dynamic_viscosity_air_pascal_seconds > 0.0)
+            ? desc->constants
+            : default_constants;
+    }
+    world->error_budget = desc->error_budget;
+    if (world->error_budget.length_tolerance_si < 0.0f ||
+        world->error_budget.velocity_tolerance_si < 0.0f ||
+        world->error_budget.energy_tolerance_ratio < 0.0f ||
+        world->error_budget.contact_margin_factor < 0.0f ||
+        world->error_budget.uncertainty_sigma < 0.0f) {
+        world->error_budget = UpeScienceErrorBudget_Default();
+    }
+    world->max_expected_linear_speed = (desc->max_expected_linear_speed > 0.0f)
+        ? desc->max_expected_linear_speed
+        : 0.0f;
+    world->max_energy_drift_ratio = (desc->max_energy_drift_ratio > 0.0f)
+        ? desc->max_energy_drift_ratio
+        : 0.0f;
     world->enable_parallel_island_solver = 0;
     world->owns_thread_pool = 0;
     {
         float ccd_threshold = (desc->ccd_threshold > 0.0f) ? desc->ccd_threshold : 10.0f;
         world->ccd_threshold_sq = ccd_threshold * ccd_threshold;
     }
+    {
+        float target_step_time_ms = (desc->adaptive_target_step_time_ms > 0.0f)
+            ? desc->adaptive_target_step_time_ms
+            : (world->fixed_dt * 1000.0f);
+        world->adaptive_target_step_time_ms = target_step_time_ms;
+    }
+    world->adaptive_min_solver_iterations = (desc->adaptive_min_solver_iterations > 0)
+        ? desc->adaptive_min_solver_iterations
+        : ((world->base_solver_iterations > 1) ? (world->base_solver_iterations - 1) : 1u);
+    world->adaptive_max_solver_iterations = (desc->adaptive_max_solver_iterations > 0)
+        ? desc->adaptive_max_solver_iterations
+        : (world->base_solver_iterations + 4u);
+    if (world->adaptive_max_solver_iterations < world->adaptive_min_solver_iterations) {
+        world->adaptive_max_solver_iterations = world->adaptive_min_solver_iterations;
+    }
+    {
+        float adaptive_ccd_threshold = (desc->adaptive_ccd_velocity_threshold > 0.0f)
+            ? desc->adaptive_ccd_velocity_threshold
+            : 0.0f;
+        world->adaptive_ccd_velocity_threshold_sq = adaptive_ccd_threshold * adaptive_ccd_threshold;
+    }
+    world->last_peak_linear_speed = 0.0f;
     world->ccd_candidate_pairs = 0;
     world->ccd_tested_pairs = 0;
     world->ccd_contact_hits = 0;
@@ -566,6 +1060,15 @@ UpeWorld *UpeWorld_Create(const UpeWorldDesc *desc) {
     world->total_kinetic_energy = 0.0;
     world->total_potential_energy = 0.0;
     world->energy_dissipated_this_frame = 0.0;
+    world->last_total_energy = 0.0;
+    world->last_energy_drift_ratio = 0.0f;
+    world->last_total_linear_momentum = 0.0f;
+    world->last_max_contact_penetration = 0.0f;
+    world->last_courant_number = 0.0f;
+    world->last_froude_number = 0.0f;
+    world->last_reynolds_estimate = 0.0f;
+    world->last_uncertainty_margin_si = 0.0f;
+    world->last_stability_flags = UPE_STABILITY_OK;
 
     world->query_bounds = nullptr;
     world->query_bound_count = 0;
@@ -698,6 +1201,10 @@ void UpeWorld_Step(UpeWorld *world) {
     world->last_island_count = 0;
     world->last_solver_iterations = (world->solver_iterations > 0) ? world->solver_iterations : 1;
     world->last_solver_island_task_count = 0;
+    world->last_peak_linear_speed = 0.0f;
+    world->last_max_contact_penetration = 0.0f;
+    world->last_stability_flags = UPE_STABILITY_OK;
+    world->last_resolved_integrator_mode = UpeWorld_ResolveIntegratorMode(world);
 
     UpeWorld_CompactDenseBodyLists(world);
 
@@ -709,10 +1216,13 @@ void UpeWorld_Step(UpeWorld *world) {
     // Count active dynamic bodies
     active_body_count = world->dynamic_body_count;
     world->last_active_body_count = active_body_count;
+    world->last_peak_linear_speed = UpeWorld_ComputePeakLinearSpeed(world, world->dynamic_body_ids, active_body_count);
+    world->ccd_enabled = UpeWorld_ShouldUseAdaptiveCcd(world, world->last_peak_linear_speed) ? 1 : 0;
 
     UpeWorld_ApplyGravityFields(world, world->dynamic_body_ids, active_body_count);
 
     if (active_body_count < 2) {
+        world->last_solver_iterations = UpeWorld_ComputeAdaptiveSolverIterations(world, active_body_count, 0, 0);
         UpeWorld_EndStage(world, UPE_STEP_STAGE_PRE_STEP, active_body_count);
         UpeWorld_BeginStage(world, UPE_STEP_STAGE_INTEGRATION, active_body_count);
         // No collisions possible, just integrate
@@ -721,9 +1231,10 @@ void UpeWorld_Step(UpeWorld *world) {
         }
         for (uint32_t dyn = 0; dyn < active_body_count; ++dyn) {
             uint32_t i = world->dynamic_body_ids[dyn];
-            UpeIntegrator_SemiImplicit(&world->bodies[i], world->fixed_dt, world->gravity);
+            UpeWorld_IntegrateBody(world, &world->bodies[i]);
             UpeBody_ClearForces(&world->bodies[i]);
         }
+        UpeWorld_UpdateScientificDiagnostics(world, world->dynamic_body_ids, active_body_count);
         if (world->profiler) {
             UpeProfiler_EndZone(world->profiler);
         }
@@ -2015,7 +2526,11 @@ void UpeWorld_Step(UpeWorld *world) {
         solver_bodies[i].inv_inertia = world->bodies[i].inv_inertia;
     }
 
-    const uint32_t solver_iterations = (world->solver_iterations > 0) ? world->solver_iterations : 1;
+    const uint32_t solver_iterations = UpeWorld_ComputeAdaptiveSolverIterations(
+        world,
+        active_body_count,
+        pair_count,
+        world->contact_count);
     world->last_solver_iterations = solver_iterations;
     world->last_solver_parallel_islands = 0;
     world->last_solver_serial_islands = 0;
@@ -2297,7 +2812,7 @@ void UpeWorld_Step(UpeWorld *world) {
     if (has_awake_dynamic_list) {
         for (uint32_t dyn = 0; dyn < awake_dynamic_count; ++dyn) {
             uint32_t i = world->awake_dynamic_ids[dyn];
-            UpeIntegrator_SemiImplicit(&world->bodies[i], world->fixed_dt, world->gravity);
+            UpeWorld_IntegrateBody(world, &world->bodies[i]);
             UpeBody_ClearForces(&world->bodies[i]);
         }
     } else {
@@ -2307,30 +2822,12 @@ void UpeWorld_Step(UpeWorld *world) {
             if (world->enable_sleeping && island_id < world->island_count && !world->islands[island_id].awake) {
                 continue;
             }
-            UpeIntegrator_SemiImplicit(&world->bodies[i], world->fixed_dt, world->gravity);
+            UpeWorld_IntegrateBody(world, &world->bodies[i]);
             UpeBody_ClearForces(&world->bodies[i]);
         }
     }
-    
-    // Calculate energy for diagnostics
-    world->total_kinetic_energy = 0.0;
-    world->total_potential_energy = 0.0;
-    for (uint32_t dyn = 0; dyn < active_body_count; ++dyn) {
-        uint32_t i = body_indices[dyn];
-        UpeBody *body = &world->bodies[i];
-        double mass = (double)body->mass;
-        
-        // Kinetic energy: (1/2) * m * v^2 + (1/2) * I * omega^2
-        float speed_sq = UpeVec3_Dot(body->velocity, body->velocity);
-        world->total_kinetic_energy += 0.5 * mass * speed_sq;
-        
-        float angular_speed_sq = UpeVec3_Dot(body->angular_velocity, body->angular_velocity);
-        // Simple I ≈ (2/5) * m * r^2 for rough equivalent
-        world->total_kinetic_energy += 0.2 * mass * angular_speed_sq;
-        
-        // Potential energy: m * g * h (relative to y=0)
-        world->total_potential_energy += mass * world->gravity.y * body->position.y;
-    }
+
+    UpeWorld_UpdateScientificDiagnostics(world, body_indices, active_body_count);
 
     UpeWorld_EndStage(world, UPE_STEP_STAGE_INTEGRATION, world->body_count);
     UpeWorld_BeginStage(world, UPE_STEP_STAGE_POST_STEP, world->contact_count);
@@ -2421,10 +2918,109 @@ uint32_t UpeWorld_GetLastStepStageStats(const UpeWorld *world, UpeStepStageStat 
     return to_copy;
 }
 
+void UpeWorld_SetAdaptiveRuntimeConfig(UpeWorld *world, const UpeAdaptiveRuntimeConfig *config) {
+    if (!world || !config) {
+        return;
+    }
+
+    world->adaptive_runtime_enabled = config->enabled ? 1 : 0;
+    if (config->mode < UPE_ADAPTIVE_DISABLED || config->mode > UPE_ADAPTIVE_STABLE) {
+        world->adaptive_mode = UPE_ADAPTIVE_BALANCED;
+    } else {
+        world->adaptive_mode = config->mode;
+    }
+
+    world->adaptive_target_step_time_ms = (config->target_step_time_ms > 0.0f)
+        ? config->target_step_time_ms
+        : (world->fixed_dt * 1000.0f);
+
+    world->adaptive_min_solver_iterations = (config->min_solver_iterations > 0)
+        ? config->min_solver_iterations
+        : 1u;
+    world->adaptive_max_solver_iterations = (config->max_solver_iterations > 0)
+        ? config->max_solver_iterations
+        : world->base_solver_iterations;
+    if (world->adaptive_max_solver_iterations < world->adaptive_min_solver_iterations) {
+        world->adaptive_max_solver_iterations = world->adaptive_min_solver_iterations;
+    }
+
+    float ccd_velocity_threshold = (config->ccd_velocity_threshold > 0.0f)
+        ? config->ccd_velocity_threshold
+        : 0.0f;
+    world->adaptive_ccd_velocity_threshold_sq = ccd_velocity_threshold * ccd_velocity_threshold;
+    world->ccd_enabled = world->ccd_requested_by_user;
+}
+
+void UpeWorld_GetAdaptiveRuntimeConfig(const UpeWorld *world, UpeAdaptiveRuntimeConfig *out_config) {
+    if (!world || !out_config) {
+        return;
+    }
+
+    out_config->enabled = world->adaptive_runtime_enabled;
+    out_config->mode = world->adaptive_mode;
+    out_config->target_step_time_ms = world->adaptive_target_step_time_ms;
+    out_config->min_solver_iterations = world->adaptive_min_solver_iterations;
+    out_config->max_solver_iterations = world->adaptive_max_solver_iterations;
+    out_config->ccd_velocity_threshold = (world->adaptive_ccd_velocity_threshold_sq > 0.0f)
+        ? sqrtf(world->adaptive_ccd_velocity_threshold_sq)
+        : 0.0f;
+}
+
+void UpeWorld_SetScientificRuntimeConfig(UpeWorld *world, const UpeScientificRuntimeConfig *config) {
+    if (!world || !config) {
+        return;
+    }
+
+    world->scientific_diagnostics_enabled = config->enabled ? 1 : 0;
+    world->units = UpeUnits_IsValid(&config->units) ? config->units : UpeUnits_SI();
+    world->constants = (config->constants.standard_gravity > 0.0 &&
+                        config->constants.speed_of_light > 0.0 &&
+                        config->constants.standard_air_density_kg_per_m3 > 0.0 &&
+                        config->constants.dynamic_viscosity_air_pascal_seconds > 0.0)
+        ? config->constants
+        : UpePhysicalConstants_SI();
+    world->error_budget = config->error_budget;
+    if (world->error_budget.length_tolerance_si < 0.0f ||
+        world->error_budget.velocity_tolerance_si < 0.0f ||
+        world->error_budget.energy_tolerance_ratio < 0.0f ||
+        world->error_budget.contact_margin_factor < 0.0f ||
+        world->error_budget.uncertainty_sigma < 0.0f) {
+        world->error_budget = UpeScienceErrorBudget_Default();
+    }
+    world->integrator_mode = config->integrator_mode;
+    if (world->integrator_mode < UPE_INTEGRATOR_EULER || world->integrator_mode > UPE_INTEGRATOR_ADAPTIVE) {
+        world->integrator_mode = UPE_INTEGRATOR_ADAPTIVE;
+    }
+    world->max_expected_linear_speed = (config->max_expected_linear_speed > 0.0f)
+        ? config->max_expected_linear_speed
+        : 0.0f;
+    world->max_energy_drift_ratio = (config->max_energy_drift_ratio > 0.0f)
+        ? config->max_energy_drift_ratio
+        : 0.0f;
+    world->last_resolved_integrator_mode = UpeWorld_ResolveIntegratorMode(world);
+}
+
+void UpeWorld_GetScientificRuntimeConfig(const UpeWorld *world, UpeScientificRuntimeConfig *out_config) {
+    if (!world || !out_config) {
+        return;
+    }
+
+    out_config->enabled = world->scientific_diagnostics_enabled;
+    out_config->units = world->units;
+    out_config->constants = world->constants;
+    out_config->error_budget = world->error_budget;
+    out_config->integrator_mode = world->integrator_mode;
+    out_config->max_expected_linear_speed = world->max_expected_linear_speed;
+    out_config->max_energy_drift_ratio = world->max_energy_drift_ratio;
+}
+
 int UpeWorld_GetStepMetrics(const UpeWorld *world, UpeWorldStepMetrics *out_metrics) {
     if (!world || !out_metrics) {
         return 0;
     }
+
+    UpeWorldValidationMetrics validation = {};
+    UpeWorld_ComputeValidationMetricsInternal(world, &validation);
 
     out_metrics->frame_index = world->frame_index;
     out_metrics->state_hash = world->last_state_hash;
@@ -2434,6 +3030,7 @@ int UpeWorld_GetStepMetrics(const UpeWorld *world, UpeWorldStepMetrics *out_metr
     out_metrics->constraints = world->last_constraint_count;
     out_metrics->islands = world->last_island_count;
     out_metrics->solver_iterations = world->last_solver_iterations;
+    out_metrics->configured_solver_iterations = world->base_solver_iterations;
     out_metrics->solver_threads = world->solver_thread_count;
     out_metrics->solver_island_tasks = world->last_solver_island_task_count;
     out_metrics->solver_parallel_islands = world->last_solver_parallel_islands;
@@ -2441,5 +3038,78 @@ int UpeWorld_GetStepMetrics(const UpeWorld *world, UpeWorldStepMetrics *out_metr
     out_metrics->ccd_candidate_pairs = world->ccd_candidate_pairs;
     out_metrics->ccd_tested_pairs = world->ccd_tested_pairs;
     out_metrics->ccd_contact_hits = world->ccd_contact_hits;
+    out_metrics->adaptive_runtime_enabled = (uint32_t)(world->adaptive_runtime_enabled != 0);
+    out_metrics->integrator_mode = (uint32_t)world->last_resolved_integrator_mode;
+    out_metrics->stability_flags = world->last_stability_flags;
+    out_metrics->validation_flags = validation.validation_flags;
+    out_metrics->peak_linear_speed = world->last_peak_linear_speed;
+    out_metrics->total_kinetic_energy_si = UpeUnits_EnergyToSI(&world->units, (float)world->total_kinetic_energy);
+    out_metrics->total_potential_energy_si = UpeUnits_EnergyToSI(&world->units, (float)world->total_potential_energy);
+    out_metrics->total_energy_si = UpeUnits_EnergyToSI(&world->units, (float)world->last_total_energy);
+    out_metrics->energy_drift_ratio = world->last_energy_drift_ratio;
+    out_metrics->total_linear_momentum_si = UpeUnits_MomentumToSI(&world->units, world->last_total_linear_momentum);
+    out_metrics->max_contact_penetration_si = UpeUnits_LengthToSI(&world->units, world->last_max_contact_penetration);
+    out_metrics->courant_number = world->last_courant_number;
+    out_metrics->froude_number = world->last_froude_number;
+    out_metrics->reynolds_estimate = world->last_reynolds_estimate;
+    out_metrics->uncertainty_margin_si = world->last_uncertainty_margin_si;
+    out_metrics->plausibility_score = validation.plausibility_score;
+    out_metrics->conservation_score = validation.conservation_score;
+    out_metrics->contact_quality_score = validation.contact_quality_score;
+    out_metrics->timestep_quality_score = validation.timestep_quality_score;
+    out_metrics->uncertainty_ratio = validation.uncertainty_ratio;
+    out_metrics->unit_length_scale = world->units.length_scale;
+    out_metrics->unit_mass_scale = world->units.mass_scale;
+    out_metrics->unit_time_scale = world->units.time_scale;
     return 1;
+}
+
+int UpeWorld_GetValidationMetrics(const UpeWorld *world, UpeWorldValidationMetrics *out_metrics) {
+    if (!world || !out_metrics) {
+        return 0;
+    }
+
+    UpeWorld_ComputeValidationMetricsInternal(world, out_metrics);
+    return 1;
+}
+
+uint32_t UpeWorld_FormatValidationSummary(const UpeWorldValidationMetrics *metrics,
+                                          char *buffer,
+                                          uint32_t buffer_size) {
+    if (!metrics) {
+        if (buffer && buffer_size > 0u) {
+            buffer[0] = '\0';
+        }
+        return 0u;
+    }
+
+    int required = snprintf(nullptr,
+                            0,
+                            "plausibility=%.3f conservation=%.3f contact=%.3f timestep=%.3f uncertainty_ratio=%.3f speed_ratio=%.3f energy_ratio=%.3f penetration_ratio=%.3f flags=0x%X",
+                            metrics->plausibility_score,
+                            metrics->conservation_score,
+                            metrics->contact_quality_score,
+                            metrics->timestep_quality_score,
+                            metrics->uncertainty_ratio,
+                            metrics->speed_budget_ratio,
+                            metrics->energy_budget_ratio,
+                            metrics->penetration_budget_ratio,
+                            metrics->validation_flags);
+
+    if (buffer && buffer_size > 0u) {
+        snprintf(buffer,
+                 buffer_size,
+                 "plausibility=%.3f conservation=%.3f contact=%.3f timestep=%.3f uncertainty_ratio=%.3f speed_ratio=%.3f energy_ratio=%.3f penetration_ratio=%.3f flags=0x%X",
+                 metrics->plausibility_score,
+                 metrics->conservation_score,
+                 metrics->contact_quality_score,
+                 metrics->timestep_quality_score,
+                 metrics->uncertainty_ratio,
+                 metrics->speed_budget_ratio,
+                 metrics->energy_budget_ratio,
+                 metrics->penetration_budget_ratio,
+                 metrics->validation_flags);
+    }
+
+    return (required > 0) ? (uint32_t)required : 0u;
 }
