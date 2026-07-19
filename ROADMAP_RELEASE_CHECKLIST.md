@@ -4,6 +4,7 @@ Date: 2026-07-10
 
 ## P0 Buyer Trust
 
+0. P0 critical: ZIP path compatibility (forward slash only): [scripts/create_roadmap_audit_bundle.py](scripts/create_roadmap_audit_bundle.py), [scripts/validate_roadmap_audit_bundle.py](scripts/validate_roadmap_audit_bundle.py)
 1. START_HERE at root: [START_HERE.md](START_HERE.md)
 2. Verify scripts: [scripts/verify_package.ps1](scripts/verify_package.ps1), [scripts/verify_package.sh](scripts/verify_package.sh)
 3. Verification flow and log output path: [scripts/verify_package.ps1](scripts/verify_package.ps1), [scripts/verify_package.sh](scripts/verify_package.sh), [proof/latest_verification_log.txt](proof/latest_verification_log.txt)

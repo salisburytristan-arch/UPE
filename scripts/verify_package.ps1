@@ -8,11 +8,11 @@ $ProofDir = Join-Path $Root "proof"
 $LogFile = Join-Path $ProofDir "latest_verification_log.txt"
 
 New-Item -ItemType Directory -Force -Path $ProofDir | Out-Null
-Set-Content -Path $LogFile -Value "UPE verification run started: $(Get-Date -Format o)"
+Set-Content -Path $LogFile -Value "UPE verification run started: $(Get-Date -Format o)" -Encoding UTF8
 
 function Write-Log {
     param([string]$Text)
-    Add-Content -Path $LogFile -Value $Text
+    Add-Content -Path $LogFile -Value $Text -Encoding UTF8
 }
 
 function Invoke-Step {
@@ -60,5 +60,9 @@ Invoke-Step -Title "Benchmark" -CommandText "$($BenchmarkExe.FullName) --bodies 
 Write-Log ""
 Write-Log "Result: PASS"
 Write-Log "Verification log written to: $LogFile"
+
+# Normalize final log encoding to UTF-8 for cross-platform readability.
+$finalLog = Get-Content -Path $LogFile -Raw
+Set-Content -Path $LogFile -Value $finalLog -Encoding UTF8
 
 Write-Host "[UPE] Verification complete: $LogFile"

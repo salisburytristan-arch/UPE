@@ -1,48 +1,44 @@
-# Commercial Evaluation & Licensing Paths
+# UPE One-Time Sale Transaction Posture
 
 Unified Physics Engine v1.0.0  
-Effective: 2026-04-05
+Effective: 2026-07-15
 
 ## Intent
 
-This project is offered for **private commercial evaluation** and may proceed under one of several transaction paths.
-It is **not** offered under any public OSS license.
+This project is positioned for a one-time complete sale of UPE-specific assets under definitive signed transaction documents.
+It is not offered under a public OSS license.
 
-## Available Commercial Paths
+## Current Transaction Model
 
-1. **Pilot / Integration License**  
-   Short evaluation-to-production path for teams validating fit in a real build or workflow.
+Default model:
 
-2. **Internal-Use Source License**  
-   For companies integrating UPE into internal tools, simulation pipelines, or proprietary products without acquiring the full IP.
+1. One-time complete sale of UPE-specific assets.
+2. Transfer terms finalized through signed asset purchase and IP assignment documentation.
+3. No ongoing public pricing tiers or checkout-based licensing program implied by this file.
 
-3. **Enterprise Source License**  
-   For studios or platform teams that need broader source access, modification rights, and a negotiated commercial scope.
+Reference documents:
 
-4. **Field / Vertical-Exclusive License**  
-   For buyers seeking exclusivity within a defined market, platform, or application area.
-
-5. **Full Acquisition / IP Transfer**  
-   For buyers that want outright ownership, subject to a separate signed transfer agreement.
+- `transfer_bundle_2026-07-15/ASSET_PURCHASE_AND_IP_ASSIGNMENT_TEMPLATE.md`
+- `transfer_bundle_2026-07-15/TRANSFER_RIGHTS_AND_TRANSITION_TERMS.md`
+- `transfer_bundle_2026-07-15/TRANSFER_MANIFEST.md`
 
 ## Ownership and Chain-of-Title
 
-- All IP rights remain reserved by the copyright holder unless expressly transferred in a signed written agreement.
-- Seller should maintain chain-of-title documentation for all contributed work.
-- Any third-party contributions should be covered by assignment or work-made-for-hire documentation where required.
+- All IP rights remain with Seller unless and until transferred in signed definitive agreements.
+- Chain-of-title diligence materials should be provided in closing schedules.
+- Third-party disclosures and constraints must be listed in the agreement schedules.
+
+## Scope Controls and Exclusions
+
+Transfer scope is limited to UPE-specific assets listed in signed schedules.
+Seller parent identity and unrelated business assets are excluded unless explicitly listed.
 
 ## Confidentiality and Distribution
 
-- Source code, binaries, benchmarks, and documentation are confidential.
-- Distribution is restricted to private evaluation under NDA or equivalent written permission.
-- Public reposting, mirroring, or unsolicited redistribution is prohibited.
-
-## Evaluation Access
-
-- Evaluation access does not grant commercialization rights.
-- Scope, fees, support, warranties, indemnities, and exclusivity are defined only in final signed agreements.
-- Until such an agreement is executed, all rights remain with the seller.
+- Source, proofs, docs, and package materials are confidential.
+- Distribution is restricted to authorized diligence and closing workflows.
+- Public reposting, mirroring, or redistribution is prohibited without written permission.
 
 ## Warranty and Liability
 
-Except where expressly stated in a signed agreement, software and materials are provided "AS IS" without warranties.
+Except where expressly stated in signed definitive agreements, materials are provided "AS IS".

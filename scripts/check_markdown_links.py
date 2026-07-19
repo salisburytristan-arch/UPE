@@ -19,6 +19,7 @@ SKIP_DIRS = {
     "releases",
     "releases_ci",
     "releases_sanity",
+    "RUNS",
 }
 
 

@@ -48,6 +48,7 @@ ALWAYS_EXCLUDE = {
     "__pycache__",
     "*.pyc",
     ".DS_Store",
+    "RUNS",
 }
 
 BINARY_LIBRARY_EXTENSIONS = {".lib", ".a", ".dll", ".so", ".dylib"}
@@ -60,11 +61,16 @@ TIER_CONFIG = {
         "include_dirs": ["core", "examples", "tests", "benchmarks", "bindings", "scripts", "docs", "cmake", "tools", "proof"],
         "include_files": [
             "README.md",
+            "START_HERE.md",
             "LICENSE",
             "CONTRIBUTING.md",
             "DISTRIBUTION_POLICY.md",
             "IP_CHAIN_OF_TITLE_CHECKLIST.md",
             "COMMERCIAL_LICENSE_AGREEMENT.md",
+            "BUYER_PACKAGE_CONTENTS.md",
+            "MODULE_STABILITY.md",
+            "LIMITATIONS.md",
+            "UPE_ONE_PAGE_SALES_SHEET.md",
             "QUICK_START.md",
             "API_REFERENCE.md",
             "ADVANCED_INTEGRATION.md",
