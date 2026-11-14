@@ -18,6 +18,16 @@ Unified Physics Engine (UPE) is a buyer-verifiable physics foundation centered o
 - **UPE Core** — rigid body, collision, constraints, CCD, determinism, replay/snapshots, hashing
 - **UPE Applied Packs** — vehicles, character/ragdoll, cloth/softbody, fluids, rollback workflows
 - **UPE Labs** — broader scientific and experimental domains kept separate from core production claims
+- **Benchmark readiness** — the repo now includes a comparison-oriented benchmark harness that standardizes workloads and records missing competitor binaries honestly
+
+### Roadmap milestones completed
+- **UPE Arena demo**: a compact deterministic showcase that reports a live state hash and performance telemetry. See [docs/UPE_ARENA_DEMO.md](docs/UPE_ARENA_DEMO.md).
+- **Benchmark matrix**: a standardized repeat-run matrix is available via [tools/run_benchmark_matrix.py](tools/run_benchmark_matrix.py) to exercise the same scenario across multiple actor counts.
+- **Independent benchmark harness**: a comparison-ready comparison manifest standardizes rigid-body, stacking, CCD, joints, vehicles, and rollback workloads, and records when external engine binaries are unavailable instead of fabricating results. See [tools/run_independent_benchmark_harness.py](tools/run_independent_benchmark_harness.py) and [docs/INDEPENDENT_BENCHMARK_HARNESS.md](docs/INDEPENDENT_BENCHMARK_HARNESS.md).
+- **API stability**: the supported compatibility contract is documented in [docs/API_STABILITY_POLICY.md](docs/API_STABILITY_POLICY.md).
+- **Buyer integration flow**: the 30-minute onboarding path is documented in [docs/BUYER_INTEGRATION_GUIDE.md](docs/BUYER_INTEGRATION_GUIDE.md).
+- **Roadmap execution status**: the full evidence stack is documented in [docs/ROADMAP_COMPLETION_STATUS.md](docs/ROADMAP_COMPLETION_STATUS.md).
+- **Roadmap evidence suite**: the single-command verification harness is in [scripts/run_roadmap_evidence_suite.py](scripts/run_roadmap_evidence_suite.py) and the companion doc is [docs/ROADMAP_EVIDENCE_SUITE.md](docs/ROADMAP_EVIDENCE_SUITE.md).
 
 **CONFIDENTIAL: Proprietary source for private evaluation, source licensing, or acquisition discussions.**
 

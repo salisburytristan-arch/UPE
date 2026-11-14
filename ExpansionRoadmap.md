@@ -3,6 +3,7 @@
 The roadmap below is now backed by deeper source-level integration in the engine core, not just planning language.
 
 Already integrated in this pass:
+- **Roadmap execution milestone**: a first UPE Arena showcase has been added at `examples/upe_arena/main.cpp` with a matching spec at `docs/UPE_ARENA_DEMO.md`. It prints a deterministic state hash, frame count, and performance telemetry consistent with the roadmap's flagship demo direction.
 - **Adaptive runtime control** in `core/src/world/upe_world.cpp` via `UpeAdaptiveRuntimeConfig`, dynamic solver tuning, and adaptive CCD behavior.
 - **Scientific runtime configuration** via `UpeScientificRuntimeConfig`, unit-aware scaling metadata, physical constants, error budgets, and stability budgets.
 - **Expanded integrator framework** with `UPE_INTEGRATOR_EULER`, `UPE_INTEGRATOR_SEMI_IMPLICIT`, `UPE_INTEGRATOR_VELOCITY_VERLET`, and adaptive integrator resolution.
@@ -17,6 +18,29 @@ Already integrated in this pass:
 - **Regression coverage** in `tests/cases/test_infrastructure.cpp`, verified with fresh build + test runs.
 
 This means the expansion work is now grounded in runtime APIs and diagnostics that the rest of the roadmap can build on cleanly.
+
+### Current execution status
+
+The roadmap is now being advanced with concrete artifact work rather than only conceptual planning:
+
+- `examples/upe_arena/main.cpp` creates a buyer-facing deterministic stack demo and prints a state hash + runtime metrics.
+- `tools/run_benchmark_matrix.py` automates a multi-size benchmark matrix so the engine can be evaluated at more than one scene scale.
+- `docs/API_STABILITY_POLICY.md` codifies the supported production compatibility boundary and review expectations.
+- `docs/BUYER_INTEGRATION_GUIDE.md` provides the buyer onboarding path required for a commercial evaluation.
+- `docs/ROADMAP_COMPLETION_STATUS.md` records the milestone evidence and closes the implementation loop for the roadmap layer.
+
+These steps are intentionally chosen to move the project from a broad codebase with impressive feature breadth toward a verifiable commercial core.
+
+## Roadmap status: completion of the buyer-readiness layer
+
+The following four roadmap objectives have now been concretized with live artifacts and proofs:
+
+1. Production core clarity and API stability
+2. Independent validation via benchmark and determinism proof surfaces
+3. A flagship simulation showcase
+4. A straightforward buyer integration path
+
+This is the maturity layer required before additional scientific or domain-pack expansion is treated as strategic roadmap value rather than a technical wishlist.
 
 ## Still not fully implemented / only partially implemented
 

@@ -28,6 +28,12 @@ UPE follows semantic versioning intent for buyer-facing integrations:
 
 Current package version is tracked in build metadata and API capability discovery.
 
+The product-level guarantee for the supported core is intentionally stricter than generic semantic-versioning language:
+
+- source compatibility within the same minor series is the default expectation
+- patch releases must not silently alter documented replay/snapshot/determinism outcomes for supported scenes
+- all public compatibility changes require release notes and migration guidance
+
 ## Compatibility Expectations
 
 For a given major version:
@@ -35,6 +41,24 @@ For a given major version:
 - Public C API should remain source-compatible unless explicitly documented otherwise.
 - New features should be additive.
 - Any behavior changes that affect determinism, serialization, or replay should be documented in release notes.
+- Experimental modules remain excluded from the stable compatibility contract until explicitly promoted.
+
+## Production-Core Compatibility Boundary
+
+The production compatibility boundary is the supported core path:
+
+- world create/step lifecycle
+- rigid-body lifecycle and shape setup
+- solver, contact, and narrowphase pipeline
+- deterministic hash and replay/snapshot workflows
+- canonical query and step-graph accessors
+
+The following remain outside the compatibility promise until they are promoted:
+
+- advanced scientific packs
+- exploratory multiphysics domains
+- experimental orbital / chemistry / relativistic modules
+- unvetted lab features in the broader simulation stack
 
 ## Deprecation Rules
 
